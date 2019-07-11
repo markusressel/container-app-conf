@@ -23,7 +23,7 @@ import subprocess
 
 from setuptools import setup, find_packages
 
-VERSION_NUMBER = "1.0.0"
+VERSION_NUMBER = "0.9.9"
 
 GIT_BRANCH = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
 GIT_BRANCH = GIT_BRANCH.decode()  # convert to standard string
@@ -53,7 +53,12 @@ def readme_type() -> str:
 
 
 def readme() -> [str]:
-    with open('README.rst') as f:
+    if readme_type() == "text/markdown":
+        file_name = "README.md"
+    else:
+        file_name = "README.rst"
+
+    with open(file_name) as f:
         return f.read()
 
 
