@@ -1,6 +1,6 @@
 # container-app-conf
 
-This is a library t o easily read application values
+This is a library to easily read application values
 from multiple places like a yaml file and environment variables
 while providing type validation.
 
