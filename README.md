@@ -46,6 +46,8 @@ class AppConfig(Config):
 | `StringConfigEntry`      | Takes the raw string input | `str` |
 | `StringListConfigEntry`  | Parses a comma separated string to a list (in yaml it can also be specified as a yaml list) | `[str]` |
 
+If none of the existing types suit your needs you can easily create your 
+own by extending the `ConfigEntry` base class.
 
 ## Default Values
 
@@ -60,7 +62,6 @@ at the top to `None` even after initial parsing. Specifying an empty text
 in the yaml or corresponding environment variable will result in an
 exception. If you want to allow setting a `None` value you can use the
 `none_allowed` constructor parameter.
-
 
 # Contributing
 
