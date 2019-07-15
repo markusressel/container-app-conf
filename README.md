@@ -1,6 +1,6 @@
-# container-app-conf
+# container-app-conf ![https://badge.fury.io/py/container-app-conf](https://badge.fury.io/py/container-app-conf.svg)
 
-This is a library to easily read application values
+**container-app-conf** is a library to easily read application values
 from multiple places like a yaml file and environment variables
 while providing type validation.
 
@@ -38,65 +38,14 @@ class AppConfig(Config):
 
 ## Config Types
 
-### Bool
+| Name                     | Description                              | Type     |
+|--------------------------|------------------------------------------|----------|
+| `BoolConfigEntry`        | Parses `bool`, `int` (`0` and `1`) and `str` values (`yes`, `no` etc.) to a boolean value | `bool` |
+| `IntConfigEntry`         | Parses input to an integer | `int` |
+| `FloatConfigEntry`       | Parses input to a floating number | `float` |
+| `StringConfigEntry`      | Takes the raw string input | `str` |
+| `StringListConfigEntry`  | Parses a comma separated string to a list (in yaml it can also be specified as a yaml list) | `[str]` |
 
-```python
-from container_app_conf.entry.bool import BoolConfigEntry
-ALIVE = BoolConfigEntry(
-        yaml_path=[
-            "my_app_config_file_name",
-            "alive"
-        ],
-        default=True)
-```
-
-### Int
-
-```python
-from container_app_conf.entry.int import IntConfigEntry
-AGE = IntConfigEntry(
-        yaml_path=[
-            "my_app_config_file_name",
-            "age"
-        ],
-        default=16)
-```
-
-### Float
-
-```python
-from container_app_conf.entry.float import FloatConfigEntry
-CHILDREN = FloatConfigEntry(
-        yaml_path=[
-            "my_app_config_file_name",
-            "children"
-        ],
-        none_allowed=True,
-        default=1.58)
-```
-
-### String
-
-```python
-from container_app_conf.entry.string import StringConfigEntry
-NAME = StringConfigEntry(
-        yaml_path=[
-            "my_app_config_file_name",
-            "name"
-        ])
-```
-
-### StringList
-
-```python
-from container_app_conf.entry.list import StringListConfigEntry
-FRIENDS = StringListConfigEntry(
-        yaml_path=[
-            "my_app_config_file_name",
-            "friends"
-        ],
-        default=[])
-```
 
 ## Default Values
 
