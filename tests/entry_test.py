@@ -22,6 +22,7 @@
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
+from container_app_conf.entry.list import ListConfigEntry
 from tests import TestBase
 
 
@@ -77,3 +78,29 @@ class EntryTest(TestBase):
 
         for k, v in input_result_map.items():
             assert float_config_entry._parse_value(k) == v
+
+    @staticmethod
+    def test_int_list_entry():
+        int_list_config_entry = ListConfigEntry(item_type=IntConfigEntry, yaml_path=["int_list"])
+
+        input_result_map = {
+            "5": [5],
+            "": [],
+            "1,2,3": [1, 2, 3]
+        }
+
+        for k, v in input_result_map.items():
+            assert int_list_config_entry._parse_value(k) == v
+
+    @staticmethod
+    def test_float_list_entry():
+        int_list_config_entry = ListConfigEntry(item_type=FloatConfigEntry, yaml_path=["float_list"])
+
+        input_result_map = {
+            "5": [5.0],
+            "": [],
+            "1,2.5,3": [1.0, 2.5, 3.0]
+        }
+
+        for k, v in input_result_map.items():
+            assert int_list_config_entry._parse_value(k) == v

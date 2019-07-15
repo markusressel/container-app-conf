@@ -18,14 +18,19 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 #
+from typing import Type
 
-from container_app_conf.entry.string import StringConfigEntry
+from container_app_conf import ConfigEntry
 
 
-class StringListConfigEntry(StringConfigEntry):
+class ListConfigEntry(ConfigEntry):
+
+    def __init__(self, item_type: Type[ConfigEntry], yaml_path: [str], default: any = None, none_allowed: bool = None):
+        self._item_type = item_type
+        super().__init__(yaml_path, default, none_allowed)
 
     def _value_to_type(self, value: any) -> any:
         if not isinstance(value, list):
             value = str(value).split(',')
 
-        return list(map(lambda x: StringConfigEntry._value_to_type(self, x), value))
+        return list(map(lambda x: self._item_type._value_to_type(self, x), filter(lambda x: x, value)))

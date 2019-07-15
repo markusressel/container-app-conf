@@ -44,7 +44,7 @@ class AppConfig(Config):
 | `IntConfigEntry`         | Parses input to an integer | `int` |
 | `FloatConfigEntry`       | Parses input to a floating number | `float` |
 | `StringConfigEntry`      | Takes the raw string input | `str` |
-| `StringListConfigEntry`  | Parses a comma separated string to a list (in yaml it can also be specified as a yaml list) | `[str]` |
+| `ListConfigEntry`        | Parses a comma separated string to a list of items specified in another `ConfigEntry` (in yaml it can also be specified as a yaml list) | `[]` |
 
 If none of the existing types suit your needs you can easily create your 
 own by extending the `ConfigEntry` base class.
