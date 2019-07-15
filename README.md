@@ -1,4 +1,4 @@
-# container-app-conf ![https://badge.fury.io/py/container-app-conf](https://badge.fury.io/py/container-app-conf.svg)
+# container-app-conf ![https://badge.fury.io/py/container-app-conf](https://badge.fury.io/py/container-app-conf.svg) [![Build Status](https://travis-ci.org/markusressel/container-app-conf.svg?branch=master)](https://travis-ci.org/markusressel/container-app-conf)
 
 **container-app-conf** is a library to easily read application values
 from multiple places like a yaml file and environment variables
