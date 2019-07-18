@@ -24,12 +24,28 @@ from container_app_conf import ConfigEntry
 
 
 class ListConfigEntry(ConfigEntry):
+    """
+    Config entry allowing to specify a list of items of specified type
+    """
 
     def __init__(self, item_type: Type[ConfigEntry], yaml_path: [str], default: any = None, none_allowed: bool = None):
+        """
+
+        :param item_type: the type of individual list items
+        :param yaml_path: list of yaml tree entries
+        :param default: default value
+        :param none_allowed: if None is allowed for this config entry
+        """
         self._item_type = item_type
         super().__init__(yaml_path, default, none_allowed)
 
-    def _value_to_type(self, value: any) -> any:
+    def _value_to_type(self, value: any) -> [any] or None:
+        """
+        Tries to permissively convert the given value to a list of values.
+        :param value: the value to parse
+        :return: the parsed list
+        """
+
         if not isinstance(value, list):
             value = str(value).split(',')
 

@@ -24,5 +24,11 @@ from container_app_conf import ConfigEntry
 
 class FloatConfigEntry(ConfigEntry):
 
-    def _value_to_type(self, value: any) -> any:
+    def _value_to_type(self, value: any) -> float or None:
+        """
+        Tries to permissively convert the given value to a float.
+        :param value: the value to parse
+        :return: the parsed float value
+        """
+
         return float(value)

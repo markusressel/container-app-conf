@@ -37,6 +37,7 @@ class Config:
     def __init__(self, validate: bool = True):
         """
         Creates a config object and reads configuration.
+        :param validate: if validation should be run (can be disabled for tests)
         """
         self._config_entries = self._find_config_entries()
         self._read_yaml()
@@ -53,10 +54,16 @@ class Config:
 
     @property
     def config_file_extensions(self) -> [str]:
+        """
+        :return: List of allowed config file extensions
+        """
         return ['yaml', 'yml']
 
     @property
     def config_file_paths(self) -> [str]:
+        """
+        :return: List of allowed config file paths
+        """
         return DEFAULT_CONFIG_FILE_PATHS
 
     def validate(self):

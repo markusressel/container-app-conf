@@ -24,7 +24,7 @@ from container_app_conf import ConfigEntry
 
 class StringConfigEntry(ConfigEntry):
 
-    def _value_to_type(self, value: any) -> any:
+    def _value_to_type(self, value: any) -> str or None:
         s = str(value)
         if self._none_allowed:
             if s.lower() in ['none', 'null', 'nil']:

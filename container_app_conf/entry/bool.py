@@ -24,7 +24,13 @@ from container_app_conf import ConfigEntry
 
 class BoolConfigEntry(ConfigEntry):
 
-    def _value_to_type(self, value: any) -> any:
+    def _value_to_type(self, value: any) -> bool or None:
+        """
+        Tries to permissively convert the given value to a boolean.
+        :param value: the value to parse
+        :return: the parsed boolean value
+        """
+
         if type(value) == bool:
             return value
         else:

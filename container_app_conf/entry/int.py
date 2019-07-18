@@ -24,5 +24,10 @@ from container_app_conf import ConfigEntry
 
 class IntConfigEntry(ConfigEntry):
 
-    def _value_to_type(self, value: any) -> any:
+    def _value_to_type(self, value: any) -> int or None:
+        """
+        Tries to permissively convert the given value to an int.
+        :param value: the value to parse
+        :return: the parsed int value
+        """
         return int(value)

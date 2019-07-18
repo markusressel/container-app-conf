@@ -41,14 +41,20 @@ class ConfigEntry:
         self._value = default
 
     @property
-    def value(self):
+    def value(self) -> any:
+        """
+        :return: the value of this config entry
+        """
         return self._value
 
     @value.setter
-    def value(self, new_value):
+    def value(self, new_value) -> None:
+        """
+        :param new_value: the new value to set
+        """
         self._value = self._parse_value(new_value)
 
-    def _parse_value(self, value: any) -> any:
+    def _parse_value(self, value: any) -> any or None:
         """
         Tries to permissively convert the given value to the expected value type.
         :param value: the value to parse
@@ -66,6 +72,11 @@ class ConfigEntry:
             self._raise_invalid_value(value)
 
     def _value_to_type(self, value: any) -> any:
+        """
+        Converts the given type to the expected type
+        :param value: the yaml value
+        :return: parsed value
+        """
         raise NotImplementedError()
 
     def _raise_invalid_value(self, value: any):
