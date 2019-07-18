@@ -29,6 +29,10 @@ LOGGER.setLevel(logging.DEBUG)
 
 
 class Config:
+    """
+    Config base class.
+    Extend this in your application.
+    """
 
     def __init__(self, validate: bool = True):
         """
@@ -71,6 +75,23 @@ class Config:
 
         return list(entries)
 
+    def _find_config_file(self) -> str or None:
+        """
+        Tries to find a usable config file
+        :return: file path or None
+        """
+        import os
+
+        for path in self.config_file_paths:
+            path = os.path.expanduser(path)
+            for extension in self.config_file_extensions:
+                for file_name in self.config_file_names:
+                    file_path = os.path.join(path, "{}.{}".format(file_name, extension))
+                    if os.path.isfile(file_path):
+                        return file_path
+
+        return None
+
     def _read_yaml(self) -> None:
         """
         Reads configuration parameters from a yaml config file (if it exists)
@@ -99,24 +120,7 @@ class Config:
             for config_entry in self._config_entries:
                 config_entry.value = _get_value(cfg, config_entry)
 
-    def _find_config_file(self) -> str or None:
-        """
-        Tries to find a usable config file
-        :return: file path or None
-        """
-        import os
-
-        for path in self.config_file_paths:
-            path = os.path.expanduser(path)
-            for extension in self.config_file_extensions:
-                for file_name in self.config_file_names:
-                    file_path = os.path.join(path, "{}.{}".format(file_name, extension))
-                    if os.path.isfile(file_path):
-                        return file_path
-
-        return None
-
-    def _read_env(self):
+    def _read_env(self) -> None:
         """
         Reads configuration parameters from environment variables
         """
