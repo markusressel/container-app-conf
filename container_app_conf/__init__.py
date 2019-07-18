@@ -46,6 +46,9 @@ class Config:
 
     @property
     def config_file_names(self) -> [str]:
+        """
+        :return: List of allowed config file names
+        """
         raise NotImplementedError()
 
     @property
