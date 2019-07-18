@@ -23,6 +23,5 @@
 DEFAULT_CONFIG_FILE_PATHS = [
     "./",
     "~/.config/",
-    "~/.config/scader/",
     "~/"
 ]
