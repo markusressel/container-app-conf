@@ -30,5 +30,7 @@ class FloatConfigEntry(ConfigEntry):
         :param value: the value to parse
         :return: the parsed float value
         """
-
-        return float(value)
+        if '%' == value[-1]:
+            return float(value[:-1]) / 100.0
+        else:
+            return float(value)

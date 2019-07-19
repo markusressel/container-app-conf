@@ -30,7 +30,6 @@ class BoolConfigEntry(ConfigEntry):
         :param value: the value to parse
         :return: the parsed boolean value
         """
-
         if type(value) == bool:
             return value
         else:

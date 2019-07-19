@@ -45,7 +45,6 @@ class ListConfigEntry(ConfigEntry):
         :param value: the value to parse
         :return: the parsed list
         """
-
         if not isinstance(value, list):
             value = str(value).split(',')
 

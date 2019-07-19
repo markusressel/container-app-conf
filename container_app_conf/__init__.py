@@ -77,7 +77,6 @@ class Config:
         Detects config entry constants in this class
         :return: list of config entries
         """
-
         entries = set()
         for attribute in map(lambda x: getattr(self, x), dir(self)):
             if isinstance(attribute, ConfigEntry):
@@ -106,7 +105,6 @@ class Config:
         """
         Reads configuration parameters from a yaml config file (if it exists)
         """
-
         def _get_value(root: {}, config_entry: ConfigEntry):
             value = root
             for key in config_entry.yaml_path:
