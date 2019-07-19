@@ -72,7 +72,8 @@ class EntryTest(TestBase):
             "-3.0": -3.0,
             -3.0: -3.0,
             1.2: 1.2,
-            "1.2": 1.2
+            "1.2": 1.2,
+            "3%": 0.03
         }
 
         for k, v in input_result_map.items():
