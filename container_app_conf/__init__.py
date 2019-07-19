@@ -105,7 +105,13 @@ class Config:
         Reads configuration parameters from a yaml config file (if it exists)
         """
 
-        def _get_value(root: {}, config_entry: ConfigEntry):
+        def _get_value(root: {}, config_entry: ConfigEntry) -> any or None:
+            """
+            Helper function to read the value of a given config entry
+            :param root: the yaml root node dictionary
+            :param config_entry: the config entry to search for
+            :return: the found value or the config entry's current value
+            """
             value = root
             for key in config_entry.yaml_path:
                 value = value.get(key)
