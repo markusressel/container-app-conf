@@ -122,7 +122,7 @@ class Config:
 
         file_path = self._find_config_file()
         if file_path is None:
-            LOGGER.debug("No config file found, skipping.")
+            LOGGER.debug("No config file found for path: {}".format(file_path))
             return
 
         with open(file_path, 'r') as ymlfile:
