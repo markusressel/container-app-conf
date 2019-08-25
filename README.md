@@ -65,8 +65,8 @@ By default a `None` value is only allowed if the default value is `None`.
 This means it is not possible to set the `MY_CONFIG` entry in the example
 at the top to `None` even after initial parsing. Specifying an empty text
 in the yaml or corresponding environment variable will result in an
-exception. If you want to allow setting a `None` value you can use the
-`none_allowed` constructor parameter.
+exception. If you want to allow setting a `None` value even if the default 
+value is **not** `None`, use the `none_allowed=True` constructor parameter.
 
 # Contributing
 
