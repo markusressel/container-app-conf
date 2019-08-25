@@ -1,13 +1,19 @@
 # container-app-conf [![Contributors](https://img.shields.io/github/contributors/markusressel/container-app-conf.svg)](https://github.com/markusressel/container-app-conf/graphs/contributors) [![MIT License](https://img.shields.io/github/license/markusressel/container-app-conf.svg)](/LICENSE) ![Code Size](https://img.shields.io/github/languages/code-size/markusressel/container-app-conf.svg) ![https://badge.fury.io/py/container-app-conf](https://badge.fury.io/py/container-app-conf.svg) [![Build Status](https://travis-ci.org/markusressel/container-app-conf.svg?branch=master)](https://travis-ci.org/markusressel/container-app-conf)
 
-**container-app-conf** is a library to easily read application values
-from multiple places like a yaml file and environment variables
-while providing type validation.
+**container-app-conf** is a library to easily read application configuration values
+from multiple sources (YAML, env) while providing type validation.
 
 The initial purpose of this library was to have an easy way to configure
-applications running inside some kind of container (Docker in this case)
-using environment variables while still provide the possibility to use
-a more simple form of configuration like a yaml file.
+an application running inside of a container using environment variables 
+(Docker in this case) and still provide the possibility to use a more simple 
+form of configuration like a YAML file.
+
+# container-app-conf is used by
+
+* [InfiniteWisdom](https://github.com/ekeih/InfiniteWisdom)
+* [DeineMudda](https://github.com/markusressel/DeineMudda)
+
+and hopefully many others :)
 
 # How to use
 
