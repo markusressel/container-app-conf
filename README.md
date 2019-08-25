@@ -8,8 +8,7 @@ an application running inside of a container using environment variables
 (Docker in this case) and still provide the possibility to use a more simple 
 form of configuration like a YAML file.
 
-# container-app-conf is used by
-
+**container-app-conf is used by**
 * [InfiniteWisdom](https://github.com/ekeih/InfiniteWisdom)
 * [DeineMudda](https://github.com/markusressel/DeineMudda)
 
