@@ -28,7 +28,7 @@ class ListConfigEntry(ConfigEntry):
     Config entry allowing to specify a list of items of specified type
     """
 
-    def __init__(self, item_type: Type[ConfigEntry], yaml_path: [str], example: str = None,
+    def __init__(self, item_type: Type[ConfigEntry], yaml_path: [str], example: any = None,
                  description: str or None = None,
                  default: any = None, none_allowed: bool = None):
         """
