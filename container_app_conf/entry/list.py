@@ -51,15 +51,12 @@ class ListConfigEntry(ConfigEntry):
         )
 
     @property
-    def example(self) -> str:
+    def example(self) -> any:
         if self.default is not None:
-            if isinstance(self.default, list):
-                return ",".join(self.default)
-            else:
-                return self.default
+            return self.default
 
         single_example = self._item_type("dummy").example
-        return ",".join([single_example, single_example, single_example])
+        return [single_example, single_example, single_example]
 
     def _value_to_type(self, value: any) -> [any] or None:
         """
@@ -76,4 +73,4 @@ class ListConfigEntry(ConfigEntry):
         if isinstance(type, str):
             return type
         str_items = list(map(lambda x: self._item_type._type_to_value(self, x), type))
-        return ",".join(str_items)
+        return str_items

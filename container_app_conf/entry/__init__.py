@@ -51,7 +51,7 @@ class ConfigEntry:
         self._value = default
 
     @property
-    def example(self) -> str:
+    def example(self) -> any:
         return self.default if self.default is not None else self._example
 
     @property
