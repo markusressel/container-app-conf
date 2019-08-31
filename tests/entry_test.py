@@ -23,6 +23,7 @@ from container_app_conf.entry.date import DateConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.list import ListConfigEntry
+from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
 from tests import TestBase
 
 
@@ -115,6 +116,23 @@ class EntryTest(TestBase):
         input_result_map = {
             "2008-09-03T20:56:35.450686Z": datetime(2008, 9, 3, 20, 56, 35, 450686, tzinfo=tzutc()),
             "2008-09-03": datetime(2008, 9, 3, 0, 0, 0, 0),
+        }
+
+        for k, v in input_result_map.items():
+            assert date_config_entry._parse_value(k) == v
+
+    @staticmethod
+    def test_timedelta_entry():
+        from datetime import timedelta
+
+        date_config_entry = TimeDeltaConfigEntry(yaml_path=["timedelta"])
+
+        input_result_map = {
+            "20:56:35": timedelta(hours=20, minutes=56, seconds=35),
+            "32m": timedelta(minutes=32),
+            "4h0m3s": timedelta(hours=4, minutes=0, seconds=3),
+            "4h3s": timedelta(hours=4, minutes=0, seconds=3),
+            "4:13": timedelta(hours=0, minutes=4, seconds=13),
         }
 
         for k, v in input_result_map.items():

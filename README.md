@@ -49,6 +49,8 @@ class AppConfig(Config):
 | `IntConfigEntry`         | Parses input to an integer | `int` |
 | `FloatConfigEntry`       | Parses input to a floating number | `float` |
 | `StringConfigEntry`      | Takes the raw string input | `str` |
+| `DateConfigEntry`        | Parses various datetime formats (see [python-dateutil](https://github.com/dateutil/dateutil/)) | `datetime` |
+| `TimeDeltaConfigEntry`   | Parses various timedelta formats (see [pytimeparse](https://github.com/wroberts/pytimeparse)) | `timedelta` |
 | `ListConfigEntry`        | Parses a comma separated string to a list of items specified in another `ConfigEntry` (in yaml it can also be specified as a yaml list) | `[]` |
 
 If none of the existing types suit your needs you can easily create your 
