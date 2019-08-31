@@ -55,6 +55,9 @@ class ListConfigEntry(ConfigEntry):
         if self.default is not None:
             return self.default
 
+        if self._example is not None:
+            return self._example
+
         single_example = self._item_type("dummy").example
         return [single_example, single_example, single_example]
 
