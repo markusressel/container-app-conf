@@ -19,6 +19,7 @@
 #  SOFTWARE.
 
 from container_app_conf.entry.bool import BoolConfigEntry
+from container_app_conf.entry.date import DateConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.list import ListConfigEntry
@@ -104,3 +105,17 @@ class EntryTest(TestBase):
 
         for k, v in input_result_map.items():
             assert int_list_config_entry._parse_value(k) == v
+
+    @staticmethod
+    def test_date_entry():
+        from datetime import datetime
+        from dateutil.tz import tzutc
+
+        date_config_entry = DateConfigEntry(yaml_path=["date"])
+        input_result_map = {
+            "2008-09-03T20:56:35.450686Z": datetime(2008, 9, 3, 20, 56, 35, 450686, tzinfo=tzutc()),
+            "2008-09-03": datetime(2008, 9, 3, 0, 0, 0, 0),
+        }
+
+        for k, v in input_result_map.items():
+            assert date_config_entry._parse_value(k) == v
