@@ -19,6 +19,9 @@
 #  SOFTWARE.
 
 import logging
+import os
+
+import yaml
 
 from container_app_conf.const import DEFAULT_CONFIG_FILE_PATHS
 from container_app_conf.entry import ConfigEntry
@@ -39,6 +42,10 @@ class Config:
         :param validate: if validation should be run (can be disabled for tests)
         """
         self._config_entries = self._find_config_entries()
+
+        if self._find_config_file() is None:
+            self.write_reference_yaml()
+
         self._read_yaml()
         self._read_env()
         if validate:
@@ -70,6 +77,41 @@ class Config:
         Validates the current configuration and throws an exception if something is wrong
         """
         return
+
+    def write_reference_yaml(self):
+        """
+        Writes a reference config file
+        :return:
+        """
+        reference = self.generate_reference_config()
+        text = yaml.dump(reference)
+
+        folder = self.config_file_paths[0]
+        file_name = "{}_reference.{}".format(self.config_file_names[0], self.config_file_extensions[0])
+        file_path = os.path.join(self.config_file_paths[0], file_name)
+
+        os.makedirs(folder, exist_ok=True)
+        with open(file_path, "w") as file:
+            file.write(text)
+
+    def generate_reference_config(self) -> {}:
+        """
+        Generates a dictionary containing the expected config tree filled with default and example values
+        :return: a dictionary containing the expected config tree
+        """
+        entries = self._find_config_entries()
+
+        config_tree = {}
+        for entry in entries:
+            current_level = config_tree
+            for path in entry.yaml_path[:-1]:
+                if path not in current_level:
+                    current_level[path] = {}
+                current_level = current_level[path]
+
+            current_level[entry.yaml_path[-1]] = entry._type_to_value(entry.example)
+
+        return config_tree
 
     def _find_config_entries(self) -> [ConfigEntry]:
         """

@@ -22,6 +22,7 @@ from container_app_conf import ConfigEntry
 
 
 class StringConfigEntry(ConfigEntry):
+    _example = "text"
 
     def _value_to_type(self, value: any) -> str or None:
         """

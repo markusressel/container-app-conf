@@ -22,6 +22,7 @@ from container_app_conf import ConfigEntry
 
 
 class IntConfigEntry(ConfigEntry):
+    _example = "42"
 
     def _value_to_type(self, value: any) -> int or None:
         """
