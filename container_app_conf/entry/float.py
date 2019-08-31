@@ -34,3 +34,6 @@ class FloatConfigEntry(ConfigEntry):
             return float(value[:-1]) / 100.0
         else:
             return float(value)
+
+    def _type_to_value(self, type: any) -> any:
+        return float(type)

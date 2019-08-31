@@ -31,3 +31,6 @@ class IntConfigEntry(ConfigEntry):
         :return: the parsed int value
         """
         return int(value)
+
+    def _type_to_value(self, type: any) -> any:
+        return int(type)
