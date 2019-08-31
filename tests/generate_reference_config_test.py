@@ -17,27 +17,11 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+from tests import TestBase
 
-from container_app_conf import ConfigEntry
 
+class EntryTest(TestBase):
 
-class BoolConfigEntry(ConfigEntry):
-    _example = "true"
-
-    def _value_to_type(self, value: any) -> bool or None:
-        """
-        Tries to permissively convert the given value to a boolean.
-        :param value: the value to parse
-        :return: the parsed boolean value
-        """
-        if type(value) == bool:
-            return value
-        else:
-            s = str(value).lower()
-
-            if s in ['y', 'yes', 'true', 't', '1']:
-                return True
-            elif s in ['n', 'no', 'false', 'f', '0']:
-                return False
-            else:
-                self._raise_invalid_value(value)
+    def test_generate_reference_config(self):
+        reference_config = self.under_test.generate_reference_config()
+        assert len(reference_config) > 0

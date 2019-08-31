@@ -21,17 +21,27 @@ import logging
 
 
 class ConfigEntry:
+    _example = None
 
-    def __init__(self, yaml_path: [str], default: any = None, none_allowed: bool = None):
+    def __init__(self, yaml_path: [str], example: str = None, description: str or None = None, default: any = None,
+                 none_allowed: bool = None):
         """
         Creates a config entry
         :param yaml_path: list of strings representing the yaml tree path for this entry
+        :param example: example str value
+        :param description: a description of this entry
         :param default: the default value
         :param none_allowed: Set to True if a 'None' value may be allowed, False if not,
                              otherwise it will be True if the default value is not None.
         """
+        if len(yaml_path) <= 0:
+            raise ValueError("{}: yaml_path must contain at least one node".format(self.__class__.__name__))
         self.yaml_path = yaml_path
         self.env_key = "_".join(yaml_path).upper()
+
+        self.description = description
+        if example is not None:
+            self._example = example
 
         if none_allowed is None:
             none_allowed = default is None
@@ -39,6 +49,10 @@ class ConfigEntry:
 
         self.default = self._parse_value(default)
         self._value = default
+
+    @property
+    def example(self) -> str:
+        return self.default if self.default is not None else self._example
 
     @property
     def value(self) -> any:
@@ -74,11 +88,20 @@ class ConfigEntry:
 
     def _value_to_type(self, value: any) -> any:
         """
-        Converts the given type to the expected type
+        Converts the given value to the expected value type of this entry
         :param value: the yaml value
         :return: parsed value
         """
         raise NotImplementedError()
+
+    def _type_to_value(self, type: any) -> any:
+        """
+        Converts a value of the expected entry type to a valid representation in the config file.
+        This is the inverse function of _value_to_type
+        :param type: value of expected entry type
+        :return: config file value
+        """
+        return str(type)
 
     def _raise_invalid_value(self, value: any):
         raise ValueError("Invalid value '{}' for config option {}".format(value, self.env_key))

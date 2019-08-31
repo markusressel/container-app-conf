@@ -28,16 +28,38 @@ class ListConfigEntry(ConfigEntry):
     Config entry allowing to specify a list of items of specified type
     """
 
-    def __init__(self, item_type: Type[ConfigEntry], yaml_path: [str], default: any = None, none_allowed: bool = None):
+    def __init__(self, item_type: Type[ConfigEntry], yaml_path: [str], example: str = None,
+                 description: str or None = None,
+                 default: any = None, none_allowed: bool = None):
         """
 
         :param item_type: the type of individual list items
         :param yaml_path: list of yaml tree entries
+        :param example: example str value
+        :param description: a description of this list entry
         :param default: default value
         :param none_allowed: if None is allowed for this config entry
         """
         self._item_type = item_type
-        super().__init__(yaml_path, default, none_allowed)
+
+        super().__init__(
+            yaml_path=yaml_path,
+            description=description,
+            example=example,
+            default=default,
+            none_allowed=none_allowed
+        )
+
+    @property
+    def example(self) -> str:
+        if self.default is not None:
+            if isinstance(self.default, list):
+                return ",".join(self.default)
+            else:
+                return self.default
+
+        single_example = self._item_type("dummy").example
+        return ",".join([single_example, single_example, single_example])
 
     def _value_to_type(self, value: any) -> [any] or None:
         """
@@ -49,3 +71,9 @@ class ListConfigEntry(ConfigEntry):
             value = str(value).split(',')
 
         return list(map(lambda x: self._item_type._value_to_type(self, x), filter(lambda x: x, value)))
+
+    def _type_to_value(self, type: list or str) -> any:
+        if isinstance(type, str):
+            return type
+        str_items = list(map(lambda x: self._item_type._type_to_value(self, x), type))
+        return ",".join(str_items)

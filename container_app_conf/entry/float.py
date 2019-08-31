@@ -22,6 +22,7 @@ from container_app_conf import ConfigEntry
 
 
 class FloatConfigEntry(ConfigEntry):
+    _example = "3.1415926535"
 
     def _value_to_type(self, value: any) -> float or None:
         """

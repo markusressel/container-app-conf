@@ -25,6 +25,7 @@ from container_app_conf import ConfigEntry
 
 
 class TimeDeltaConfigEntry(ConfigEntry):
+    _example = "4h32m1s"
 
     def _value_to_type(self, value: any) -> timedelta or None:
         """
@@ -32,8 +33,12 @@ class TimeDeltaConfigEntry(ConfigEntry):
         :param value: the value to parse
         :return: the parsed date value
         """
-        parsed = parse(value)
-        if parsed is None:
-            raise ValueError("Cannot parse the given timedelta format: {}".format(value))
-
-        return timedelta(seconds=parsed)
+        if isinstance(value, timedelta):
+            return value
+        elif isinstance(value, str):
+            parsed = parse(value)
+            if parsed is None:
+                raise ValueError("Cannot parse the given timedelta format: {}".format(value))
+            return timedelta(seconds=parsed)
+        else:
+            self._raise_invalid_value(value)

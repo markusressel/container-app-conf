@@ -19,7 +19,58 @@
 #  SOFTWARE.
 
 import unittest
+from datetime import datetime, timedelta
+
+from container_app_conf import Config
+from container_app_conf.entry.bool import BoolConfigEntry
+from container_app_conf.entry.date import DateConfigEntry
+from container_app_conf.entry.float import FloatConfigEntry
+from container_app_conf.entry.int import IntConfigEntry
+from container_app_conf.entry.list import ListConfigEntry
+from container_app_conf.entry.string import StringConfigEntry
+from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
+
+
+class TestConfig(Config):
+    @property
+    def config_file_names(self) -> [str]:
+        return ["testing"]
+
+    BOOL = BoolConfigEntry(
+        yaml_path=["test", "bool"],
+        default=False
+    )
+    STRING = StringConfigEntry(
+        yaml_path=["test", "string"],
+        default="default value"
+    )
+    INT = IntConfigEntry(
+        yaml_path=["test", "int"],
+        default=100
+    )
+    FLOAT = FloatConfigEntry(
+        yaml_path=["test", "float"],
+        default=1.23
+    )
+    DATE = DateConfigEntry(
+        yaml_path=["test", "this", "date", "is", "nested", "deep"],
+        default=datetime.now()
+    )
+    TIMEDELTA = TimeDeltaConfigEntry(
+        yaml_path=["test", "this", "timediff", "is", "in", "this", "branch"],
+        default=timedelta(seconds=10)
+    )
+    STRING_LIST = ListConfigEntry(
+        item_type=StringConfigEntry,
+        yaml_path=["test", "this", "is", "a", "list"],
+        default=[
+            "these",
+            "are",
+            "test",
+            "values"
+        ]
+    )
 
 
 class TestBase(unittest.TestCase):
-    pass
+    under_test = TestConfig()

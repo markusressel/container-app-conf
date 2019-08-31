@@ -27,6 +27,7 @@ from container_app_conf import ConfigEntry
 
 
 class DateConfigEntry(ConfigEntry):
+    _example = "2008-09-03T20:56:35.450686Z"
 
     def _value_to_type(self, value: any) -> datetime or None:
         """
@@ -34,4 +35,15 @@ class DateConfigEntry(ConfigEntry):
         :param value: the value to parse
         :return: the parsed date value
         """
-        return dateutil.parser.parse(value)
+        if isinstance(value, datetime):
+            return value
+        elif isinstance(value, str):
+            return dateutil.parser.parse(value)
+        else:
+            self._raise_invalid_value(value)
+
+    def _type_to_value(self, type: any) -> any:
+        if isinstance(type, datetime):
+            return type.isoformat()
+        else:
+            return str(type)
