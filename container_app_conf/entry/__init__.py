@@ -23,7 +23,7 @@ import logging
 class ConfigEntry:
     _example = None
 
-    def __init__(self, yaml_path: [str], example: str = None, description: str or None = None, default: any = None,
+    def __init__(self, yaml_path: [str], example: any = None, description: str or None = None, default: any = None,
                  none_allowed: bool = None):
         """
         Creates a config entry
