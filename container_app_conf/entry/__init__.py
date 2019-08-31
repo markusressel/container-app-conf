@@ -17,6 +17,7 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+import logging
 
 
 class ConfigEntry:
@@ -67,7 +68,8 @@ class ConfigEntry:
 
         try:
             return self._value_to_type(value)
-        except:
+        except Exception as ex:
+            logging.exception(ex)
             self._raise_invalid_value(value)
 
     def _value_to_type(self, value: any) -> any:
