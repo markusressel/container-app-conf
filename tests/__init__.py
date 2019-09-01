@@ -31,6 +31,18 @@ from container_app_conf.entry.string import StringConfigEntry
 from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
 
 
+class TestConfig2(Config):
+    @property
+    def config_file_names(self) -> [str]:
+        return ["testing"]
+
+    BOOL = BoolConfigEntry(
+        yaml_path=["test", "bool"],
+        # default=False,
+        example=True
+    )
+
+
 class TestConfig(Config):
     @property
     def config_file_names(self) -> [str]:
@@ -63,7 +75,7 @@ class TestConfig(Config):
     STRING_LIST = ListConfigEntry(
         item_type=StringConfigEntry,
         yaml_path=["test", "this", "is", "a", "list"],
-        default=[
+        example=[
             "these",
             "are",
             "test",
@@ -74,3 +86,8 @@ class TestConfig(Config):
 
 class TestBase(unittest.TestCase):
     under_test = TestConfig()
+
+    def test_singleton(self):
+        assert not TestConfig() == TestConfig2()
+        assert TestConfig() == TestConfig()
+        assert TestConfig2() == TestConfig2()

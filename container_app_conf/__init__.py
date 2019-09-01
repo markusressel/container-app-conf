@@ -36,16 +36,29 @@ class Config:
     Extend this in your application.
     """
 
-    def __init__(self, validate: bool = True):
+    _instances = {}
+
+    def __new__(cls, validate: bool = True):
         """
         Creates a config object and reads configuration.
         :param validate: if validation should be run (can be disabled for tests)
         """
+        if cls._instances.get(cls, None) is None:
+            cls._instances[cls] = super(Config, cls).__new__(cls)
+
+        self = cls._instances[cls]
         self._config_entries = self._find_config_entries()
+        self.load_config(validate)
 
         if self._find_config_file() is None:
             self.write_reference_yaml()
 
+        return Config._instances[cls]
+
+    def load_config(self, validate: bool):
+        """
+        Loads the configuration from all available sources
+        """
         self._read_yaml()
         self._read_env()
         if validate:
