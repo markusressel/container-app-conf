@@ -33,6 +33,8 @@ class AppConfig(Config):
         return ["my_app_config_file_name"]
         
     MY_CONFIG = StringConfigEntry(
+        description="This is just a demo text config entry",
+        example="example",
         yaml_path=[
             "my_app_config_file_name",
             "example"
@@ -69,6 +71,25 @@ at the top to `None` even after initial parsing. Specifying an empty text
 in the yaml or corresponding environment variable will result in an
 exception. If you want to allow setting a `None` value even if the default 
 value is **not** `None`, use the `none_allowed=True` constructor parameter.
+
+## Generate reference config
+
+If no YAML configuration file can be found during initialization, 
+**container-app-conf** will automatically generate a reference config
+and write it to the first allowed config file path. By default this is:
+
+```
+./myapp_reference.yaml
+```
+
+This reference contains **all** available configuration options. If 
+a **default** was specified for an entry it will be used, otherwise 
+the **example** value.
+
+If the generated reference contains values that do not make sense 
+because of unknown constraints, specify your own **example** 
+or better yet **default** value using the respective 
+config entry constructor parameter.
 
 # Contributing
 
