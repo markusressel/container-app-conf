@@ -86,8 +86,3 @@ class TestConfig(Config):
 
 class TestBase(unittest.TestCase):
     under_test = TestConfig()
-
-    def test_singleton(self):
-        assert not TestConfig() == TestConfig2()
-        assert TestConfig() == TestConfig()
-        assert TestConfig2() == TestConfig2()

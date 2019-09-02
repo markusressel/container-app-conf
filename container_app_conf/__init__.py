@@ -25,6 +25,7 @@ import yaml
 
 from container_app_conf.const import DEFAULT_CONFIG_FILE_PATHS
 from container_app_conf.entry import ConfigEntry
+from container_app_conf.util import find_duplicates
 
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.DEBUG)
@@ -135,6 +136,12 @@ class Config:
         for attribute in map(lambda x: getattr(self, x), dir(self)):
             if isinstance(attribute, ConfigEntry):
                 entries.add(attribute)
+
+        entry_env_keys = list(map(lambda x: x.env_key, entries))
+        duplicates = find_duplicates(entry_env_keys)
+        if len(duplicates) > 0:
+            clashing = ", ".join(duplicates.keys())
+            raise ValueError("YAML paths must be unique! Clashing paths: {}".format(clashing))
 
         return list(entries)
 
