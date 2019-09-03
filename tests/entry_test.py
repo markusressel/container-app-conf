@@ -18,9 +18,11 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
+import os
+
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
-from container_app_conf.entry.file import FileConfigEntry
+from container_app_conf.entry.file import FileConfigEntry, DirectoryConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
@@ -107,17 +109,37 @@ class EntryTest(EntryTestBase):
     def test_file_entry():
         config_entry = FileConfigEntry(yaml_path=["file"])
         input_output = [
-            ("C:\\tmp", "C:\\tmp"),
             ("/tmp/test", "/tmp/test"),
-            ("./test", "./test"),
+            ("./test", os.path.abspath("./test")),
             ("/something/", AssertionError),
         ]
 
         EntryTestBase.assert_input_output(config_entry, input_output)
 
-        config_entry = FileConfigEntry(yaml_path=["file"], check_existence=True)
+        config_entry = FileConfigEntry(yaml_path=["file"],
+                                       check_existence=True)
         input_output = [
             ("/tmp/test", FileNotFoundError),
+        ]
+
+        EntryTestBase.assert_input_output(config_entry, input_output)
+
+    @staticmethod
+    def test_directory_entry():
+        config_entry = DirectoryConfigEntry(yaml_path=["directory"])
+        input_output = [
+            ("/tmp", "/tmp"),
+            ("./test", os.path.abspath("./test")),
+            ("/something/", "/something"),
+        ]
+
+        EntryTestBase.assert_input_output(config_entry, input_output)
+
+        config_entry = DirectoryConfigEntry(yaml_path=["directory"],
+                                            check_existence=True)
+
+        input_output = [
+            ("./", os.path.abspath("./")),
         ]
 
         EntryTestBase.assert_input_output(config_entry, input_output)
