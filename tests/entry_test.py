@@ -109,6 +109,7 @@ class EntryTest(EntryTestBase):
         input_output = [
             ("C:\\tmp", "C:\\tmp"),
             ("/tmp/test", "/tmp/test"),
+            ("./test", "./test"),
             ("/something/", AssertionError),
         ]
 
@@ -117,7 +118,6 @@ class EntryTest(EntryTestBase):
         config_entry = FileConfigEntry(yaml_path=["file"], check_existence=True)
         input_output = [
             ("/tmp/test", FileNotFoundError),
-            ("./__init__.py", "./__init__.py"),
         ]
 
         EntryTestBase.assert_input_output(config_entry, input_output)
