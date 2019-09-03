@@ -17,7 +17,6 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-
 from typing import Type
 
 from container_app_conf import ConfigEntry
@@ -30,17 +29,23 @@ class ListConfigEntry(ConfigEntry):
 
     def __init__(self, item_type: Type[ConfigEntry], yaml_path: [str], example: any = None,
                  description: str or None = None,
-                 default: any = None, none_allowed: bool = None):
+                 default: any = None, none_allowed: bool = None,
+                 item_args: dict = None,
+                 delimiter: str = None):
         """
-
-        :param item_type: the type of individual list items
+        :param item_type: the type of the ConfigEntry to use for individual list items
+        :param item_args: additional constructor arguments for the item_entry
+        :param delimiter: delimiter to use for splitting items when specifying the list as a string
         :param yaml_path: list of yaml tree entries
         :param example: example str value
         :param description: a description of this list entry
         :param default: default value
         :param none_allowed: if None is allowed for this config entry
         """
-        self._item_type = item_type
+        if item_args is None:
+            item_args = {}
+        self._item_entry = item_type(yaml_path=["dummy"], **item_args)
+        self.delimiter = delimiter if delimiter is not None else ","
 
         super().__init__(
             yaml_path=yaml_path,
@@ -58,7 +63,7 @@ class ListConfigEntry(ConfigEntry):
         if self._example is not None:
             return self._example
 
-        single_example = self._item_type("dummy").example
+        single_example = self._item_entry.example
         return [single_example, single_example, single_example]
 
     def _value_to_type(self, value: any) -> [any] or None:
@@ -68,12 +73,12 @@ class ListConfigEntry(ConfigEntry):
         :return: the parsed list
         """
         if not isinstance(value, list):
-            value = str(value).split(',')
+            value = str(value).split(self.delimiter)
 
-        return list(map(lambda x: self._item_type._value_to_type(self, x), filter(lambda x: x, value)))
+        return list(map(lambda x: self._item_entry._value_to_type(x), filter(lambda x: x, value)))
 
     def _type_to_value(self, type: list or str) -> any:
         if isinstance(type, str):
             return type
-        str_items = list(map(lambda x: self._item_type._type_to_value(self, x), type))
+        str_items = list(map(lambda x: self._item_entry._type_to_value(x), type))
         return str_items

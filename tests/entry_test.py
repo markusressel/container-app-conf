@@ -20,6 +20,7 @@
 
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
+from container_app_conf.entry.file import FileConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
@@ -80,12 +81,12 @@ class EntryTest(EntryTestBase):
         from dateutil.tz import tzutc
 
         config_entry = DateConfigEntry(yaml_path=["date"])
-        input_result_map = [
+        input_output = [
             ("2008-09-03T20:56:35.450686Z", datetime(2008, 9, 3, 20, 56, 35, 450686, tzinfo=tzutc())),
             ("2008-09-03", datetime(2008, 9, 3, 0, 0, 0, 0)),
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_result_map)
+        EntryTestBase.assert_input_output(config_entry, input_output)
 
     @staticmethod
     def test_timedelta_entry():
@@ -98,6 +99,25 @@ class EntryTest(EntryTestBase):
             ("4h0m3s", timedelta(hours=4, minutes=0, seconds=3)),
             ("4h3s", timedelta(hours=4, minutes=0, seconds=3)),
             ("4:13", timedelta(hours=0, minutes=4, seconds=13)),
+        ]
+
+        EntryTestBase.assert_input_output(config_entry, input_output)
+
+    @staticmethod
+    def test_file_entry():
+        config_entry = FileConfigEntry(yaml_path=["file"])
+        input_output = [
+            ("C:\\tmp", "C:\\tmp"),
+            ("/tmp/test", "/tmp/test"),
+            ("/something/", AssertionError),
+        ]
+
+        EntryTestBase.assert_input_output(config_entry, input_output)
+
+        config_entry = FileConfigEntry(yaml_path=["file"], check_existence=True)
+        input_output = [
+            ("/tmp/test", FileNotFoundError),
+            ("./__init__.py", "./__init__.py"),
         ]
 
         EntryTestBase.assert_input_output(config_entry, input_output)
