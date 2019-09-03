@@ -18,6 +18,9 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 import logging
+import re
+
+from container_app_conf.const import ENV_REGEX
 
 
 class ConfigEntry:
@@ -38,6 +41,8 @@ class ConfigEntry:
             raise ValueError("{}: yaml_path must contain at least one node".format(self.__class__.__name__))
         self.yaml_path = yaml_path
         self.env_key = "_".join(yaml_path).upper()
+        if not re.match(ENV_REGEX, self.env_key):
+            raise ValueError("Config entry contains invalid characters, restrict yourself to: {}".format(ENV_REGEX))
 
         self.description = description
         if example is not None:

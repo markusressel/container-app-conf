@@ -36,7 +36,7 @@ class AppConfig(Config):
         description="This is just a demo text config entry",
         example="example",
         yaml_path=[
-            "my_app_config_file_name",
+            "my_app",
             "example"
         ],
         none_allowed=False)
@@ -71,6 +71,40 @@ at the top to `None` even after initial parsing. Specifying an empty text
 in the yaml or corresponding environment variable will result in an
 exception. If you want to allow setting a `None` value even if the default 
 value is **not** `None`, use the `none_allowed=True` constructor parameter.
+
+## YAML paths
+
+**container-app-conf** looks for a YAML config file in multiple 
+directories that are commonly used for configuration files. By default
+this includes:
+
+- `./`
+- `~/.config/`
+- `~/`
+
+but can also be defined manually by overriding the `config_file_paths` property: 
+
+```python
+@property
+def config_file_paths(self) -> [str]:
+    """
+    :return: List of allowed config file paths
+    """
+    return ["/my/path", "/my/other/path"]
+```
+
+## ENV variables
+
+Since you only specify the yaml path of a config entry the matching ENV
+key is generated automatically. Currently this is done by concatenating
+all YAML tree items using an underscore and converting to uppercase:
+
+```python
+yaml_path = ["my_app", "example"]
+env_key = "_".join(yaml_path).upper()
+```
+
+yields `MY_APP_EXAMPLE`.
 
 ## Generate reference config
 

@@ -21,7 +21,7 @@
 import unittest
 from datetime import datetime, timedelta
 
-from container_app_conf import Config
+from container_app_conf import Config, ConfigEntry
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
@@ -86,3 +86,23 @@ class TestConfig(Config):
 
 class TestBase(unittest.TestCase):
     under_test = TestConfig()
+
+
+class EntryTestBase(TestBase):
+
+    @staticmethod
+    def assert_input_output(entry: ConfigEntry, list_of_tuples: [()]):
+        for item in list_of_tuples:
+            assert len(item) == 2
+
+            input = item[0]
+            result = item[1]
+
+            if (type(result) == type) and issubclass(result, BaseException):
+                try:
+                    entry._parse_value(input)
+                    assert False
+                except:
+                    assert True
+            else:
+                assert entry._parse_value(input) == result

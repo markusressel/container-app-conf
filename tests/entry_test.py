@@ -22,118 +22,82 @@ from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
-from container_app_conf.entry.list import ListConfigEntry
 from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
-from tests import TestBase
+from tests import EntryTestBase
 
 
-class EntryTest(TestBase):
+class EntryTest(EntryTestBase):
 
     @staticmethod
     def test_bool_entry():
-        bool_config_entry = BoolConfigEntry(yaml_path=["bool"])
+        config_entry = BoolConfigEntry(yaml_path=["bool"])
 
         true_values = ["y", "yes", "true", "t", 1, True]
         false_values = ["n", "no", "false", "f", 0, False]
         invalid_values = ["hello", 2, 0.1]
 
-        for v in true_values:
-            assert bool_config_entry._parse_value(v)
+        input_output = []
 
-        for v in false_values:
-            assert not bool_config_entry._parse_value(v)
+        for tv in true_values:
+            input_output.append((tv, True))
+        for fv in false_values:
+            input_output.append((fv, False))
+        for iv in invalid_values:
+            input_output.append((iv, ValueError))
 
-        for v in invalid_values:
-            try:
-                bool_config_entry._parse_value(v)
-                assert False
-            except ValueError as ex:
-                assert ex is not None
+        EntryTestBase.assert_input_output(config_entry, input_output)
 
     @staticmethod
     def test_int_entry():
-        int_config_entry = IntConfigEntry(yaml_path=["int"])
+        config_entry = IntConfigEntry(yaml_path=["int"])
+        input_output = [
+            ("5", 5),
+            (5, 5),
+            ("-3", -3),
+            (-3, -3)
+        ]
 
-        input_result_map = {
-            "5": 5,
-            5: 5,
-            "-3": -3,
-            -3: -3
-        }
-
-        for k, v in input_result_map.items():
-            assert int_config_entry._parse_value(k) == v
+        EntryTestBase.assert_input_output(config_entry, input_output)
 
     @staticmethod
     def test_float_entry():
-        float_config_entry = FloatConfigEntry(yaml_path=["float"])
+        config_entry = FloatConfigEntry(yaml_path=["float"])
+        input_output = [
+            ("5", 5.0),
+            (5, 5.0),
+            ("-3.0", -3.0),
+            (-3.0, -3.0),
+            (1.2, 1.2),
+            ("1.2", 1.2),
+            ("3%", 0.03)
+        ]
 
-        input_result_map = {
-            "5": 5.0,
-            5: 5.0,
-            "-3.0": -3.0,
-            -3.0: -3.0,
-            1.2: 1.2,
-            "1.2": 1.2,
-            "3%": 0.03
-        }
-
-        for k, v in input_result_map.items():
-            assert float_config_entry._parse_value(k) == v
-
-    @staticmethod
-    def test_int_list_entry():
-        int_list_config_entry = ListConfigEntry(item_type=IntConfigEntry, yaml_path=["int_list"])
-
-        input_result_map = {
-            "5": [5],
-            "": [],
-            "1,2,3": [1, 2, 3]
-        }
-
-        for k, v in input_result_map.items():
-            assert int_list_config_entry._parse_value(k) == v
-
-    @staticmethod
-    def test_float_list_entry():
-        int_list_config_entry = ListConfigEntry(item_type=FloatConfigEntry, yaml_path=["float_list"])
-
-        input_result_map = {
-            "5": [5.0],
-            "": [],
-            "1,2.5,3": [1.0, 2.5, 3.0]
-        }
-
-        for k, v in input_result_map.items():
-            assert int_list_config_entry._parse_value(k) == v
+        EntryTestBase.assert_input_output(config_entry, input_output)
 
     @staticmethod
     def test_date_entry():
         from datetime import datetime
         from dateutil.tz import tzutc
 
-        date_config_entry = DateConfigEntry(yaml_path=["date"])
-        input_result_map = {
-            "2008-09-03T20:56:35.450686Z": datetime(2008, 9, 3, 20, 56, 35, 450686, tzinfo=tzutc()),
-            "2008-09-03": datetime(2008, 9, 3, 0, 0, 0, 0),
-        }
+        config_entry = DateConfigEntry(yaml_path=["date"])
+        input_result_map = [
+            ("2008-09-03T20:56:35.450686Z", datetime(2008, 9, 3, 20, 56, 35, 450686, tzinfo=tzutc())),
+            ("2008-09-03", datetime(2008, 9, 3, 0, 0, 0, 0)),
+        ]
 
-        for k, v in input_result_map.items():
-            assert date_config_entry._parse_value(k) == v
+        EntryTestBase.assert_input_output(config_entry, input_result_map)
 
     @staticmethod
     def test_timedelta_entry():
         from datetime import timedelta
 
-        date_config_entry = TimeDeltaConfigEntry(yaml_path=["timedelta"])
+        config_entry = TimeDeltaConfigEntry(yaml_path=["timedelta"])
+        input_output = [
+            ("20:56:35", timedelta(hours=20, minutes=56, seconds=35)),
+            ("32m", timedelta(minutes=32)),
+            ("4h0m3s", timedelta(hours=4, minutes=0, seconds=3)),
+            ("4h3s", timedelta(hours=4, minutes=0, seconds=3)),
+            ("4:13", timedelta(hours=0, minutes=4, seconds=13)),
+        ]
 
-        input_result_map = {
-            "20:56:35": timedelta(hours=20, minutes=56, seconds=35),
-            "32m": timedelta(minutes=32),
-            "4h0m3s": timedelta(hours=4, minutes=0, seconds=3),
-            "4h3s": timedelta(hours=4, minutes=0, seconds=3),
-            "4:13": timedelta(hours=0, minutes=4, seconds=13),
-        }
-
-        for k, v in input_result_map.items():
-            assert date_config_entry._parse_value(k) == v
+        EntryTestBase.assert_input_output(config_entry, input_output)
