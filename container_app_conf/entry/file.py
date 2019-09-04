@@ -36,13 +36,13 @@ class FileConfigEntry(ConfigEntry):
 
     def _value_to_type(self, value: any) -> str or None:
         """
-        Tries to permissively convert the given value to a datetime.
+        Tries to permissively convert the given value to a file path.
         :param value: the value to parse
-        :return: the parsed date value
+        :return: the parsed file value
         """
         str_value = str(value)
 
-        if str_value.endswith("/") or str_value.endswith("\\"):
+        if str_value.endswith(os.sep):
             raise AssertionError("File path should not end with delimiter: {}".format(str_value))
 
         if os.path.exists(str_value):
@@ -52,4 +52,34 @@ class FileConfigEntry(ConfigEntry):
             if self.check_existence:
                 raise FileNotFoundError("File does not exist: {}".format(value))
 
-        return str_value
+        return os.path.abspath(str_value)
+
+
+class DirectoryConfigEntry(ConfigEntry):
+    _example = "/tmp"
+
+    def __init__(self, yaml_path: [str], example: any = None, description: str or None = None, default: any = None,
+                 none_allowed: bool = None, check_existence: bool = False):
+        """
+        See ConfigEntry
+        :param check_existence: whether to check for folder existence
+        """
+        super().__init__(yaml_path, example, description, default, none_allowed)
+        self.check_existence = check_existence
+
+    def _value_to_type(self, value: any) -> str or None:
+        """
+        Tries to permissively convert the given value to a folder path.
+        :param value: the value to parse
+        :return: the parsed folder value
+        """
+        str_value = str(value)
+
+        if os.path.exists(str_value):
+            if not os.path.isdir(str_value):
+                raise NotADirectoryError("Path is not a directory: {}".format(str_value))
+        else:
+            if self.check_existence:
+                raise FileNotFoundError("directory does not exist: {}".format(value))
+
+        return os.path.abspath(str_value)

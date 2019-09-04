@@ -24,7 +24,7 @@ from datetime import datetime, timedelta
 from container_app_conf import Config, ConfigEntry
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
-from container_app_conf.entry.file import FileConfigEntry
+from container_app_conf.entry.file import FileConfigEntry, DirectoryConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.list import ListConfigEntry
@@ -75,6 +75,9 @@ class TestConfig(Config):
     )
     FILE = FileConfigEntry(
         yaml_path=["test", "file"],
+    )
+    DIRECTORY = DirectoryConfigEntry(
+        yaml_path=["test", "directory"],
     )
     STRING_LIST = ListConfigEntry(
         item_type=StringConfigEntry,

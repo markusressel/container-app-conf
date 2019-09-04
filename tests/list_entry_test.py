@@ -17,6 +17,7 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+import os
 from datetime import datetime
 from datetime import timedelta
 
@@ -117,8 +118,8 @@ class ListEntryTest(EntryTestBase):
             (None, None),
             ("/tmp/", AssertionError),
             (example1, [example1]),
-            (example2, [example2]),
-            (",".join(example3), example3),
+            (example2, [os.path.abspath(example2)]),
+            (",".join(example3), [example1, os.path.abspath(example2)]),
         ]
 
         EntryTestBase.assert_input_output(config_entry, input_output)
