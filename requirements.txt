@@ -1,4 +1,4 @@
 pytimeparse
 pyyaml
 python-dateutil
-py-range-parse>=1.0.3
+py-range-parse>=1.0.4

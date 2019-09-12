@@ -21,6 +21,8 @@
 import unittest
 from datetime import datetime, timedelta
 
+from py_range_parse import Range
+
 from container_app_conf import Config, ConfigEntry
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
@@ -82,6 +84,7 @@ class TestConfig(Config):
     )
     RANGE = RangeConfigEntry(
         yaml_path=["test", "this", "is", "a", "range"],
+        default=Range(0, 100)
     )
     STRING_LIST = ListConfigEntry(
         item_type=StringConfigEntry,
