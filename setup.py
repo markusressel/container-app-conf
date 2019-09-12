@@ -86,7 +86,7 @@ setup(
     description='Convenient configuration of containerized applications',
     long_description=readme(),
     long_description_content_type=readme_type(),
-    license='GPLv3+',
+    license='MIT',
     author='Markus Ressel',
     author_email='mail@markusressel.de',
     url='https://github.com/markusressel/container-app-conf',
