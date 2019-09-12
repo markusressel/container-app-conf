@@ -20,11 +20,14 @@
 
 import os
 
+from py_range_parse import Range
+
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
 from container_app_conf.entry.file import FileConfigEntry, DirectoryConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
+from container_app_conf.entry.range import RangeConfigEntry
 from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
 from tests import EntryTestBase
 
@@ -140,6 +143,15 @@ class EntryTest(EntryTestBase):
 
         input_output = [
             ("./", os.path.abspath("./")),
+        ]
+
+        EntryTestBase.assert_input_output(config_entry, input_output)
+
+    @staticmethod
+    def test_range_entry():
+        config_entry = RangeConfigEntry(yaml_path=["range"])
+        input_output = [
+            ("[-5..5]", Range(-5, 5)),
         ]
 
         EntryTestBase.assert_input_output(config_entry, input_output)

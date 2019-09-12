@@ -28,6 +28,7 @@ from container_app_conf.entry.file import FileConfigEntry, DirectoryConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.list import ListConfigEntry
+from container_app_conf.entry.range import RangeConfigEntry
 from container_app_conf.entry.string import StringConfigEntry
 from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
 
@@ -78,6 +79,9 @@ class TestConfig(Config):
     )
     DIRECTORY = DirectoryConfigEntry(
         yaml_path=["test", "directory"],
+    )
+    RANGE = RangeConfigEntry(
+        yaml_path=["test", "this", "is", "a", "range"],
     )
     STRING_LIST = ListConfigEntry(
         item_type=StringConfigEntry,
