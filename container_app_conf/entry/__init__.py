@@ -52,7 +52,10 @@ class ConfigEntry:
             none_allowed = default is None
         self._none_allowed = none_allowed
 
-        self.default = self._parse_value(default)
+        if default is not None or self._none_allowed:
+            self.default = self._parse_value(default)
+        else:
+            self.default = None
         self._value = default
 
     @property
