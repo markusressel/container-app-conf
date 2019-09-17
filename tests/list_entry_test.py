@@ -17,9 +17,9 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-import os
 from datetime import datetime
 from datetime import timedelta
+from pathlib import Path
 
 from dateutil.tz import tzutc
 
@@ -34,8 +34,7 @@ from tests import EntryTestBase
 
 class ListEntryTest(EntryTestBase):
 
-    @staticmethod
-    def test_str_list_entry_custom_delimiter():
+    def test_str_list_entry_custom_delimiter(self):
         config_entry = ListConfigEntry(item_type=IntConfigEntry,
                                        yaml_path=["int_list"],
                                        delimiter="::")
@@ -43,10 +42,9 @@ class ListEntryTest(EntryTestBase):
             ("1::2::3", [1, 2, 3])
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_int_list_entry():
+    def test_int_list_entry(self):
         config_entry = ListConfigEntry(item_type=IntConfigEntry,
                                        yaml_path=["int_list"])
         input_output = [
@@ -55,10 +53,9 @@ class ListEntryTest(EntryTestBase):
             ("1,2,3", [1, 2, 3])
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_float_list_entry():
+    def test_float_list_entry(self):
         config_entry = ListConfigEntry(item_type=FloatConfigEntry,
                                        yaml_path=["float_list"])
         input_output = [
@@ -68,10 +65,9 @@ class ListEntryTest(EntryTestBase):
             ("1,2.5,3", [1.0, 2.5, 3.0])
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_date_list_entry():
+    def test_date_list_entry(self):
         config_entry = ListConfigEntry(item_type=DateConfigEntry,
                                        yaml_path=["date_list"])
 
@@ -84,10 +80,9 @@ class ListEntryTest(EntryTestBase):
             (",".join(input_example_1), output_example_1)
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_timedelta_entry():
+    def test_timedelta_entry(self):
         config_entry = ListConfigEntry(item_type=TimeDeltaConfigEntry,
                                        yaml_path=["timedelta_list"])
         input_output = [
@@ -102,10 +97,9 @@ class ListEntryTest(EntryTestBase):
             )
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_file_entry():
+    def test_file_entry(self):
         config_entry = ListConfigEntry(item_type=FileConfigEntry,
                                        item_args={
                                            "check_existence": False
@@ -117,9 +111,9 @@ class ListEntryTest(EntryTestBase):
         input_output = [
             (None, None),
             ("/tmp/", AssertionError),
-            (example1, [example1]),
-            (example2, [os.path.abspath(example2)]),
-            (",".join(example3), [example1, os.path.abspath(example2)]),
+            (example1, [Path(example1)]),
+            (example2, [Path(example2)]),
+            (",".join(example3), [Path(example1), Path(example2)]),
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
