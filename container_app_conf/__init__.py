@@ -203,4 +203,6 @@ class Config:
         import os
 
         for entry in self._config_entries:
-            entry.value = os.environ.get(entry.env_key, entry.value)
+            new_value = os.environ.get(entry.env_key, entry.value)
+            if new_value != entry.value:
+                entry.value = new_value
