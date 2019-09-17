@@ -18,6 +18,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 import os
+import pathlib
 
 from container_app_conf import ConfigEntry
 
@@ -41,18 +42,18 @@ class FileConfigEntry(ConfigEntry):
         :return: the parsed file value
         """
         str_value = str(value)
+        file = pathlib.Path(str_value)
 
         if str_value.endswith(os.sep):
-            raise AssertionError("File path should not end with delimiter: {}".format(str_value))
+            raise AssertionError("File path should not end with '{}' delimiter: {}".format(os.sep, str_value))
 
-        if os.path.exists(str_value):
-            if not os.path.isfile(str_value):
-                IsADirectoryError("Path is not a file: {}".format(str_value))
-        else:
-            if self.check_existence:
-                raise FileNotFoundError("File does not exist: {}".format(value))
+        if file.is_dir():
+            raise IsADirectoryError("Path is not a file: {}".format(str_value))
 
-        return os.path.abspath(str_value)
+        if self.check_existence and not file.exists():
+            raise FileNotFoundError("File does not exist: {}".format(value))
+
+        return file
 
 
 class DirectoryConfigEntry(ConfigEntry):
@@ -74,12 +75,15 @@ class DirectoryConfigEntry(ConfigEntry):
         :return: the parsed folder value
         """
         str_value = str(value)
+        directory = pathlib.Path(str_value)
 
-        if os.path.exists(str_value):
-            if not os.path.isdir(str_value):
-                raise NotADirectoryError("Path is not a directory: {}".format(str_value))
-        else:
-            if self.check_existence:
-                raise FileNotFoundError("directory does not exist: {}".format(value))
+        if not str_value.endswith(os.sep):
+            raise AssertionError("Directory path should end with '{}' delimiter: {}".format(os.sep, str_value))
 
-        return os.path.abspath(str_value)
+        if directory.is_file():
+            raise NotADirectoryError("Path is not a directory: {}".format(str_value))
+
+        if self.check_existence and not directory.exists():
+            raise FileNotFoundError("directory does not exist: {}".format(value))
+
+        return directory

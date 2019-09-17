@@ -18,7 +18,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-import os
+from pathlib import Path
 
 from py_range_parse import Range
 
@@ -34,8 +34,7 @@ from tests import EntryTestBase
 
 class EntryTest(EntryTestBase):
 
-    @staticmethod
-    def test_bool_entry():
+    def test_bool_entry(self):
         config_entry = BoolConfigEntry(yaml_path=["bool"])
 
         true_values = ["y", "yes", "true", "t", 1, True]
@@ -51,10 +50,9 @@ class EntryTest(EntryTestBase):
         for iv in invalid_values:
             input_output.append((iv, ValueError))
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_int_entry():
+    def test_int_entry(self):
         config_entry = IntConfigEntry(yaml_path=["int"])
         input_output = [
             ("5", 5),
@@ -63,10 +61,9 @@ class EntryTest(EntryTestBase):
             (-3, -3)
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_float_entry():
+    def test_float_entry(self):
         config_entry = FloatConfigEntry(yaml_path=["float"])
         input_output = [
             ("5", 5.0),
@@ -78,10 +75,9 @@ class EntryTest(EntryTestBase):
             ("3%", 0.03)
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_date_entry():
+    def test_date_entry(self):
         from datetime import datetime
         from dateutil.tz import tzutc
 
@@ -91,10 +87,9 @@ class EntryTest(EntryTestBase):
             ("2008-09-03", datetime(2008, 9, 3, 0, 0, 0, 0)),
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_timedelta_entry():
+    def test_timedelta_entry(self):
         from datetime import timedelta
 
         config_entry = TimeDeltaConfigEntry(yaml_path=["timedelta"])
@@ -106,18 +101,17 @@ class EntryTest(EntryTestBase):
             ("4:13", timedelta(hours=0, minutes=4, seconds=13)),
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_file_entry():
+    def test_file_entry(self):
         config_entry = FileConfigEntry(yaml_path=["file"])
         input_output = [
-            ("/tmp/test", "/tmp/test"),
-            ("./test", os.path.abspath("./test")),
+            ("/tmp/test", Path("/tmp/test")),
+            ("./test", Path("./test")),
             ("/something/", AssertionError),
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
         config_entry = FileConfigEntry(yaml_path=["file"],
                                        check_existence=True)
@@ -125,33 +119,32 @@ class EntryTest(EntryTestBase):
             ("/tmp/test", FileNotFoundError),
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_directory_entry():
+    def test_directory_entry(self):
         config_entry = DirectoryConfigEntry(yaml_path=["directory"])
         input_output = [
-            ("/tmp", "/tmp"),
-            ("./test", os.path.abspath("./test")),
-            ("/something/", "/something"),
+            ("/tmp", AssertionError),
+            ("/tmp/", Path("/tmp")),
+            ("./test/", Path("./test")),
+            ("/something/", Path("/something")),
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
         config_entry = DirectoryConfigEntry(yaml_path=["directory"],
                                             check_existence=True)
 
         input_output = [
-            ("./", os.path.abspath("./")),
+            ("./", Path("./")),
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)
 
-    @staticmethod
-    def test_range_entry():
+    def test_range_entry(self):
         config_entry = RangeConfigEntry(yaml_path=["range"])
         input_output = [
             ("[-5..5]", Range(-5, 5)),
         ]
 
-        EntryTestBase.assert_input_output(config_entry, input_output)
+        self.assert_input_output(config_entry, input_output)

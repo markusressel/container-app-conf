@@ -104,8 +104,7 @@ class TestBase(unittest.TestCase):
 
 class EntryTestBase(TestBase):
 
-    @staticmethod
-    def assert_input_output(entry: ConfigEntry, list_of_tuples: [()]):
+    def assert_input_output(self, entry: ConfigEntry, list_of_tuples: [()]):
         for item in list_of_tuples:
             assert len(item) == 2
 
@@ -119,4 +118,4 @@ class EntryTestBase(TestBase):
                 except:
                     assert True
             else:
-                assert entry._parse_value(input) == result
+                self.assertEquals(entry._parse_value(input), result)
