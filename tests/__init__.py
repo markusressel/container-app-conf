@@ -118,4 +118,4 @@ class EntryTestBase(TestBase):
                 except:
                     assert True
             else:
-                self.assertEquals(entry._parse_value(input), result)
+                self.assertEqual(entry._parse_value(input), result)
