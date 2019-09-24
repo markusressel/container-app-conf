@@ -34,9 +34,31 @@ class TestConfig2(Config):
     )
 
 
-class TestClashingKeys(TestBase):
+class TestSingleton(TestBase):
 
     def test_singleton(self):
         assert not TestConfig() == TestConfig2()
         assert TestConfig() == TestConfig()
         assert TestConfig2() == TestConfig2()
+
+    def test_singleton_config_entry(self):
+        conf1 = TestConfig()
+        conf2 = TestConfig()
+
+        conf1.INT.value = 1
+        conf2.INT.value = 2
+
+        self.assertEqual(conf1.INT.value, conf2.INT.value)
+
+    def test_instance_config_entry(self):
+        conf1 = TestConfig()
+        conf2 = TestConfig(singleton=False)
+        conf3 = TestConfig(singleton=False)
+
+        conf1.INT.value = 1
+        conf2.INT.value = 2
+        conf3.INT.value = 3
+
+        self.assertNotEqual(conf1.INT.value, conf2.INT.value)
+        self.assertNotEqual(conf1.INT.value, conf3.INT.value)
+        self.assertNotEqual(conf2.INT.value, conf3.INT.value)

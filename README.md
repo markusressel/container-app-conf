@@ -108,6 +108,21 @@ env_key = "_".join(yaml_path).upper()
 
 yields `MY_APP_EXAMPLE`.
 
+## Singleton
+
+By default every `Config` subclass instance will behave like a 
+singleton. This means if you change the config value in one instance it 
+will also affect all other instances of the same `__class__`.
+
+To be able to create multiple instances of a config that are independent 
+of one another this behaviour can be disabled using the `singleton` 
+constructor parameter:
+
+```python
+config1 = AppConfig(singleton=False)
+config2 = AppConfig(singleton=False)
+```
+
 ## Generate reference config
 
 If no YAML configuration file can be found during initialization, 

@@ -17,9 +17,10 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-
+import copy
 import logging
 import os
+from typing import Dict
 
 import yaml
 
@@ -28,7 +29,6 @@ from container_app_conf.entry import ConfigEntry
 from container_app_conf.util import find_duplicates
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
 
 
 class Config:
@@ -39,22 +39,40 @@ class Config:
 
     _instances = {}
 
-    def __new__(cls, validate: bool = True):
+    def __new__(cls, validate: bool = True, singleton: bool = True):
         """
         Creates a config object and reads configuration.
         :param validate: if validation should be run (can be disabled for tests)
+        :param singleton: if the returned instance should be a singleton
         """
-        if cls._instances.get(cls, None) is None:
-            cls._instances[cls] = super(Config, cls).__new__(cls)
+        if singleton:
+            if cls._instances.get(cls, None) is None:
+                instance = super(Config, cls).__new__(cls)
+                cls._instances[cls] = instance
+            else:
+                instance = cls._instances[cls]
+        else:
+            instance = super(Config, cls).__new__(cls)
 
-        self = cls._instances[cls]
+        self = instance
         self._config_entries = self._find_config_entries()
+
+        if not singleton:
+            # copy class attribute to instance to overshadow class attributes
+            instance_attributes = {}
+            for name, attribute in self._config_entries.items():
+                attribute_copy = copy.deepcopy(attribute)
+                self.__dict__.setdefault(name, attribute_copy)
+                instance_attributes[attribute.env_key] = attribute_copy
+            # update config_entries list to reflect instance attributes
+            self._config_entries = instance_attributes
+
         self.load_config(validate)
 
         if self._find_config_file() is None:
             self.write_reference_yaml()
 
-        return Config._instances[cls]
+        return instance
 
     def load_config(self, validate: bool):
         """
@@ -113,7 +131,7 @@ class Config:
         Generates a dictionary containing the expected config tree filled with default and example values
         :return: a dictionary containing the expected config tree
         """
-        entries = self._find_config_entries()
+        entries = self._config_entries.values()
 
         config_tree = {}
         for entry in entries:
@@ -127,23 +145,23 @@ class Config:
 
         return config_tree
 
-    def _find_config_entries(self) -> [ConfigEntry]:
+    def _find_config_entries(self) -> Dict[str, ConfigEntry]:
         """
         Detects config entry constants in this class
         :return: list of config entries
         """
-        entries = set()
-        for attribute in map(lambda x: getattr(self, x), dir(self)):
+        entries = {}
+        for name, attribute in dict(map(lambda x: (x, getattr(self, x)), dir(self))).items():
             if isinstance(attribute, ConfigEntry):
-                entries.add(attribute)
+                entries[name] = attribute
 
-        entry_env_keys = list(map(lambda x: x.env_key, entries))
+        entry_env_keys = list(map(lambda x: x.env_key, entries.values()))
         duplicates = find_duplicates(entry_env_keys)
         if len(duplicates) > 0:
             clashing = ", ".join(duplicates.keys())
             raise ValueError("YAML paths must be unique! Clashing paths: {}".format(clashing))
 
-        return list(entries)
+        return entries
 
     def _find_config_file(self) -> str or None:
         """
@@ -182,9 +200,12 @@ class Config:
 
             return value
 
+        if self.config_file_paths is None or len(self.config_file_paths) <= 0:
+            return
+
         file_path = self._find_config_file()
         if file_path is None:
-            LOGGER.debug("No config file found for path: {}".format(file_path))
+            LOGGER.debug("No config file found in paths: {}".format(self.config_file_paths))
             return
 
         with open(file_path, 'r') as ymlfile:
@@ -193,7 +214,7 @@ class Config:
             if not cfg:
                 return
 
-            for config_entry in self._config_entries:
+            for config_entry in self._config_entries.values():
                 config_entry.value = _get_value(cfg, config_entry)
 
     def _read_env(self) -> None:
@@ -202,7 +223,7 @@ class Config:
         """
         import os
 
-        for entry in self._config_entries:
-            new_value = os.environ.get(entry.env_key, entry.value)
+        for env_key, entry in self._config_entries.items():
+            new_value = os.environ.get(env_key, entry.value)
             if new_value != entry.value:
                 entry.value = new_value
