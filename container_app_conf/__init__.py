@@ -29,7 +29,6 @@ from container_app_conf.entry import ConfigEntry
 from container_app_conf.util import find_duplicates
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
 
 
 class Config:
@@ -201,9 +200,12 @@ class Config:
 
             return value
 
+        if self.config_file_paths is None or len(self.config_file_paths) <= 0:
+            return
+
         file_path = self._find_config_file()
         if file_path is None:
-            LOGGER.debug("No config file found for path: {}".format(file_path))
+            LOGGER.debug("No config file found in paths: {}".format(self.config_file_paths))
             return
 
         with open(file_path, 'r') as ymlfile:
