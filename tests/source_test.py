@@ -19,12 +19,12 @@
 #  SOFTWARE.
 from container_app_conf import DataSource, ConfigEntry
 from tests import TestBase
-from tests.singleton_test import TestConfig2
+from tests.singleton_test import TestConfigBase2
 
 
 class MemoryDataSource(DataSource):
     data = {
-        TestConfig2.BOOL.env_key: True
+        TestConfigBase2.BOOL.env_key: True
     }
 
     def has(self, entry: ConfigEntry) -> bool:
@@ -36,21 +36,21 @@ class MemoryDataSource(DataSource):
 
 class MemoryDataSource2(MemoryDataSource):
     data = {
-        TestConfig2.BOOL.env_key: False
+        TestConfigBase2.BOOL.env_key: False
     }
 
 
 class TestDataSource(TestBase):
 
     def test_yaml_env_priority(self):
-        conf = TestConfig2(data_sources=[
+        conf = TestConfigBase2(data_sources=[
             MemoryDataSource(),
             MemoryDataSource2()
         ], singleton=False)
 
         self.assertTrue(conf.BOOL.value)
 
-        conf2 = TestConfig2(data_sources=[
+        conf2 = TestConfigBase2(data_sources=[
             MemoryDataSource2(),
             MemoryDataSource()
         ], singleton=False)

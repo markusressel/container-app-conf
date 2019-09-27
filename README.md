@@ -20,13 +20,13 @@ and hopefully many others :)
 pip install container-app-conf
 ```
 
-## Extend `Config` base
+## Extend `ConfigBase` base
 
 ```python
-from container_app_conf import Config
+from container_app_conf import ConfigBase
 from container_app_conf.entry.string import StringConfigEntry
 
-class AppConfig(Config):
+class AppConfig(ConfigBase):
 
     @property
     def config_file_names(self) -> [str]:

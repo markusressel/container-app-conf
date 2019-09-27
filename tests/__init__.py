@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 
 from py_range_parse import Range
 
-from container_app_conf import Config, ConfigEntry
+from container_app_conf import ConfigBase, ConfigEntry
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
 from container_app_conf.entry.file import FileConfigEntry, DirectoryConfigEntry
@@ -35,7 +35,7 @@ from container_app_conf.entry.string import StringConfigEntry
 from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
 
 
-class TestConfig2(Config):
+class TestConfigBase2(ConfigBase):
     @property
     def config_file_names(self) -> [str]:
         return ["testing"]
@@ -47,7 +47,7 @@ class TestConfig2(Config):
     )
 
 
-class TestConfig(Config):
+class TestConfigBase(ConfigBase):
     @property
     def config_file_names(self) -> [str]:
         return ["testing"]
@@ -99,7 +99,7 @@ class TestConfig(Config):
 
 
 class TestBase(unittest.TestCase):
-    under_test = TestConfig()
+    under_test = TestConfigBase()
 
 
 class EntryTestBase(TestBase):

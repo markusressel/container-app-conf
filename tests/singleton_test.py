@@ -17,12 +17,12 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf import Config
+from container_app_conf import ConfigBase
 from container_app_conf.entry.bool import BoolConfigEntry
-from tests import TestBase, TestConfig
+from tests import TestBase, TestConfigBase
 
 
-class TestConfig2(Config):
+class TestConfigBase2(ConfigBase):
     @property
     def config_file_names(self) -> [str]:
         return ["testing"]
@@ -37,13 +37,13 @@ class TestConfig2(Config):
 class TestSingleton(TestBase):
 
     def test_singleton(self):
-        assert not TestConfig() == TestConfig2()
-        assert TestConfig() == TestConfig()
-        assert TestConfig2() == TestConfig2()
+        assert not TestConfigBase() == TestConfigBase2()
+        assert TestConfigBase() == TestConfigBase()
+        assert TestConfigBase2() == TestConfigBase2()
 
     def test_singleton_config_entry(self):
-        conf1 = TestConfig()
-        conf2 = TestConfig()
+        conf1 = TestConfigBase()
+        conf2 = TestConfigBase()
 
         conf1.INT.value = 1
         conf2.INT.value = 2
@@ -51,9 +51,9 @@ class TestSingleton(TestBase):
         self.assertEqual(conf1.INT.value, conf2.INT.value)
 
     def test_instance_config_entry(self):
-        conf1 = TestConfig()
-        conf2 = TestConfig(singleton=False)
-        conf3 = TestConfig(singleton=False)
+        conf1 = TestConfigBase()
+        conf2 = TestConfigBase(singleton=False)
+        conf3 = TestConfigBase(singleton=False)
 
         conf1.INT.value = 1
         conf2.INT.value = 2

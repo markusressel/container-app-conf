@@ -33,6 +33,7 @@ class EnvSource(DataSource):
     """
 
     def __init__(self, entries: List[ConfigEntry]):
+        # TODO: env keys should be implicit and never contain invalid characters
         for entry in entries:
             env_key = self.env_key(entry)
             if not re.match(ENV_REGEX, env_key):

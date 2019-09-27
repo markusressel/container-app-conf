@@ -31,7 +31,7 @@ from container_app_conf.util import find_duplicates
 LOGGER = logging.getLogger(__name__)
 
 
-class Config:
+class ConfigBase:
     """
     Config base class.
     Extend this in your application.
@@ -47,12 +47,12 @@ class Config:
         """
         if singleton:
             if cls._instances.get(cls, None) is None:
-                instance = super(Config, cls).__new__(cls)
+                instance = super(ConfigBase, cls).__new__(cls)
                 cls._instances[cls] = instance
             else:
                 instance = cls._instances[cls]
         else:
-            instance = super(Config, cls).__new__(cls)
+            instance = super(ConfigBase, cls).__new__(cls)
 
         self = instance
         self._config_entries = self._find_config_entries()
@@ -78,6 +78,7 @@ class Config:
 
         self.load_config(validate)
 
+        # TODO: find a way to generate example files
         # if self._find_config_file() is None:
         #     self.write_reference_yaml()
 
