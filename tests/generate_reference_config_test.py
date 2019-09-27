@@ -25,6 +25,6 @@ class EntryTest(TestBase):
 
     def test_generate_reference_config(self):
         entries = self.under_test._config_entries.values()
-        source = YamlSource()
+        source = YamlSource(self.under_test.__class__.__name__)
         reference_config = source._generate_reference_config(entries)
         assert len(reference_config) > 0

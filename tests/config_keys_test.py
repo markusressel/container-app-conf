@@ -31,11 +31,11 @@ class TestConfigBaseClashing(ConfigBase):
         return ["clashing_keys"]
 
     BOOL = BoolConfigEntry(
-        yaml_path=clashing_yaml_path,
+        key_path=clashing_yaml_path,
         default=False)
 
     STRING = StringConfigEntry(
-        yaml_path=clashing_yaml_path,
+        key_path=clashing_yaml_path,
         default="test"
     )
 

@@ -27,7 +27,7 @@ class ListConfigEntry(ConfigEntry):
     Config entry allowing to specify a list of items of specified type
     """
 
-    def __init__(self, item_type: Type[ConfigEntry], yaml_path: [str], example: any = None,
+    def __init__(self, item_type: Type[ConfigEntry], key_path: [str], example: any = None,
                  description: str or None = None,
                  default: any = None, none_allowed: bool = None,
                  item_args: dict = None,
@@ -36,7 +36,7 @@ class ListConfigEntry(ConfigEntry):
         :param item_type: the type of the ConfigEntry to use for individual list items
         :param item_args: additional constructor arguments for the item_entry
         :param delimiter: delimiter to use for splitting items when specifying the list as a string
-        :param yaml_path: list of yaml tree entries
+        :param key_path: list of yaml tree entries
         :param example: example str value
         :param description: a description of this list entry
         :param default: default value
@@ -44,11 +44,11 @@ class ListConfigEntry(ConfigEntry):
         """
         if item_args is None:
             item_args = {}
-        self._item_entry = item_type(yaml_path=["dummy"], **item_args)
+        self._item_entry = item_type(key_path=["dummy"], **item_args)
         self.delimiter = delimiter if delimiter is not None else ","
 
         super().__init__(
-            yaml_path=yaml_path,
+            key_path=key_path,
             description=description,
             example=example,
             default=default,

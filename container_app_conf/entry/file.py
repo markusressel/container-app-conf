@@ -26,13 +26,13 @@ from container_app_conf import ConfigEntry
 class FileConfigEntry(ConfigEntry):
     _example = "/tmp/temporary"
 
-    def __init__(self, yaml_path: [str], example: any = None, description: str or None = None, default: any = None,
+    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
                  none_allowed: bool = None, check_existence: bool = False):
         """
         See ConfigEntry
         :param check_existence: whether to check for file existence
         """
-        super().__init__(yaml_path, example, description, default, none_allowed)
+        super().__init__(key_path, example, description, default, none_allowed)
         self.check_existence = check_existence
 
     def _value_to_type(self, value: any) -> str or None:
@@ -59,13 +59,13 @@ class FileConfigEntry(ConfigEntry):
 class DirectoryConfigEntry(ConfigEntry):
     _example = "/tmp"
 
-    def __init__(self, yaml_path: [str], example: any = None, description: str or None = None, default: any = None,
+    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
                  none_allowed: bool = None, check_existence: bool = False):
         """
         See ConfigEntry
         :param check_existence: whether to check for folder existence
         """
-        super().__init__(yaml_path, example, description, default, none_allowed)
+        super().__init__(key_path, example, description, default, none_allowed)
         self.check_existence = check_existence
 
     def _value_to_type(self, value: any) -> str or None:

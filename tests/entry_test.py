@@ -35,7 +35,7 @@ from tests import EntryTestBase
 class EntryTest(EntryTestBase):
 
     def test_bool_entry(self):
-        config_entry = BoolConfigEntry(yaml_path=["bool"])
+        config_entry = BoolConfigEntry(key_path=["bool"])
 
         true_values = ["y", "yes", "true", "t", 1, True]
         false_values = ["n", "no", "false", "f", 0, False]
@@ -53,7 +53,7 @@ class EntryTest(EntryTestBase):
         self.assert_input_output(config_entry, input_output)
 
     def test_int_entry(self):
-        config_entry = IntConfigEntry(yaml_path=["int"])
+        config_entry = IntConfigEntry(key_path=["int"])
         input_output = [
             ("5", 5),
             (5, 5),
@@ -64,7 +64,7 @@ class EntryTest(EntryTestBase):
         self.assert_input_output(config_entry, input_output)
 
     def test_float_entry(self):
-        config_entry = FloatConfigEntry(yaml_path=["float"])
+        config_entry = FloatConfigEntry(key_path=["float"])
         input_output = [
             ("5", 5.0),
             (5, 5.0),
@@ -81,7 +81,7 @@ class EntryTest(EntryTestBase):
         from datetime import datetime
         from dateutil.tz import tzutc
 
-        config_entry = DateConfigEntry(yaml_path=["date"])
+        config_entry = DateConfigEntry(key_path=["date"])
         input_output = [
             ("2008-09-03T20:56:35.450686Z", datetime(2008, 9, 3, 20, 56, 35, 450686, tzinfo=tzutc())),
             ("2008-09-03", datetime(2008, 9, 3, 0, 0, 0, 0)),
@@ -92,7 +92,7 @@ class EntryTest(EntryTestBase):
     def test_timedelta_entry(self):
         from datetime import timedelta
 
-        config_entry = TimeDeltaConfigEntry(yaml_path=["timedelta"])
+        config_entry = TimeDeltaConfigEntry(key_path=["timedelta"])
         input_output = [
             ("20:56:35", timedelta(hours=20, minutes=56, seconds=35)),
             ("32m", timedelta(minutes=32)),
@@ -104,7 +104,7 @@ class EntryTest(EntryTestBase):
         self.assert_input_output(config_entry, input_output)
 
     def test_file_entry(self):
-        config_entry = FileConfigEntry(yaml_path=["file"])
+        config_entry = FileConfigEntry(key_path=["file"])
         input_output = [
             ("/tmp/test", Path("/tmp/test")),
             ("./test", Path("./test")),
@@ -113,7 +113,7 @@ class EntryTest(EntryTestBase):
 
         self.assert_input_output(config_entry, input_output)
 
-        config_entry = FileConfigEntry(yaml_path=["file"],
+        config_entry = FileConfigEntry(key_path=["file"],
                                        check_existence=True)
         input_output = [
             ("/tmp/test", FileNotFoundError),
@@ -122,7 +122,7 @@ class EntryTest(EntryTestBase):
         self.assert_input_output(config_entry, input_output)
 
     def test_directory_entry(self):
-        config_entry = DirectoryConfigEntry(yaml_path=["directory"])
+        config_entry = DirectoryConfigEntry(key_path=["directory"])
         input_output = [
             ("/tmp", AssertionError),
             ("/tmp/", Path("/tmp")),
@@ -132,7 +132,7 @@ class EntryTest(EntryTestBase):
 
         self.assert_input_output(config_entry, input_output)
 
-        config_entry = DirectoryConfigEntry(yaml_path=["directory"],
+        config_entry = DirectoryConfigEntry(key_path=["directory"],
                                             check_existence=True)
 
         input_output = [
@@ -142,7 +142,7 @@ class EntryTest(EntryTestBase):
         self.assert_input_output(config_entry, input_output)
 
     def test_range_entry(self):
-        config_entry = RangeConfigEntry(yaml_path=["range"])
+        config_entry = RangeConfigEntry(key_path=["range"])
         input_output = [
             ("[-5..5]", Range(-5, 5)),
         ]

@@ -43,8 +43,9 @@ class EnvSource(DataSource):
         return self.env_key(entry) in os.environ.keys()
 
     def get(self, entry: ConfigEntry) -> any:
-        return os.environ.get(entry.env_key, None)
+        key = self.env_key(entry)
+        return os.environ.get(key, None)
 
     @staticmethod
     def env_key(entry: ConfigEntry) -> str:
-        return "_".join(entry.yaml_path).upper()
+        return "_".join(entry.key_path).upper()

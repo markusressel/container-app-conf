@@ -63,7 +63,8 @@ class ConfigBase:
             for name, attribute in self._config_entries.items():
                 attribute_copy = copy.deepcopy(attribute)
                 self.__dict__.setdefault(name, attribute_copy)
-                instance_attributes[attribute.env_key] = attribute_copy
+                key = "_".join(attribute.key_path)
+                instance_attributes[key] = attribute_copy
             # update config_entries list to reflect instance attributes
             self._config_entries = instance_attributes
 
@@ -71,16 +72,14 @@ class ConfigBase:
             # set default data sources
             self.data_sources = [
                 EnvSource(list(self._config_entries.values())),
-                YamlSource()
+                YamlSource(cls.__name__)
             ]
+            # TODO: write reference for custom data sources too
+            self.data_sources[1].write_reference_yaml(list(self._config_entries.values()))
         else:
             self.data_sources = data_sources
 
         self.load_config(validate)
-
-        # TODO: find a way to generate example files
-        # if self._find_config_file() is None:
-        #     self.write_reference_yaml()
 
         return instance
 
@@ -89,7 +88,7 @@ class ConfigBase:
         Loads the configuration from all available sources
         """
         for source in reversed(self.data_sources):
-            for env_key, entry in self._config_entries.items():
+            for entry in self._config_entries.values():
                 if source.has(entry):
                     entry.value = source.get(entry)
 
@@ -112,10 +111,10 @@ class ConfigBase:
             if isinstance(attribute, ConfigEntry):
                 entries[name] = attribute
 
-        entry_env_keys = list(map(lambda x: x.env_key, entries.values()))
+        entry_env_keys = list(map(lambda x: "->".join(x.key_path), entries.values()))
         duplicates = find_duplicates(entry_env_keys)
         if len(duplicates) > 0:
             clashing = ", ".join(duplicates.keys())
-            raise ValueError("YAML paths must be unique! Clashing paths: {}".format(clashing))
+            raise ValueError("Key paths must be unique! Clashing paths: {}".format(clashing))
 
         return entries

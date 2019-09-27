@@ -18,31 +18,25 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 import logging
-import re
-
-from container_app_conf.const import ENV_REGEX
 
 
 class ConfigEntry:
     _example = None
 
-    def __init__(self, yaml_path: [str], example: any = None, description: str or None = None, default: any = None,
+    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
                  none_allowed: bool = None):
         """
         Creates a config entry
-        :param yaml_path: list of strings representing the yaml tree path for this entry
+        :param key_path: list of strings representing f.ex. the yaml tree path
         :param example: example str value
         :param description: a description of this entry
         :param default: the default value
         :param none_allowed: Set to True if a 'None' value may be allowed, False if not,
                              otherwise it will be True if the default value is not None.
         """
-        if len(yaml_path) <= 0:
+        if len(key_path) <= 0:
             raise ValueError("{}: yaml_path must contain at least one node".format(self.__class__.__name__))
-        self.yaml_path = yaml_path
-        self.env_key = "_".join(yaml_path).upper()
-        if not re.match(ENV_REGEX, self.env_key):
-            raise ValueError("Config entry contains invalid characters, restrict yourself to: {}".format(ENV_REGEX))
+        self.key_path = key_path
 
         self.description = description
         if example is not None:
@@ -112,4 +106,4 @@ class ConfigEntry:
         return str(type)
 
     def _raise_invalid_value(self, value: any):
-        raise ValueError("Invalid value '{}' for config option {}".format(value, self.env_key))
+        raise ValueError("Invalid value '{}' for config option `{}`".format(value, ">".join(self.key_path)))

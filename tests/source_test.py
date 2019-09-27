@@ -22,21 +22,27 @@ from tests import TestBase
 from tests.singleton_test import TestConfigBase2
 
 
+def _key(entry: ConfigEntry) -> str:
+    return "_".join(entry.key_path)
+
+
 class MemoryDataSource(DataSource):
     data = {
-        TestConfigBase2.BOOL.env_key: True
+        _key(TestConfigBase2.BOOL): True
     }
 
     def has(self, entry: ConfigEntry) -> bool:
-        return entry.env_key in self.data.keys()
+        key = _key(entry)
+        return key in self.data.keys()
 
     def get(self, entry: ConfigEntry) -> any:
-        return self.data[entry.env_key]
+        key = _key(entry)
+        return self.data[key]
 
 
 class MemoryDataSource2(MemoryDataSource):
     data = {
-        TestConfigBase2.BOOL.env_key: False
+        _key(TestConfigBase2.BOOL): False
     }
 
 

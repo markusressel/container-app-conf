@@ -35,8 +35,8 @@ class YamlSource(DataSource):
     """
     DEFAULT_FILE_EXTENSIONS = ['yaml', 'yml']
 
-    def __init__(self, path: str or List[str] = None,
-                 file_name: str or List[str] = None,
+    def __init__(self, file_name: str or List[str],
+                 path: str or List[str] = None,
                  file_extension: str or List[str] = None):
         """
         :param path: allowed config file path(s)
@@ -89,7 +89,7 @@ class YamlSource(DataSource):
         if value is None:
             return False
 
-        for key in entry.yaml_path:
+        for key in entry.key_path:
             value = value.get(key)
             if value is None:
                 return False
@@ -101,7 +101,7 @@ class YamlSource(DataSource):
         if value is None:
             return None
 
-        for key in entry.yaml_path:
+        for key in entry.key_path:
             value = value.get(key)
             if value is None:
                 return entry.value
@@ -132,11 +132,11 @@ class YamlSource(DataSource):
         config_tree = {}
         for entry in config_entries:
             current_level = config_tree
-            for path in entry.yaml_path[:-1]:
+            for path in entry.key_path[:-1]:
                 if path not in current_level:
                     current_level[path] = {}
                 current_level = current_level[path]
 
-            current_level[entry.yaml_path[-1]] = entry._type_to_value(entry.example)
+            current_level[entry.key_path[-1]] = entry._type_to_value(entry.example)
 
         return config_tree

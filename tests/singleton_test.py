@@ -28,7 +28,7 @@ class TestConfigBase2(ConfigBase):
         return ["testing"]
 
     BOOL = BoolConfigEntry(
-        yaml_path=["test", "bool"],
+        key_path=["test", "bool"],
         # default=False,
         example=True
     )
