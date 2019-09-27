@@ -17,14 +17,33 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf import YamlSource
-from tests import TestBase
+
+import os
+import re
+from typing import List
+
+from container_app_conf import ConfigEntry
+from container_app_conf.const import ENV_REGEX
+from container_app_conf.source import DataSource
 
 
-class EntryTest(TestBase):
+class EnvSource(DataSource):
+    """
+    Data source utilizing environment variables
+    """
 
-    def test_generate_reference_config(self):
-        entries = self.under_test._config_entries.values()
-        source = YamlSource()
-        reference_config = source._generate_reference_config(entries)
-        assert len(reference_config) > 0
+    def __init__(self, entries: List[ConfigEntry]):
+        for entry in entries:
+            env_key = self.env_key(entry)
+            if not re.match(ENV_REGEX, env_key):
+                raise ValueError("Config entry contains invalid characters, restrict yourself to: {}".format(ENV_REGEX))
+
+    def has(self, entry: ConfigEntry) -> bool:
+        return self.env_key(entry) in os.environ.keys()
+
+    def get(self, entry: ConfigEntry) -> any:
+        return os.environ.get(entry.env_key, None)
+
+    @staticmethod
+    def env_key(entry: ConfigEntry) -> str:
+        return "_".join(entry.yaml_path).upper()
