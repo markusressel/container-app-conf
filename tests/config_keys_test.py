@@ -42,6 +42,14 @@ class TestConfigBaseClashing(ConfigBase):
 
 class TestClashingKeys(TestBase):
 
+    def test_invalid_key_path_characters(self):
+        def create_entry():
+            BoolConfigEntry(key_path=[
+                "test:"
+            ])
+
+        self.assertRaises(ValueError, create_entry)
+
     def test_clashing_keys(self):
         with self.assertRaises(ValueError):
             TestConfigBaseClashing()

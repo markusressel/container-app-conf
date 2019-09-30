@@ -21,7 +21,7 @@ import copy
 import logging
 from typing import Dict, List
 
-from container_app_conf.const import DEFAULT_CONFIG_FILE_PATHS, KEY_PATH_REGEX
+from container_app_conf.const import DEFAULT_CONFIG_FILE_PATHS
 from container_app_conf.entry import ConfigEntry
 from container_app_conf.source import DataSource
 from container_app_conf.source.env_source import EnvSource
