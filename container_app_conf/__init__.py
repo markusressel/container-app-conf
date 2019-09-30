@@ -21,7 +21,7 @@ import copy
 import logging
 from typing import Dict, List
 
-from container_app_conf.const import DEFAULT_CONFIG_FILE_PATHS
+from container_app_conf.const import DEFAULT_CONFIG_FILE_PATHS, KEY_PATH_REGEX
 from container_app_conf.entry import ConfigEntry
 from container_app_conf.source import DataSource
 from container_app_conf.source.env_source import EnvSource
@@ -42,6 +42,8 @@ class ConfigBase:
     def __new__(cls, data_sources: List[DataSource] = None, validate: bool = True, singleton: bool = True):
         """
         Creates a config object and reads configuration.
+        :param data_sources: list of data sources to use. The first value that holds a value for a specific
+                             config entry overshadows other data sources.
         :param validate: if validation should be run (can be disabled for tests)
         :param singleton: if the returned instance should be a singleton
         """
@@ -71,7 +73,7 @@ class ConfigBase:
         if data_sources is None:
             # set default data sources
             self.data_sources = [
-                EnvSource(list(self._config_entries.values())),
+                EnvSource(),
                 YamlSource(cls.__name__)
             ]
             # TODO: write reference for custom data sources too

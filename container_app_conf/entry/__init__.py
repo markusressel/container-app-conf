@@ -18,6 +18,9 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 import logging
+import re
+
+from container_app_conf import KEY_PATH_REGEX
 
 
 class ConfigEntry:
@@ -36,6 +39,10 @@ class ConfigEntry:
         """
         if len(key_path) <= 0:
             raise ValueError("{}: yaml_path must contain at least one node".format(self.__class__.__name__))
+        if not re.match(KEY_PATH_REGEX, key_path):
+            raise ValueError(
+                "Key path contains invalid characters, please restrict yourself to: {}".format(KEY_PATH_REGEX))
+
         self.key_path = key_path
 
         self.description = description

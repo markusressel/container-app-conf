@@ -19,11 +19,8 @@
 #  SOFTWARE.
 
 import os
-import re
-from typing import List
 
 from container_app_conf import ConfigEntry
-from container_app_conf.const import ENV_REGEX
 from container_app_conf.source import DataSource
 
 
@@ -31,13 +28,6 @@ class EnvSource(DataSource):
     """
     Data source utilizing environment variables
     """
-
-    def __init__(self, entries: List[ConfigEntry]):
-        # TODO: env keys should be implicit and never contain invalid characters
-        for entry in entries:
-            env_key = self.env_key(entry)
-            if not re.match(ENV_REGEX, env_key):
-                raise ValueError("Config entry contains invalid characters, restrict yourself to: {}".format(ENV_REGEX))
 
     def has(self, entry: ConfigEntry) -> bool:
         return self.env_key(entry) in os.environ.keys()
