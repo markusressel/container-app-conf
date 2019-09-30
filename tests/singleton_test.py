@@ -23,10 +23,6 @@ from tests import TestBase, TestConfigBase
 
 
 class TestConfigBase2(ConfigBase):
-    @property
-    def config_file_names(self) -> [str]:
-        return ["testing"]
-
     BOOL = BoolConfigEntry(
         key_path=["test", "bool"],
         # default=False,

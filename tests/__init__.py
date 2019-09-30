@@ -36,10 +36,6 @@ from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
 
 
 class TestConfigBase2(ConfigBase):
-    @property
-    def config_file_names(self) -> [str]:
-        return ["testing"]
-
     BOOL = BoolConfigEntry(
         key_path=["test", "bool"],
         # default=False,
@@ -48,10 +44,6 @@ class TestConfigBase2(ConfigBase):
 
 
 class TestConfigBase(ConfigBase):
-    @property
-    def config_file_names(self) -> [str]:
-        return ["testing"]
-
     BOOL = BoolConfigEntry(
         key_path=["test", "bool"],
         default=False
