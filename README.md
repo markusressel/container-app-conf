@@ -28,14 +28,10 @@ from container_app_conf.entry.string import StringConfigEntry
 
 class AppConfig(ConfigBase):
 
-    @property
-    def config_file_names(self) -> [str]:
-        return ["my_app_config_file_name"]
-        
     MY_CONFIG = StringConfigEntry(
         description="This is just a demo text config entry",
         example="example",
-        yaml_path=[
+        key_path=[
             "my_app",
             "example"
         ],
@@ -74,39 +70,49 @@ in the yaml or corresponding environment variable will result in an
 exception. If you want to allow setting a `None` value even if the default 
 value is **not** `None`, use the `none_allowed=True` constructor parameter.
 
-## YAML paths
+## Data sources
 
-**container-app-conf** looks for a YAML config file in multiple 
-directories that are commonly used for configuration files. By default
-this includes:
+**container-app-conf** supports the simultaneous use of multiple data 
+sources to determine configuration values. The following 
+implementations are available:
+
+| Name                     | Description                              |
+|--------------------------|------------------------------------------|
+| `EnvSource`              | Reads environment variables |
+| `YamlSource`             | Parses `YAML` files |
+
+### EnvSource
+
+#### ENV Key
+
+Since you only specify the key path of a config entry the ENV
+key is generated automatically by concatenating all key path items 
+using an underscore and converting to uppercase:
+
+```python
+key_path = ["my_app", "example"]
+env_key = "_".join(key_path).upper()
+```
+
+yields `MY_APP_EXAMPLE`.
+
+### YamlSource
+
+#### File paths
+
+By default the `YamlSource` looks for a YAML config file in multiple 
+directories that are commonly used for configuration files which include:
 
 - `./`
 - `~/.config/`
 - `~/`
 
-but can also be defined manually by overriding the `config_file_paths` property: 
+This can be customized using the `path` constructor parameter: 
 
 ```python
-@property
-def config_file_paths(self) -> [str]:
-    """
-    :return: List of allowed config file paths
-    """
-    return ["/my/path", "/my/other/path"]
+from container_app_conf.source.yaml_source import YamlSource
+yaml_source = YamlSource(file_name="myapp", path=["/my/path", "/my/other/path"])
 ```
-
-## ENV variables
-
-Since you only specify the yaml path of a config entry the matching ENV
-key is generated automatically. Currently this is done by concatenating
-all YAML tree items using an underscore and converting to uppercase:
-
-```python
-yaml_path = ["my_app", "example"]
-env_key = "_".join(yaml_path).upper()
-```
-
-yields `MY_APP_EXAMPLE`.
 
 ## Singleton
 
@@ -125,22 +131,18 @@ config2 = AppConfig(singleton=False)
 
 ## Generate reference config
 
-If no YAML configuration file can be found during initialization, 
-**container-app-conf** will automatically generate a reference config
-and write it to the first allowed config file path. By default this is:
+**container-app-conf** will (by default) generate a reference config
+for each data source that supports it. This reference contains **all** 
+available configuration options. If a **default** was specified for an 
+entry it will be used, otherwise the **example** value.
 
-```
-./myapp_reference.yaml
-```
-
-This reference contains **all** available configuration options. If 
-a **default** was specified for an entry it will be used, otherwise 
-the **example** value.
+Where and how the reference fill is stored depends on the data source
+implementation.
 
 If the generated reference contains values that do not make sense 
-because of unknown constraints, specify your own **example** 
-or better yet **default** value using the respective 
-config entry constructor parameter.
+because of application constraints, specify your own **example** 
+or better yet **default** value using the respective config entry 
+constructor parameter.
 
 # Contributing
 
