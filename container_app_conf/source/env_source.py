@@ -32,7 +32,7 @@ class EnvSource(DataSource):
     def has(self, entry: ConfigEntry) -> bool:
         return self.env_key(entry) in os.environ.keys()
 
-    def get(self, entry: ConfigEntry) -> any:
+    def get(self, entry: ConfigEntry) -> str or None:
         key = self.env_key(entry)
         return os.environ.get(key, None)
 

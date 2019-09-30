@@ -17,6 +17,7 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+
 from container_app_conf import ConfigEntry
 
 
@@ -37,3 +38,10 @@ class DataSource:
         :return: value
         """
         raise NotImplementedError()
+
+    def write_reference(self, reference: dict):
+        """
+        Writes a reference configuration (if implemented)
+        :param reference: the reference config as in tree form
+        """
+        pass

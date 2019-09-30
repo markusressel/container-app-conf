@@ -24,18 +24,18 @@ from tests import TestBase
 
 
 class TestConfigBaseClashing(ConfigBase):
-    clashing_yaml_path = ["test", "bool"]
+    clashing_key_path = ["test", "bool"]
 
     @property
     def config_file_names(self) -> [str]:
         return ["clashing_keys"]
 
     BOOL = BoolConfigEntry(
-        key_path=clashing_yaml_path,
+        key_path=clashing_key_path,
         default=False)
 
     STRING = StringConfigEntry(
-        key_path=clashing_yaml_path,
+        key_path=clashing_key_path,
         default="test"
     )
 

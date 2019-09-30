@@ -108,11 +108,10 @@ class YamlSource(DataSource):
 
         return value
 
-    def write_reference_yaml(self, config_entries: List[ConfigEntry]):
+    def write_reference(self, reference: dict):
         """
         Writes a reference config file
         """
-        reference = self._generate_reference_config(config_entries)
         text = yaml.dump(reference)
 
         folder = self.paths[0]
@@ -122,21 +121,3 @@ class YamlSource(DataSource):
         os.makedirs(folder, exist_ok=True)
         with open(file_path, "w") as file:
             file.write(text)
-
-    @staticmethod
-    def _generate_reference_config(config_entries: List[ConfigEntry]) -> {}:
-        """
-        Generates a dictionary containing the expected config tree filled with default and example values
-        :return: a dictionary containing the expected config tree
-        """
-        config_tree = {}
-        for entry in config_entries:
-            current_level = config_tree
-            for path in entry.key_path[:-1]:
-                if path not in current_level:
-                    current_level[path] = {}
-                current_level = current_level[path]
-
-            current_level[entry.key_path[-1]] = entry._type_to_value(entry.example)
-
-        return config_tree

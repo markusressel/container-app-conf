@@ -17,7 +17,7 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf import YamlSource
+from container_app_conf.util import generate_reference_config
 from tests import TestBase
 
 
@@ -25,6 +25,5 @@ class EntryTest(TestBase):
 
     def test_generate_reference_config(self):
         entries = self.under_test._config_entries.values()
-        source = YamlSource(self.under_test.__class__.__name__)
-        reference_config = source._generate_reference_config(entries)
+        reference_config = generate_reference_config(entries)
         assert len(reference_config) > 0

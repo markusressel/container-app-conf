@@ -38,7 +38,7 @@ class ConfigEntry:
                              otherwise it will be True if the default value is not None.
         """
         if len(key_path) <= 0:
-            raise ValueError("{}: yaml_path must contain at least one node".format(self.__class__.__name__))
+            raise ValueError("{}: key_path must contain at least one node".format(self.__class__.__name__))
         for item in key_path:
             if not re.match(KEY_PATH_REGEX, item):
                 raise ValueError("Key path item '{}' contains invalid characters, please "

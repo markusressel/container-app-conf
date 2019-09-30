@@ -26,7 +26,7 @@ from container_app_conf.entry import ConfigEntry
 from container_app_conf.source import DataSource
 from container_app_conf.source.env_source import EnvSource
 from container_app_conf.source.yaml_source import YamlSource
-from container_app_conf.util import find_duplicates
+from container_app_conf.util import find_duplicates, generate_reference_config
 
 LOGGER = logging.getLogger(__name__)
 
@@ -39,13 +39,17 @@ class ConfigBase:
 
     _instances = {}
 
-    def __new__(cls, data_sources: List[DataSource] = None, validate: bool = True, singleton: bool = True):
+    def __new__(cls, data_sources: List[DataSource] = None,
+                validate: bool = True,
+                singleton: bool = True,
+                write_reference: bool = True):
         """
         Creates a config object and reads configuration.
         :param data_sources: list of data sources to use. The first value that holds a value for a specific
                              config entry overshadows other data sources.
         :param validate: if validation should be run (can be disabled for tests)
         :param singleton: if the returned instance should be a singleton
+        :param write_reference: Whether to write a reference configuration for all used data sources
         """
         if singleton:
             if cls._instances.get(cls, None) is None:
@@ -76,10 +80,13 @@ class ConfigBase:
                 EnvSource(),
                 YamlSource(cls.__name__)
             ]
-            # TODO: write reference for custom data sources too
-            self.data_sources[1].write_reference_yaml(list(self._config_entries.values()))
         else:
             self.data_sources = data_sources
+
+        if write_reference:
+            reference_config = generate_reference_config(list(self._config_entries.values()))
+            for data_source in self.data_sources:
+                data_source.write_reference(reference_config)
 
         self.load_config(validate)
 
