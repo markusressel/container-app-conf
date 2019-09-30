@@ -17,13 +17,25 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf.util import generate_reference_config
-from tests import TestBase
+
+import os
+
+from container_app_conf import ConfigEntry
+from container_app_conf.source import DataSource
 
 
-class EntryTest(TestBase):
+class EnvSource(DataSource):
+    """
+    Data source utilizing environment variables
+    """
 
-    def test_generate_reference_config(self):
-        entries = self.under_test._config_entries.values()
-        reference_config = generate_reference_config(entries)
-        assert len(reference_config) > 0
+    def has(self, entry: ConfigEntry) -> bool:
+        return self.env_key(entry) in os.environ.keys()
+
+    def get(self, entry: ConfigEntry) -> str or None:
+        key = self.env_key(entry)
+        return os.environ.get(key, None)
+
+    @staticmethod
+    def env_key(entry: ConfigEntry) -> str:
+        return "_".join(entry.key_path).upper()

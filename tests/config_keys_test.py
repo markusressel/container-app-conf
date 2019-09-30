@@ -17,31 +17,39 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf import Config
+from container_app_conf import ConfigBase
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.string import StringConfigEntry
 from tests import TestBase
 
 
-class TestConfigClashing(Config):
-    clashing_yaml_path = ["test", "bool"]
+class TestConfigBaseClashing(ConfigBase):
+    clashing_key_path = ["test", "bool"]
 
     @property
     def config_file_names(self) -> [str]:
         return ["clashing_keys"]
 
     BOOL = BoolConfigEntry(
-        yaml_path=clashing_yaml_path,
+        key_path=clashing_key_path,
         default=False)
 
     STRING = StringConfigEntry(
-        yaml_path=clashing_yaml_path,
+        key_path=clashing_key_path,
         default="test"
     )
 
 
 class TestClashingKeys(TestBase):
 
+    def test_invalid_key_path_characters(self):
+        def create_entry():
+            BoolConfigEntry(key_path=[
+                "test:"
+            ])
+
+        self.assertRaises(ValueError, create_entry)
+
     def test_clashing_keys(self):
         with self.assertRaises(ValueError):
-            TestConfigClashing()
+            TestConfigBaseClashing()

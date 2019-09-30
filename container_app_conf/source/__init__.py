@@ -17,13 +17,31 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf.util import generate_reference_config
-from tests import TestBase
+
+from container_app_conf import ConfigEntry
 
 
-class EntryTest(TestBase):
+class DataSource:
 
-    def test_generate_reference_config(self):
-        entries = self.under_test._config_entries.values()
-        reference_config = generate_reference_config(entries)
-        assert len(reference_config) > 0
+    def has(self, entry: ConfigEntry) -> bool:
+        """
+        Checks whether the data source has a value for the given config entry
+        :param entry: the config entry to check
+        :return: True if the source contains a value for the given entry, False otherwise
+        """
+        raise NotImplementedError()
+
+    def get(self, entry: ConfigEntry) -> any:
+        """
+        Retrieve the value of the given key
+        :param entry: config entry
+        :return: value
+        """
+        raise NotImplementedError()
+
+    def write_reference(self, reference: dict):
+        """
+        Writes a reference configuration (if implemented)
+        :param reference: the reference config as in tree form
+        """
+        pass

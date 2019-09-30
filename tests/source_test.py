@@ -17,13 +17,48 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf.util import generate_reference_config
+from container_app_conf import DataSource, ConfigEntry
 from tests import TestBase
+from tests.singleton_test import TestConfigBase2
 
 
-class EntryTest(TestBase):
+def _key(entry: ConfigEntry) -> str:
+    return "_".join(entry.key_path)
 
-    def test_generate_reference_config(self):
-        entries = self.under_test._config_entries.values()
-        reference_config = generate_reference_config(entries)
-        assert len(reference_config) > 0
+
+class MemoryDataSource(DataSource):
+    data = {
+        _key(TestConfigBase2.BOOL): True
+    }
+
+    def has(self, entry: ConfigEntry) -> bool:
+        key = _key(entry)
+        return key in self.data.keys()
+
+    def get(self, entry: ConfigEntry) -> any:
+        key = _key(entry)
+        return self.data[key]
+
+
+class MemoryDataSource2(MemoryDataSource):
+    data = {
+        _key(TestConfigBase2.BOOL): False
+    }
+
+
+class TestDataSource(TestBase):
+
+    def test_yaml_env_priority(self):
+        conf = TestConfigBase2(data_sources=[
+            MemoryDataSource(),
+            MemoryDataSource2()
+        ], singleton=False)
+
+        self.assertTrue(conf.BOOL.value)
+
+        conf2 = TestConfigBase2(data_sources=[
+            MemoryDataSource2(),
+            MemoryDataSource()
+        ], singleton=False)
+
+        self.assertFalse(conf2.BOOL.value)

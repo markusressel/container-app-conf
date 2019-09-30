@@ -18,8 +18,8 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-# regex to restrict config path
-ENV_REGEX = r"^[a-zA-Z_\-0-9]*$"
+# regex to restrict config entry key path characters
+KEY_PATH_REGEX = r"^[a-zA-Z_\-0-9]*$"
 
 # the order of this list also defines priority
 DEFAULT_CONFIG_FILE_PATHS = [

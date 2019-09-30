@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 
 from py_range_parse import Range
 
-from container_app_conf import Config, ConfigEntry
+from container_app_conf import ConfigBase, ConfigEntry
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
 from container_app_conf.entry.file import FileConfigEntry, DirectoryConfigEntry
@@ -35,60 +35,60 @@ from container_app_conf.entry.string import StringConfigEntry
 from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
 
 
-class TestConfig2(Config):
+class TestConfigBase2(ConfigBase):
     @property
     def config_file_names(self) -> [str]:
         return ["testing"]
 
     BOOL = BoolConfigEntry(
-        yaml_path=["test", "bool"],
+        key_path=["test", "bool"],
         # default=False,
         example=True
     )
 
 
-class TestConfig(Config):
+class TestConfigBase(ConfigBase):
     @property
     def config_file_names(self) -> [str]:
         return ["testing"]
 
     BOOL = BoolConfigEntry(
-        yaml_path=["test", "bool"],
+        key_path=["test", "bool"],
         default=False
     )
     STRING = StringConfigEntry(
-        yaml_path=["test", "string"],
+        key_path=["test", "string"],
         default="default value"
     )
     INT = IntConfigEntry(
-        yaml_path=["test", "int"],
+        key_path=["test", "int"],
         default=100
     )
     FLOAT = FloatConfigEntry(
-        yaml_path=["test", "float"],
+        key_path=["test", "float"],
         default=1.23
     )
     DATE = DateConfigEntry(
-        yaml_path=["test", "this", "date", "is", "nested", "deep"],
+        key_path=["test", "this", "date", "is", "nested", "deep"],
         default=datetime.now()
     )
     TIMEDELTA = TimeDeltaConfigEntry(
-        yaml_path=["test", "this", "timediff", "is", "in", "this", "branch"],
+        key_path=["test", "this", "timediff", "is", "in", "this", "branch"],
         default=timedelta(seconds=10)
     )
     FILE = FileConfigEntry(
-        yaml_path=["test", "file"],
+        key_path=["test", "file"],
     )
     DIRECTORY = DirectoryConfigEntry(
-        yaml_path=["test", "directory"],
+        key_path=["test", "directory"],
     )
     RANGE = RangeConfigEntry(
-        yaml_path=["test", "this", "is", "a", "range"],
+        key_path=["test", "this", "is", "a", "range"],
         default=Range(0, 100)
     )
     STRING_LIST = ListConfigEntry(
         item_type=StringConfigEntry,
-        yaml_path=["test", "this", "is", "a", "list"],
+        key_path=["test", "this", "is", "a", "list"],
         example=[
             "these",
             "are",
@@ -99,7 +99,7 @@ class TestConfig(Config):
 
 
 class TestBase(unittest.TestCase):
-    under_test = TestConfig()
+    under_test = TestConfigBase()
 
 
 class EntryTestBase(TestBase):

@@ -17,6 +17,9 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+from typing import List
+
+from container_app_conf import ConfigEntry
 
 
 def find_duplicates(l: list) -> []:
@@ -42,3 +45,21 @@ def find_duplicates(l: list) -> []:
             result[k] = v
 
     return result
+
+
+def generate_reference_config(config_entries: List[ConfigEntry]) -> {}:
+    """
+    Generates a dictionary containing the expected config tree filled with default and example values
+    :return: a dictionary containing the expected config tree
+    """
+    config_tree = {}
+    for entry in config_entries:
+        current_level = config_tree
+        for path in entry.key_path[:-1]:
+            if path not in current_level:
+                current_level[path] = {}
+            current_level = current_level[path]
+
+        current_level[entry.key_path[-1]] = entry._type_to_value(entry.example)
+
+    return config_tree

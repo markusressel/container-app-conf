@@ -36,7 +36,7 @@ class ListEntryTest(EntryTestBase):
 
     def test_str_list_entry_custom_delimiter(self):
         config_entry = ListConfigEntry(item_type=IntConfigEntry,
-                                       yaml_path=["int_list"],
+                                       key_path=["int_list"],
                                        delimiter="::")
         input_output = [
             ("1::2::3", [1, 2, 3])
@@ -46,7 +46,7 @@ class ListEntryTest(EntryTestBase):
 
     def test_int_list_entry(self):
         config_entry = ListConfigEntry(item_type=IntConfigEntry,
-                                       yaml_path=["int_list"])
+                                       key_path=["int_list"])
         input_output = [
             ("", []),
             ("5", [5]),
@@ -57,7 +57,7 @@ class ListEntryTest(EntryTestBase):
 
     def test_float_list_entry(self):
         config_entry = ListConfigEntry(item_type=FloatConfigEntry,
-                                       yaml_path=["float_list"])
+                                       key_path=["float_list"])
         input_output = [
             ("", []),
             ("5", [5.0]),
@@ -69,7 +69,7 @@ class ListEntryTest(EntryTestBase):
 
     def test_date_list_entry(self):
         config_entry = ListConfigEntry(item_type=DateConfigEntry,
-                                       yaml_path=["date_list"])
+                                       key_path=["date_list"])
 
         input_example_1 = ["2008-09-03T20:56:35.450686Z", "2008-09-03"]
         output_example_1 = [datetime(2008, 9, 3, 20, 56, 35, 450686, tzinfo=tzutc()),
@@ -84,7 +84,7 @@ class ListEntryTest(EntryTestBase):
 
     def test_timedelta_entry(self):
         config_entry = ListConfigEntry(item_type=TimeDeltaConfigEntry,
-                                       yaml_path=["timedelta_list"])
+                                       key_path=["timedelta_list"])
         input_output = [
             (None, None),
             (
@@ -104,7 +104,7 @@ class ListEntryTest(EntryTestBase):
                                        item_args={
                                            "check_existence": False
                                        },
-                                       yaml_path=["file_list"])
+                                       key_path=["file_list"])
         example1 = "/tmp/file"
         example2 = "./file"
         example3 = [example1, example2]
