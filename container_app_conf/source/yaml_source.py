@@ -18,7 +18,6 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 import logging
-import os
 
 import yaml
 
@@ -38,16 +37,7 @@ class YamlSource(FilesystemSource):
             import yaml
             return yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-    def write_reference(self, reference: dict):
-        """
-        Writes a reference config file
-        """
+    def _write_reference(self, reference: dict, file_path: str):
         text = yaml.dump(reference)
-
-        folder = self.paths[0]
-        file_name = "{}_reference.{}".format(self.file_names[0], self.file_extensions[0])
-        file_path = os.path.join(self.paths[0], file_name)
-
-        os.makedirs(folder, exist_ok=True)
         with open(file_path, "w") as file:
             file.write(text)

@@ -18,6 +18,10 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 from container_app_conf import DataSource, ConfigEntry
+from container_app_conf.entry.int import IntConfigEntry
+from container_app_conf.entry.string import StringConfigEntry
+from container_app_conf.source.toml_source import TomlSource
+from container_app_conf.source.yaml_source import YamlSource
 from tests import TestBase
 from tests.singleton_test import TestConfigBase2
 
@@ -48,7 +52,7 @@ class MemoryDataSource2(MemoryDataSource):
 
 class TestDataSource(TestBase):
 
-    def test_yaml_env_priority(self):
+    def test_priority(self):
         conf = TestConfigBase2(data_sources=[
             MemoryDataSource(),
             MemoryDataSource2()
@@ -62,3 +66,53 @@ class TestDataSource(TestBase):
         ], singleton=False)
 
         self.assertFalse(conf2.BOOL.value)
+
+    def test_toml(self):
+        str_entry = StringConfigEntry(
+            key_path=["testing", "key1"],
+            default="value"
+        )
+        int_entry = IntConfigEntry(
+            key_path=["testing", "key2"],
+            default=2
+        )
+        data = {
+            "testing": {
+                "key1": "value",
+                "key2": 2,
+            }
+        }
+
+        source = TomlSource("test")
+        source._write_reference(data, "./test.toml")
+
+        source.load()
+        self.assertTrue(source.has(str_entry))
+        self.assertEqual(source.get(str_entry), "value")
+        self.assertTrue(source.has(int_entry))
+        self.assertEqual(source.get(int_entry), 2)
+
+    def test_yaml(self):
+        str_entry = StringConfigEntry(
+            key_path=["testing", "key1"],
+            default="value"
+        )
+        int_entry = IntConfigEntry(
+            key_path=["testing", "key2"],
+            default=2
+        )
+        data = {
+            "testing": {
+                "key1": "value",
+                "key2": 2,
+            }
+        }
+
+        source = YamlSource("test")
+        source._write_reference(data, "./test.yaml")
+
+        source.load()
+        self.assertTrue(source.has(str_entry))
+        self.assertEqual(source.get(str_entry), "value")
+        self.assertTrue(source.has(int_entry))
+        self.assertEqual(source.get(int_entry), 2)

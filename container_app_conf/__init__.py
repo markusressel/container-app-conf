@@ -76,12 +76,10 @@ class ConfigBase:
             # set default data sources
             from container_app_conf.source.env_source import EnvSource
             from container_app_conf.source.yaml_source import YamlSource
-            from container_app_conf.source.toml_source import TomlSource
 
             self.data_sources = [
                 EnvSource(),
-                YamlSource(cls.__name__),
-                TomlSource(cls.__name__)
+                YamlSource(cls.__name__)
             ]
         else:
             self.data_sources = data_sources

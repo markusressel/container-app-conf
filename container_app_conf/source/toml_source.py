@@ -18,7 +18,6 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 import logging
-import os
 
 import toml
 
@@ -41,14 +40,6 @@ class TomlSource(FilesystemSource):
         with open(file_path, 'r') as file:
             return toml.load(file)
 
-    def write_reference(self, reference: dict):
-        """
-        Writes a reference config file
-        """
-        folder = self.paths[0]
-        file_name = "{}_reference.{}".format(self.file_names[0], self.file_extensions[0])
-        file_path = os.path.join(self.paths[0], file_name)
-
-        os.makedirs(folder, exist_ok=True)
+    def _write_reference(self, reference: dict, file_path: str):
         with open(file_path, "w") as file:
             toml.dump(reference, file)
