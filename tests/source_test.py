@@ -20,6 +20,7 @@
 from container_app_conf import DataSource, ConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.string import StringConfigEntry
+from container_app_conf.source.json_source import JsonSource
 from container_app_conf.source.toml_source import TomlSource
 from container_app_conf.source.yaml_source import YamlSource
 from tests import TestBase
@@ -110,6 +111,31 @@ class TestDataSource(TestBase):
 
         source = YamlSource("test")
         source._write_reference(data, "./test.yaml")
+
+        source.load()
+        self.assertTrue(source.has(str_entry))
+        self.assertEqual(source.get(str_entry), "value")
+        self.assertTrue(source.has(int_entry))
+        self.assertEqual(source.get(int_entry), 2)
+
+    def test_json(self):
+        str_entry = StringConfigEntry(
+            key_path=["testing", "key1"],
+            default="value"
+        )
+        int_entry = IntConfigEntry(
+            key_path=["testing", "key2"],
+            default=2
+        )
+        data = {
+            "testing": {
+                "key1": "value",
+                "key2": 2,
+            }
+        }
+
+        source = JsonSource("test")
+        source._write_reference(data, "./test.json")
 
         source.load()
         self.assertTrue(source.has(str_entry))
