@@ -81,6 +81,7 @@ implementations are available:
 | `EnvSource`              | Reads environment variables |
 | `YamlSource`             | Parses `YAML` files |
 | `TomlSource`             | Parses `TOML` files |
+| `JsonSource`             | Parses `JSON` files |
 
 ### EnvSource
 
