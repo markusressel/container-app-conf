@@ -17,26 +17,24 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+import json
 import logging
-
-import yaml
 
 from container_app_conf.source import FilesystemSource
 
 LOGGER = logging.getLogger(__name__)
 
 
-class YamlSource(FilesystemSource):
+class JsonSource(FilesystemSource):
     """
     Data source utilizing YAML files
     """
-    DEFAULT_FILE_EXTENSIONS = ['yaml', 'yml']
+    DEFAULT_FILE_EXTENSIONS = ['json']
 
     def _load(self, file_path: str) -> dict:
-        with open(file_path, 'r') as ymlfile:
-            return yaml.load(ymlfile, Loader=yaml.FullLoader)
+        with open(file_path, 'r') as file:
+            return json.load(file)
 
     def _write_reference(self, reference: dict, file_path: str):
-        text = yaml.dump(reference)
         with open(file_path, "w") as file:
-            file.write(text)
+            json.dump(reference, file, indent=2)
