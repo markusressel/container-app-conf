@@ -24,8 +24,6 @@ from typing import Dict, List
 from container_app_conf.const import DEFAULT_CONFIG_FILE_PATHS
 from container_app_conf.entry import ConfigEntry
 from container_app_conf.source import DataSource
-from container_app_conf.source.env_source import EnvSource
-from container_app_conf.source.yaml_source import YamlSource
 from container_app_conf.util import find_duplicates, generate_reference_config
 
 LOGGER = logging.getLogger(__name__)
@@ -76,6 +74,9 @@ class ConfigBase:
 
         if data_sources is None:
             # set default data sources
+            from container_app_conf.source.env_source import EnvSource
+            from container_app_conf.source.yaml_source import YamlSource
+
             self.data_sources = [
                 EnvSource(),
                 YamlSource(cls.__name__)

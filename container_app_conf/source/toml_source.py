@@ -19,25 +19,27 @@
 #  SOFTWARE.
 import logging
 
-import yaml
+import toml
 
 from container_app_conf.source import FilesystemSource
 
 LOGGER = logging.getLogger(__name__)
 
 
-class YamlSource(FilesystemSource):
+class TomlSource(FilesystemSource):
     """
-    Data source utilizing YAML files
+    Data source utilizing TOML files
     """
-    DEFAULT_FILE_EXTENSIONS = ['yaml', 'yml']
+    DEFAULT_FILE_EXTENSIONS = ['toml', 'tml']
 
     def _load(self, file_path: str) -> dict:
-        with open(file_path, 'r') as ymlfile:
-            import yaml
-            return yaml.load(ymlfile, Loader=yaml.FullLoader)
+        """
+        Reads the content of the given file
+        :return: file content as a dictionary
+        """
+        with open(file_path, 'r') as file:
+            return toml.load(file)
 
     def _write_reference(self, reference: dict, file_path: str):
-        text = yaml.dump(reference)
         with open(file_path, "w") as file:
-            file.write(text)
+            toml.dump(reference, file)
