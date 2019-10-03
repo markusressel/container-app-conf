@@ -109,6 +109,7 @@ class EntryTest(EntryTestBase):
             ("/tmp/test", Path("/tmp/test")),
             ("./test", Path("./test")),
             ("/something/", AssertionError),
+            (Path("./test"), Path("./test")),
         ]
 
         self.assert_input_output(config_entry, input_output)
@@ -128,6 +129,7 @@ class EntryTest(EntryTestBase):
             ("/tmp/", Path("/tmp")),
             ("./test/", Path("./test")),
             ("/something/", Path("/something")),
+            (Path("./test/"), Path("./test"))
         ]
 
         self.assert_input_output(config_entry, input_output)

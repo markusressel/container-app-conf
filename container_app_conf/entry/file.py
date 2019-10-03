@@ -42,7 +42,10 @@ class FileConfigEntry(ConfigEntry):
         :return: the parsed file value
         """
         str_value = str(value)
-        file = pathlib.Path(str_value)
+        if isinstance(value, pathlib.Path):
+            file = value
+        else:
+            file = pathlib.Path(str_value)
 
         if str_value.endswith(os.sep):
             raise AssertionError("File path should not end with '{}' delimiter: {}".format(os.sep, str_value))
@@ -75,7 +78,11 @@ class DirectoryConfigEntry(ConfigEntry):
         :return: the parsed folder value
         """
         str_value = str(value)
-        directory = pathlib.Path(str_value)
+        if isinstance(value, pathlib.Path):
+            str_value += "/"
+            directory = value
+        else:
+            directory = pathlib.Path(str_value)
 
         if not str_value.endswith(os.sep):
             raise AssertionError("Directory path should end with '{}' delimiter: {}".format(os.sep, str_value))
