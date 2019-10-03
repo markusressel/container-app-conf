@@ -102,10 +102,6 @@ class ConfigBase:
                 if source.has(entry):
                     entry.value = source.get(entry)
 
-        # reset all entries to make sure None constraints are fulfilled
-        for entry in self._config_entries.values():
-            entry.value = entry.value
-
         if validate:
             self.validate()
 
@@ -113,7 +109,9 @@ class ConfigBase:
         """
         Validates the current configuration and throws an exception if something is wrong
         """
-        return
+        # reset all entries to make sure None constraints are fulfilled
+        for entry in self._config_entries.values():
+            entry.value = entry.value
 
     def _find_config_entries(self) -> Dict[str, ConfigEntry]:
         """
