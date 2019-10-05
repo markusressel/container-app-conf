@@ -53,18 +53,19 @@ class EntryTest(EntryTestBase):
         self.assert_input_output(config_entry, input_output)
 
     def test_int_entry(self):
-        config_entry = IntConfigEntry(key_path=["int"])
+        config_entry = IntConfigEntry(key_path=["int"], range=Range(-5, 5))
         input_output = [
             ("5", 5),
             (5, 5),
             ("-3", -3),
-            (-3, -3)
+            (-3, -3),
+            (-6, ValueError)
         ]
 
         self.assert_input_output(config_entry, input_output)
 
     def test_float_entry(self):
-        config_entry = FloatConfigEntry(key_path=["float"])
+        config_entry = FloatConfigEntry(key_path=["float"], range=Range(-10.0, 10))
         input_output = [
             ("5", 5.0),
             (5, 5.0),
@@ -72,7 +73,8 @@ class EntryTest(EntryTestBase):
             (-3.0, -3.0),
             (1.2, 1.2),
             ("1.2", 1.2),
-            ("3%", 0.03)
+            ("3%", 0.03),
+            (-20.0, ValueError)
         ]
 
         self.assert_input_output(config_entry, input_output)
