@@ -28,11 +28,36 @@ from container_app_conf.entry.file import FileConfigEntry, DirectoryConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.range import RangeConfigEntry
+from container_app_conf.entry.regex import RegexConfigEntry
+from container_app_conf.entry.string import StringConfigEntry
 from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
 from tests import EntryTestBase
 
 
 class EntryTest(EntryTestBase):
+
+    def test_string_entry(self):
+        config_entry = StringConfigEntry(key_path=["string"], none_allowed=True)
+
+        input_output = [
+            ("5", "5"),
+            ("hello", "hello"),
+            ("$stuff=)(&/%$§", "$stuff=)(&/%$§"),
+            ("None", None)
+        ]
+
+        self.assert_input_output(config_entry, input_output)
+
+    def test_regex_entry(self):
+        config_entry = RegexConfigEntry(key_path=["regex"], none_allowed=True)
+
+        import re
+        input_output = [
+            ("$[0-9]*", re.compile("$[0-9]*")),
+            ("None", None)
+        ]
+
+        self.assert_input_output(config_entry, input_output)
 
     def test_bool_entry(self):
         config_entry = BoolConfigEntry(key_path=["bool"])
