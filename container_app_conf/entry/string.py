@@ -17,12 +17,18 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+import re
 
 from container_app_conf import ConfigEntry
 
 
 class StringConfigEntry(ConfigEntry):
     _example = "text"
+
+    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
+                 none_allowed: bool = None, regex: str = None):
+        self.regex = re.compile(regex) if regex is not None else None
+        super().__init__(key_path, example, description, default, none_allowed)
 
     def _value_to_type(self, value: any) -> str or None:
         """
@@ -34,5 +40,9 @@ class StringConfigEntry(ConfigEntry):
         if self._none_allowed:
             if s.lower() in ['none', 'null', 'nil']:
                 return None
+
+        if self.regex is not None:
+            if not self.regex.match(s):
+                self._raise_invalid_value(s)
 
         return s
