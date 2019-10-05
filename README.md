@@ -47,6 +47,7 @@ class AppConfig(ConfigBase):
 | `IntConfigEntry`         | Parses input to an integer | `int` |
 | `FloatConfigEntry`       | Parses input to a floating number | `float` |
 | `StringConfigEntry`      | Takes the raw string input | `str` |
+| `RegexConfigEntry`       | Parses and compiles regular expressions | `re.pattern` |
 | `DateConfigEntry`        | Parses various datetime formats (see [python-dateutil](https://github.com/dateutil/dateutil/)) | `datetime` |
 | `TimeDeltaConfigEntry`   | Parses various timedelta formats (see [pytimeparse](https://github.com/wroberts/pytimeparse)) | `timedelta` |
 | `FileConfigEntry`        | Parses a file path | `Path` |
