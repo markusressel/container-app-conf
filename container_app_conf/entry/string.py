@@ -54,3 +54,6 @@ class RegexConfigEntry(StringConfigEntry):
 
         import re
         return re.compile(s)
+
+    def _type_to_value(self, type: any) -> str:
+        return type.pattern
