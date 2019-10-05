@@ -31,7 +31,8 @@ from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.list import ListConfigEntry
 from container_app_conf.entry.range import RangeConfigEntry
-from container_app_conf.entry.string import StringConfigEntry, RegexConfigEntry
+from container_app_conf.entry.regex import RegexConfigEntry
+from container_app_conf.entry.string import StringConfigEntry
 from container_app_conf.entry.timedelta import TimeDeltaConfigEntry
 
 

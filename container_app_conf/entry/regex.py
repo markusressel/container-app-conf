@@ -18,21 +18,24 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from container_app_conf import ConfigEntry
+import copy
+import re
+
+from container_app_conf.entry.string import StringConfigEntry
+
+# workaround for deepcopy bug in python<=3.6
+# see: https://stackoverflow.com/questions/6279305/typeerror-cannot-deepcopy-this-pattern-object/56935186#56935186
+copy._deepcopy_dispatch[type(re.compile(''))] = lambda r, _: r
 
 
-class StringConfigEntry(ConfigEntry):
-    _example = "text"
+class RegexConfigEntry(StringConfigEntry):
+    _example = r"^[a-zA-z0-9]*$"
 
     def _value_to_type(self, value: any) -> str or None:
-        """
-        Converts the given type to the expected type
-        :param value: the yaml value
-        :return: parsed value
-        """
-        s = str(value)
-        if self._none_allowed:
-            if s.lower() in ['none', 'null', 'nil']:
-                return None
+        s = super()._value_to_type(value)
+        if value is None and self._none_allowed:
+            return None
+        return re.compile(s)
 
-        return s
+    def _type_to_value(self, type: any) -> str:
+        return type.pattern
