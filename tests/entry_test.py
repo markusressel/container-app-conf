@@ -48,6 +48,17 @@ class EntryTest(EntryTestBase):
 
         self.assert_input_output(config_entry, input_output)
 
+    def test_string_entry_regex(self):
+        config_entry = StringConfigEntry(key_path=["string"], none_allowed=True, regex="^[0-9]*$")
+
+        input_output = [
+            ("5", "5"),
+            ("hello", ValueError),
+            ("$stuff=)(&/%$§", ValueError),
+        ]
+
+        self.assert_input_output(config_entry, input_output)
+
     def test_regex_entry(self):
         config_entry = RegexConfigEntry(key_path=["regex"], none_allowed=True)
 
