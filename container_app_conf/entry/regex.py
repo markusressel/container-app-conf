@@ -33,7 +33,7 @@ class RegexConfigEntry(StringConfigEntry):
 
     def _value_to_type(self, value: any) -> str or None:
         s = super()._value_to_type(value)
-        if value is None and self._none_allowed:
+        if s is None and self._none_allowed:
             return None
         return re.compile(s)
 
