@@ -17,12 +17,18 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+from py_range_parse import Range
 
 from container_app_conf import ConfigEntry
 
 
 class FloatConfigEntry(ConfigEntry):
     _example = "3.1415926535"
+
+    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
+                 none_allowed: bool = None, range: Range = None):
+        self.range = range
+        super().__init__(key_path, example, description, default, none_allowed)
 
     def _value_to_type(self, value: any) -> float or None:
         """
@@ -31,9 +37,13 @@ class FloatConfigEntry(ConfigEntry):
         :return: the parsed float value
         """
         if isinstance(value, str) and '%' == value[-1]:
-            return float(value[:-1]) / 100.0
+            parsed_value = float(value[:-1]) / 100.0
         else:
-            return float(value)
+            parsed_value = float(value)
+
+        if self.range is not None and parsed_value not in self.range:
+            self._raise_invalid_value(value)
+        return parsed_value
 
     def _type_to_value(self, type: any) -> any:
         return float(type)
