@@ -36,3 +36,21 @@ class StringConfigEntry(ConfigEntry):
                 return None
 
         return s
+
+
+class RegexConfigEntry(StringConfigEntry):
+    _example = r"^[a-zA-z0-9]*$"
+
+    def _value_to_type(self, value: any) -> str or None:
+        """
+        Converts the given type to the expected type
+        :param value: the yaml value
+        :return: parsed value
+        """
+        s = str(value)
+        if self._none_allowed:
+            if s.lower() in ['none', 'null', 'nil']:
+                return None
+
+        import re
+        return re.compile(s)
