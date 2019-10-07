@@ -33,10 +33,6 @@ class TomlSource(FilesystemSource):
     DEFAULT_FILE_EXTENSIONS = ['toml', 'tml']
 
     def _load(self, file_path: str) -> dict:
-        """
-        Reads the content of the given file
-        :return: file content as a dictionary
-        """
         with open(file_path, 'r') as file:
             return toml.load(file)
 

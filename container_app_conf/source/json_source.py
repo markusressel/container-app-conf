@@ -27,7 +27,7 @@ LOGGER = logging.getLogger(__name__)
 
 class JsonSource(FilesystemSource):
     """
-    Data source utilizing YAML files
+    Data source utilizing JSON files
     """
     DEFAULT_FILE_EXTENSIONS = ['json']
 
