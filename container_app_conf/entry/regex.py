@@ -20,6 +20,7 @@
 
 import copy
 import re
+from typing import Pattern
 
 from container_app_conf.entry.string import StringConfigEntry
 
@@ -31,7 +32,7 @@ copy._deepcopy_dispatch[type(re.compile(''))] = lambda r, _: r
 class RegexConfigEntry(StringConfigEntry):
     _example = r"^[a-zA-z0-9]*$"
 
-    def _value_to_type(self, value: any) -> str or None:
+    def _value_to_type(self, value: any) -> Pattern or None:
         s = super()._value_to_type(value)
         if s is None and self._none_allowed:
             return None
