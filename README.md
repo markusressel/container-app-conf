@@ -11,6 +11,7 @@ form of configuration like a YAML file.
 **container-app-conf is used by**
 * [InfiniteWisdom](https://github.com/ekeih/InfiniteWisdom)
 * [DeineMudda](https://github.com/markusressel/DeineMudda)
+* [py-image-dedup](https://github.com/markusressel/py-image-dedup)
 
 and hopefully many others :)
 
