@@ -22,21 +22,36 @@ import copy
 import re
 from typing import Pattern
 
-from container_app_conf.entry.string import StringConfigEntry
+from container_app_conf import ConfigEntry
 
 # workaround for deepcopy bug in python<=3.6
 # see: https://stackoverflow.com/questions/6279305/typeerror-cannot-deepcopy-this-pattern-object/56935186#56935186
 copy._deepcopy_dispatch[type(re.compile(''))] = lambda r, _: r
 
 
-class RegexConfigEntry(StringConfigEntry):
+class RegexConfigEntry(ConfigEntry):
     _example = r"^[a-zA-z0-9]*$"
 
+    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
+                 none_allowed: bool = None, flags: int = 0):
+        """
+        :param flags: Regex flags to use when compiling pattern
+        """
+        self.flags = flags if flags is not None else 0
+        super().__init__(key_path, example, description, default, none_allowed)
+
     def _value_to_type(self, value: any) -> Pattern or None:
-        s = super()._value_to_type(value)
-        if s is None and self._none_allowed:
+        if value is None and self._none_allowed:
             return None
-        return re.compile(s)
+
+        if value is Pattern:
+            if value.flags == self.flags:
+                return value
+            else:
+                self._raise_invalid_value(value)
+
+        value = str(value)
+        return re.compile(value, flags=self.flags)
 
     def _type_to_value(self, type: any) -> str:
         return type.pattern

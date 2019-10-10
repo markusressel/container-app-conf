@@ -60,12 +60,11 @@ class EntryTest(EntryTestBase):
         self.assert_input_output(config_entry, input_output)
 
     def test_regex_entry(self):
-        config_entry = RegexConfigEntry(key_path=["regex"], none_allowed=True)
-
         import re
+        config_entry = RegexConfigEntry(key_path=["regex"], flags=re.IGNORECASE)
+
         input_output = [
-            ("$[0-9]*", re.compile("$[0-9]*")),
-            ("None", None)
+            ("$[0-9]*", re.compile("$[0-9]*", re.IGNORECASE)),
         ]
 
         self.assert_input_output(config_entry, input_output)
