@@ -65,6 +65,7 @@ class EntryTest(EntryTestBase):
 
         input_output = [
             ("$[0-9]*", re.compile("$[0-9]*", re.IGNORECASE)),
+            (re.compile("$[0-9]*", re.IGNORECASE), re.compile("$[0-9]*", re.IGNORECASE)),
         ]
 
         self.assert_input_output(config_entry, input_output)
