@@ -79,7 +79,7 @@ class DirectoryConfigEntry(ConfigEntry):
         """
         str_value = str(value)
         if isinstance(value, pathlib.Path):
-            str_value += "/"
+            str_value += os.sep
             directory = value
         else:
             directory = pathlib.Path(str_value)
