@@ -45,7 +45,10 @@ class RegexConfigEntry(ConfigEntry):
             return None
 
         if value is Pattern:
-            return value
+            if value.flags == self.flags:
+                return value
+            else:
+                self._raise_invalid_value(value)
 
         value = str(value)
         return re.compile(value, flags=self.flags)
