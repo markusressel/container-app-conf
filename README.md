@@ -36,7 +36,7 @@ class AppConfig(ConfigBase):
             "my_app",
             "example"
         ],
-        none_allowed=False)
+        required=False)
 
 ```
 

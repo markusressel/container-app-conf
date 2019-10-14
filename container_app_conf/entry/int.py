@@ -26,9 +26,9 @@ class IntConfigEntry(ConfigEntry):
     _example = "42"
 
     def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
-                 none_allowed: bool = None, range: Range = None):
+                 required: bool = None, range: Range = None):
         self.range = range
-        super().__init__(key_path, example, description, default, none_allowed)
+        super().__init__(key_path, example, description, default, required)
 
     def _value_to_type(self, value: any) -> int or None:
         """
@@ -38,7 +38,7 @@ class IntConfigEntry(ConfigEntry):
         """
         parsed_value = int(value)
         if self.range is not None and parsed_value not in self.range:
-            self._raise_invalid_value(value)
+            raise ValueError("Value not in range")
         return parsed_value
 
     def _type_to_value(self, type: any) -> any:

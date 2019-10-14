@@ -40,7 +40,7 @@ class DateConfigEntry(ConfigEntry):
         elif isinstance(value, str):
             return dateutil.parser.parse(value)
         else:
-            self._raise_invalid_value(value)
+            raise ValueError("Unsupported type: {}".format(type(value)))
 
     def _type_to_value(self, type: any) -> any:
         if isinstance(type, datetime):

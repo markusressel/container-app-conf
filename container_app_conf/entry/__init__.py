@@ -27,14 +27,14 @@ class ConfigEntry:
     _example = None
 
     def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
-                 none_allowed: bool = None):
+                 required: bool = None):
         """
         Creates a config entry
         :param key_path: list of strings representing f.ex. the yaml tree path
         :param example: example str value
         :param description: a description of this entry
         :param default: the default value
-        :param none_allowed: Set to True if a 'None' value may be allowed, False if not,
+        :param required: Set to True if a 'None' value may be allowed, False if not,
                              otherwise it will be True if the default value is not None.
         """
         if len(key_path) <= 0:
@@ -50,11 +50,11 @@ class ConfigEntry:
         if example is not None:
             self._example = example
 
-        if none_allowed is None:
-            none_allowed = default is None
-        self._none_allowed = none_allowed
+        if required is None:
+            required = default is not None
+        self._required = required
 
-        if default is not None or self._none_allowed:
+        if self._required:
             self.default = self._parse_value(default)
         else:
             self.default = None
@@ -85,16 +85,16 @@ class ConfigEntry:
         :return: the parsed value
         """
         if value is None:
-            if self._none_allowed:
+            if not self._required:
                 return None
             else:
-                self._raise_invalid_value(value)
+                self._raise_invalid_value(value, "Value is required")
 
         try:
             return self._value_to_type(value)
         except Exception as ex:
             logging.exception(ex)
-            self._raise_invalid_value(value)
+            self._raise_invalid_value(value, ex)
 
     def _value_to_type(self, value: any) -> any:
         """
@@ -113,5 +113,9 @@ class ConfigEntry:
         """
         return str(type)
 
-    def _raise_invalid_value(self, value: any):
-        raise ValueError("Invalid value '{}' for config option `{}`".format(value, ">".join(self.key_path)))
+    def _raise_invalid_value(self, value: any, reason: str or None = None):
+        entry_key_path = ">".join(self.key_path)
+        message = "Invalid value '{}' for config option `{}`".format(value, entry_key_path)
+        if reason is not None:
+            message += ": {}".format(reason)
+        raise ValueError(message)

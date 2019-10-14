@@ -40,7 +40,7 @@ class BoolConfigEntry(ConfigEntry):
             elif s in ['n', 'no', 'false', 'f', '0']:
                 return False
             else:
-                self._raise_invalid_value(value)
+                raise ValueError("Unsupported value")
 
     def _type_to_value(self, type: any) -> any:
         return bool(type)

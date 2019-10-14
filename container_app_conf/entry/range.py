@@ -39,4 +39,4 @@ class RangeConfigEntry(ConfigEntry):
                 raise ValueError("Cannot parse the range format: {}".format(value))
             return parsed
         else:
-            self._raise_invalid_value(value)
+            raise ValueError("Unsupported type: {}".format(type(value)))

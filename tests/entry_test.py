@@ -37,7 +37,7 @@ from tests import EntryTestBase
 class EntryTest(EntryTestBase):
 
     def test_string_entry(self):
-        config_entry = StringConfigEntry(key_path=["string"], none_allowed=True)
+        config_entry = StringConfigEntry(key_path=["string"], required=True)
 
         input_output = [
             ("5", "5"),
@@ -49,7 +49,7 @@ class EntryTest(EntryTestBase):
         self.assert_input_output(config_entry, input_output)
 
     def test_string_entry_regex(self):
-        config_entry = StringConfigEntry(key_path=["string"], none_allowed=True, regex="^[0-9]*$")
+        config_entry = StringConfigEntry(key_path=["string"], required=True, regex="^[0-9]*$")
 
         input_output = [
             ("5", "5"),

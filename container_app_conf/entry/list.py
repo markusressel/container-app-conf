@@ -29,7 +29,7 @@ class ListConfigEntry(ConfigEntry):
 
     def __init__(self, item_type: Type[ConfigEntry], key_path: [str], example: any = None,
                  description: str or None = None,
-                 default: any = None, none_allowed: bool = None,
+                 default: any = None, required: bool = None,
                  item_args: dict = None,
                  delimiter: str = None):
         """
@@ -40,7 +40,7 @@ class ListConfigEntry(ConfigEntry):
         :param example: example str value
         :param description: a description of this list entry
         :param default: default value
-        :param none_allowed: if None is allowed for this config entry
+        :param required: if None is allowed for this config entry
         """
         if item_args is None:
             item_args = {}
@@ -52,7 +52,7 @@ class ListConfigEntry(ConfigEntry):
             description=description,
             example=example,
             default=default,
-            none_allowed=none_allowed
+            required=required
         )
 
     @property

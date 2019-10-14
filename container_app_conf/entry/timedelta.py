@@ -41,4 +41,4 @@ class TimeDeltaConfigEntry(ConfigEntry):
                 raise ValueError("Cannot parse the given timedelta format: {}".format(value))
             return timedelta(seconds=parsed)
         else:
-            self._raise_invalid_value(value)
+            raise ValueError("Unsupported type: {}".format(type(value)))
