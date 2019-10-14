@@ -65,14 +65,15 @@ A default value can be specified for every `ConfigEntry` by using the
 
 ## Required values
 
-By default a `None` value is only allowed for an entry if it has no 
-default (or it is set to `None`).
-This means it is not possible to set the `MY_CONFIG` entry in the example
-at the top to `None` even after initial parsing. Omitting a value for 
-this entry in all data sources or specifying an empty text in the yaml
-or corresponding environment variable will result in an exception.
+By default config entries with a default different from `None` are 
+required. A `None` value is only allowed for an entry if it has no 
+default (or it is set to `None` explicitly).
 
-If an entry requires a value and has no default set the `required`
+For required entries it is not possible to set its value `None` even 
+after initial parsing. Omitting a value for this entry in all data 
+sources will result in an exception.
+
+If an entry requires a value and has no default, set the `required`
 constructor parameter to `True`.
 
 If you want to allow setting a `None` value even if the default value 
