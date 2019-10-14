@@ -98,6 +98,7 @@ class ConfigBase:
         Loads the configuration from all available sources
         """
         for source in reversed(self.data_sources):
+            source.load()
             for entry in self._config_entries.values():
                 if source.has(entry):
                     entry.value = source.get(entry)
