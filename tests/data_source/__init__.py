@@ -17,30 +17,27 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+from typing import Dict
 
-import os
-
-from container_app_conf import ConfigEntry
-from container_app_conf.source import DataSource
+from container_app_conf import DataSource, ConfigEntry
 
 
-class EnvSource(DataSource):
-    """
-    Data source utilizing environment variables
-    """
-    KEY_SPLIT_CHAR = "_"
+class MemoryDataSource(DataSource):
 
-    def has(self, entry: ConfigEntry) -> bool:
-        return self.env_key(entry) in os.environ.keys()
-
-    def get(self, entry: ConfigEntry) -> str or None:
-        key = self.env_key(entry)
-        return os.environ.get(key, None)
-
-    def env_key(self, entry: ConfigEntry) -> str:
-        return self.KEY_SPLIT_CHAR.join(entry.key_path).upper()
+    def items(self) -> Dict[ConfigEntry, any]:
+        """
+        :return: dictionary of "config entry" -> "value" items
+        """
+        raise NotImplementedError()
 
     def _load(self) -> dict:
-        # loading env is pointless since it is already in memory
-        # instead we override has() and get() methods to directly access the environment
-        pass
+        data = {}
+        for entry, value in self.items().items():
+            key_path = entry.key_path
+            current_level = data
+            for key in key_path[:-1]:
+                current_level[key] = {}
+                current_level = current_level[key]
+            current_level[key_path[-1]] = value
+
+        return data

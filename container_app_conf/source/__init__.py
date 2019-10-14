@@ -28,13 +28,38 @@ LOGGER = logging.getLogger(__name__)
 
 class DataSource:
 
+    def __init__(self):
+        self.root = {}
+
+    def load(self):
+        """
+        Loads all values of this data source into memory
+        """
+        self.root = self._load()
+
+    def _load(self) -> dict:
+        """
+        Loads all values of this data source and returns them as a dictionary tree
+        :return: value tree
+        """
+        raise NotImplementedError()
+
     def has(self, entry: ConfigEntry) -> bool:
         """
         Checks whether the data source has a value for the given config entry
         :param entry: the config entry to check
         :return: True if the source contains a value for the given entry, False otherwise
         """
-        raise NotImplementedError()
+        value = self.root
+        if value is None:
+            return False
+
+        for key in entry.key_path:
+            value = value.get(key)
+            if value is None:
+                return False
+
+        return True
 
     def get(self, entry: ConfigEntry) -> any:
         """
@@ -42,7 +67,16 @@ class DataSource:
         :param entry: config entry
         :return: value
         """
-        raise NotImplementedError()
+        value = self.root
+        if value is None:
+            return None
+
+        for key in entry.key_path:
+            value = value.get(key)
+            if value is None:
+                return entry.value
+
+        return value
 
     def write_reference(self, reference: dict):
         """
@@ -63,7 +97,7 @@ class FilesystemSource(DataSource):
         :param file_name: allowed config file name(s)
         :param file_extension: allowed config file extension(s)
         """
-        self.root = {}
+        super().__init__()
         if path is None:
             from container_app_conf import DEFAULT_CONFIG_FILE_PATHS
             self.paths = DEFAULT_CONFIG_FILE_PATHS
@@ -75,48 +109,21 @@ class FilesystemSource(DataSource):
         else:
             self.file_extensions = file_extension if isinstance(file_extension, list) else [file_extension]
 
-    def load(self):
-        """
-        Loads the config file content into memory
-        """
+    def _load(self) -> dict:
         file_path = self._find_config_file()
         if file_path is None:
             LOGGER.debug("No config file found in paths: {}".format(self.paths))
-            return
+            return {}
 
-        self.root = self._load(file_path)
+        return self._load_file(file_path)
 
-    def _load(self, file_path: str) -> dict:
+    def _load_file(self, file_path: str) -> dict:
         """
         Parses the file content into memory
         :param file_path: the path of the file to parse
         :return: file content as a dictionary
         """
         raise NotImplementedError()
-
-    def has(self, entry: ConfigEntry) -> bool:
-        value = self.root
-        if value is None:
-            return False
-
-        for key in entry.key_path:
-            value = value.get(key)
-            if value is None:
-                return False
-
-        return True
-
-    def get(self, entry: ConfigEntry) -> any:
-        value = self.root
-        if value is None:
-            return None
-
-        for key in entry.key_path:
-            value = value.get(key)
-            if value is None:
-                return entry.value
-
-        return value
 
     def write_reference(self, reference: dict):
         """

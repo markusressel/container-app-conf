@@ -17,45 +17,40 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf import DataSource, ConfigEntry
+from typing import Dict
+
+from container_app_conf import ConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.string import StringConfigEntry
 from container_app_conf.source.json_source import JsonSource
 from container_app_conf.source.toml_source import TomlSource
 from container_app_conf.source.yaml_source import YamlSource
 from tests import TestBase
+from tests.data_source import MemoryDataSource
 from tests.singleton_test import TestConfigBase2
 
 
-def _key(entry: ConfigEntry) -> str:
-    return "_".join(entry.key_path)
+class MemoryDataSource1(MemoryDataSource):
 
-
-class MemoryDataSource(DataSource):
-    data = {
-        _key(TestConfigBase2.BOOL): True
-    }
-
-    def has(self, entry: ConfigEntry) -> bool:
-        key = _key(entry)
-        return key in self.data.keys()
-
-    def get(self, entry: ConfigEntry) -> any:
-        key = _key(entry)
-        return self.data[key]
+    def items(self) -> Dict[ConfigEntry, any]:
+        return {
+            TestConfigBase2.BOOL: True
+        }
 
 
 class MemoryDataSource2(MemoryDataSource):
-    data = {
-        _key(TestConfigBase2.BOOL): False
-    }
+
+    def items(self) -> Dict[ConfigEntry, any]:
+        return {
+            TestConfigBase2.BOOL: False
+        }
 
 
 class TestDataSource(TestBase):
 
     def test_priority(self):
         conf = TestConfigBase2(data_sources=[
-            MemoryDataSource(),
+            MemoryDataSource1(),
             MemoryDataSource2()
         ], singleton=False)
 
@@ -63,7 +58,7 @@ class TestDataSource(TestBase):
 
         conf2 = TestConfigBase2(data_sources=[
             MemoryDataSource2(),
-            MemoryDataSource()
+            MemoryDataSource1()
         ], singleton=False)
 
         self.assertFalse(conf2.BOOL.value)

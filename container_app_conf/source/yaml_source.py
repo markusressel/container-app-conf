@@ -32,7 +32,7 @@ class YamlSource(FilesystemSource):
     """
     DEFAULT_FILE_EXTENSIONS = ['yaml', 'yml']
 
-    def _load(self, file_path: str) -> dict:
+    def _load_file(self, file_path: str) -> dict:
         with open(file_path, 'r') as ymlfile:
             return yaml.load(ymlfile, Loader=yaml.FullLoader)
 
