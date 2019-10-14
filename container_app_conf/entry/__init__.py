@@ -22,6 +22,8 @@ import re
 
 from container_app_conf.const import KEY_PATH_REGEX
 
+LOGGER = logging.Logger(__name__)
+
 
 class ConfigEntry:
     _example = None
@@ -93,7 +95,7 @@ class ConfigEntry:
         try:
             return self._value_to_type(value)
         except Exception as ex:
-            logging.exception(ex)
+            LOGGER.exception(ex)
             self._raise_invalid_value(value, ex)
 
     def _value_to_type(self, value: any) -> any:
