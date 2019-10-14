@@ -36,7 +36,7 @@ class AppConfig(ConfigBase):
             "my_app",
             "example"
         ],
-        required=False)
+        required=True)
 
 ```
 
@@ -63,14 +63,20 @@ own by extending the `ConfigEntry` base class.
 A default value can be specified for every `ConfigEntry` by using the
 `default` constructor parameter.
 
-## Allow `None` 
+## Required values
 
-By default a `None` value is only allowed if the default value is `None`.
+By default a `None` value is only allowed for an entry if it has no 
+default (or it is set to `None`).
 This means it is not possible to set the `MY_CONFIG` entry in the example
-at the top to `None` even after initial parsing. Specifying an empty text
-in the yaml or corresponding environment variable will result in an
-exception. If you want to allow setting a `None` value even if the default 
-value is **not** `None`, use the `none_allowed=True` constructor parameter.
+at the top to `None` even after initial parsing. Omitting a value for 
+this entry in all data sources or specifying an empty text in the yaml
+or corresponding environment variable will result in an exception.
+
+If an entry requires a value and has no default set the `required`
+constructor parameter to `True`.
+
+If you want to allow setting a `None` value even if the default value 
+is **not** `None`, you have to explicitly set `required=False`.
 
 ## Data sources
 
