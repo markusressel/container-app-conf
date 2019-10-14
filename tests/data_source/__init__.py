@@ -17,12 +17,17 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf import DataSource
+from typing import Dict
+
+from container_app_conf import DataSource, ConfigEntry
 
 
 class MemoryDataSource(DataSource):
 
-    def items(self) -> dict:
+    def items(self) -> Dict[ConfigEntry, any]:
+        """
+        :return: dictionary of "config entry" -> "value" items
+        """
         raise NotImplementedError()
 
     def _load(self) -> dict:

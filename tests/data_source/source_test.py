@@ -17,6 +17,9 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+from typing import Dict
+
+from container_app_conf import ConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.string import StringConfigEntry
 from container_app_conf.source.json_source import JsonSource
@@ -29,7 +32,7 @@ from tests.singleton_test import TestConfigBase2
 
 class MemoryDataSource1(MemoryDataSource):
 
-    def items(self) -> dict:
+    def items(self) -> Dict[ConfigEntry, any]:
         return {
             TestConfigBase2.BOOL: True
         }
@@ -37,7 +40,7 @@ class MemoryDataSource1(MemoryDataSource):
 
 class MemoryDataSource2(MemoryDataSource):
 
-    def items(self) -> dict:
+    def items(self) -> Dict[ConfigEntry, any]:
         return {
             TestConfigBase2.BOOL: False
         }
