@@ -37,10 +37,6 @@ class StringConfigEntry(ConfigEntry):
         :return: parsed value
         """
         s = str(value)
-        if self._required:
-            if s.lower() in ['none', 'null', 'nil']:
-                return None
-
         if self.regex is not None:
             if not self.regex.match(s):
                 raise ValueError("Value doesn't match regex: {}".format(self.regex))

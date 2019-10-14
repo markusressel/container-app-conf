@@ -93,7 +93,15 @@ class ConfigEntry:
                 self._raise_invalid_value(value, "Value is required")
 
         try:
-            return self._value_to_type(value)
+            parsed_value = self._value_to_type(value)
+
+            if parsed_value is None:
+                if not self._required:
+                    return None
+                else:
+                    self._raise_invalid_value(parsed_value, "Value is required")
+
+            return parsed_value
         except Exception as ex:
             LOGGER.exception(ex)
             self._raise_invalid_value(value, ex)
