@@ -26,9 +26,9 @@ class StringConfigEntry(ConfigEntry):
     _example = "text"
 
     def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
-                 none_allowed: bool = None, regex: str = None):
+                 required: bool = None, regex: str = None):
         self.regex = re.compile(regex) if regex is not None else None
-        super().__init__(key_path, example, description, default, none_allowed)
+        super().__init__(key_path, example, description, default, required)
 
     def _value_to_type(self, value: any) -> str or None:
         """
@@ -37,12 +37,8 @@ class StringConfigEntry(ConfigEntry):
         :return: parsed value
         """
         s = str(value)
-        if self._none_allowed:
-            if s.lower() in ['none', 'null', 'nil']:
-                return None
-
         if self.regex is not None:
             if not self.regex.match(s):
-                self._raise_invalid_value(s)
+                raise ValueError("Value doesn't match regex: {}".format(self.regex))
 
         return s
