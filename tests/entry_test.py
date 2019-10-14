@@ -37,13 +37,13 @@ from tests import EntryTestBase
 class EntryTest(EntryTestBase):
 
     def test_string_entry(self):
-        config_entry = StringConfigEntry(key_path=["string"], required=True)
+        config_entry = StringConfigEntry(key_path=["string"], required=False)
 
         input_output = [
             ("5", "5"),
             ("hello", "hello"),
             ("$stuff=)(&/%$§", "$stuff=)(&/%$§"),
-            ("None", ValueError)
+            ("None", None)
         ]
 
         self.assert_input_output(config_entry, input_output)
