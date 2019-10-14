@@ -43,7 +43,7 @@ class EntryTest(EntryTestBase):
             ("5", "5"),
             ("hello", "hello"),
             ("$stuff=)(&/%$§", "$stuff=)(&/%$§"),
-            ("None", None)
+            ("None", ValueError)
         ]
 
         self.assert_input_output(config_entry, input_output)

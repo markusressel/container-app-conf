@@ -56,7 +56,7 @@ class ConfigEntry:
             required = default is not None
         self._required = required
 
-        if self._required:
+        if default is not None:
             self.default = self._parse_value(default)
         else:
             self.default = None
