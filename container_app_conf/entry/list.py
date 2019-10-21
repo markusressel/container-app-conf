@@ -29,7 +29,9 @@ class ListConfigEntry(ConfigEntry):
 
     def __init__(self, item_type: Type[ConfigEntry], key_path: [str], example: any = None,
                  description: str or None = None,
-                 default: any = None, required: bool = None,
+                 default: any = None,
+                 required: bool = None,
+                 secret: bool = None,
                  item_args: dict = None,
                  delimiter: str = None):
         """
@@ -52,7 +54,8 @@ class ListConfigEntry(ConfigEntry):
             description=description,
             example=example,
             default=default,
-            required=required
+            required=required,
+            secret=secret,
         )
 
     @property

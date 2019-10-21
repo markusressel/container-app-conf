@@ -33,12 +33,12 @@ class RegexConfigEntry(ConfigEntry):
     _example = r"^[a-zA-z0-9]*$"
 
     def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
-                 required: bool = None, flags: int or None = None):
+                 required: bool = None, secret: bool = None, flags: int or None = None):
         """
         :param flags: Regex flags to mandate or None if no flag restrictions should be made
         """
         self.flags = flags | re.UNICODE if flags is not None else None
-        super().__init__(key_path, example, description, default, required)
+        super().__init__(key_path, example, description, default, required, secret)
 
     def _value_to_type(self, value: any) -> Pattern or None:
         if value is None and self._required:

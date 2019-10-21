@@ -17,28 +17,16 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-import re
+from container_app_conf.entry.string import StringConfigEntry
+from tests import EntryTestBase
 
-from container_app_conf import ConfigEntry
 
+class SecretTest(EntryTestBase):
 
-class StringConfigEntry(ConfigEntry):
-    _example = "text"
-
-    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
-                 required: bool = None, secret: bool = None, regex: str = None):
-        self.regex = re.compile(regex) if regex is not None else None
-        super().__init__(key_path, example, description, default, required, secret)
-
-    def _value_to_type(self, value: any) -> str or None:
-        """
-        Converts the given type to the expected type
-        :param value: the yaml value
-        :return: parsed value
-        """
-        s = str(value)
-        if self.regex is not None:
-            if not self.regex.match(s):
-                raise ValueError("Value doesn't match regex: {}".format(self.regex))
-
-        return s
+    def test_secret_entry(self):
+        config_entry = StringConfigEntry(key_path=["string"], required=False)
+        self.assertFalse(config_entry.secret)
+        config_entry = StringConfigEntry(key_path=["string"], required=False, secret=False)
+        self.assertFalse(config_entry.secret)
+        config_entry = StringConfigEntry(key_path=["string"], required=False, secret=True)
+        self.assertTrue(config_entry.secret)
