@@ -44,13 +44,14 @@ class RegexConfigEntry(ConfigEntry):
         if value is None and self._required:
             return None
 
-        if isinstance(value, Pattern) and self.flags is not None:
-            if value.flags == int(self.flags):
-                return value
-            else:
-                raise ValueError("Value does not match expected flags: {}".format(self.flags))
-
-        value = str(value)
+        if isinstance(value, Pattern):
+            if self.flags is not None:
+                if value.flags == int(self.flags):
+                    return value
+                else:
+                    raise ValueError("Value does not match expected flags: {}".format(self.flags))
+        else:
+            value = str(value)
         return re.compile(value, flags=self.flags if self.flags is not None else 0)
 
     def _type_to_value(self, type: any) -> str:
