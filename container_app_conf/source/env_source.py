@@ -37,8 +37,9 @@ class EnvSource(DataSource):
         key = self.env_key(entry)
         return os.environ.get(key, None)
 
-    def env_key(self, entry: ConfigEntry) -> str:
-        return self.KEY_SPLIT_CHAR.join(entry.key_path).upper()
+    @staticmethod
+    def env_key(entry: ConfigEntry) -> str:
+        return EnvSource.KEY_SPLIT_CHAR.join(entry.key_path).upper()
 
     def _load(self) -> dict:
         # loading env is pointless since it is already in memory

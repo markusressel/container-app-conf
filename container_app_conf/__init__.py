@@ -23,6 +23,7 @@ from typing import Dict, List
 
 from container_app_conf.const import DEFAULT_CONFIG_FILE_PATHS
 from container_app_conf.entry import ConfigEntry
+from container_app_conf.formatter import ConfigFormatter
 from container_app_conf.source import DataSource
 from container_app_conf.util import find_duplicates, generate_reference_config
 
@@ -113,6 +114,16 @@ class ConfigBase:
         # reset all entries to make sure None constraints are fulfilled
         for entry in self._config_entries.values():
             entry.value = entry.value
+
+    def print(self, formatter: ConfigFormatter = None) -> str:
+        """
+        Prints
+        :return: printable description of the current configuration
+        """
+        if formatter is None:
+            formatter = ConfigFormatter()
+        output = formatter.format(self)
+        return output
 
     def _find_config_entries(self) -> Dict[str, ConfigEntry]:
         """

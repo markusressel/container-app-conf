@@ -91,7 +91,14 @@ class TestConfigBase(ConfigBase):
             "are",
             "test",
             "values"
-        ]
+        ],
+        secret=True
+    )
+
+    SECRET_REGEX = RegexConfigEntry(
+        key_path=["secret", "regex"],
+        default="[0-9]*",
+        secret=True
     )
 
 

@@ -18,7 +18,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 from container_app_conf.entry.string import StringConfigEntry
-from tests import EntryTestBase
+from tests import EntryTestBase, TestConfigBase
 
 
 class SecretTest(EntryTestBase):
@@ -30,3 +30,10 @@ class SecretTest(EntryTestBase):
         self.assertFalse(config_entry.secret)
         config_entry = StringConfigEntry(key_path=["string"], required=False, secret=True)
         self.assertTrue(config_entry.secret)
+
+    def test_secret_current_config(self):
+        config = TestConfigBase()
+        output = config.print()
+
+        for secret_entry in list(filter(lambda x: x.secret, config._config_entries.values())):
+            self.assertNotIn(str(secret_entry.value), output)
