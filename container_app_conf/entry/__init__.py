@@ -29,7 +29,7 @@ class ConfigEntry:
     _example = None
 
     def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
-                 required: bool = None):
+                 required: bool = None, secret: bool = None):
         """
         Creates a config entry
         :param key_path: list of strings representing f.ex. the yaml tree path
@@ -37,7 +37,9 @@ class ConfigEntry:
         :param description: a description of this entry
         :param default: the default value
         :param required: Set to True if a 'None' value may be allowed, False if not,
-                             otherwise it will be True if the default value is not None.
+                            otherwise it will be True if the default value is not None.
+        :param secret: indicates whether this entry contains a secret and should be disguised when
+                        outputting the current configuration
         """
         if len(key_path) <= 0:
             raise ValueError("{}: key_path must contain at least one node".format(self.__class__.__name__))
@@ -55,6 +57,8 @@ class ConfigEntry:
         if required is None:
             required = default is not None
         self._required = required
+
+        self.secret = False if secret is None else secret
 
         if default is not None:
             self.default = self._parse_value(default)

@@ -26,9 +26,9 @@ class IntConfigEntry(ConfigEntry):
     _example = "42"
 
     def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
-                 required: bool = None, range: Range = None):
+                 required: bool = None, secret: bool = None, range: Range = None):
         self.range = range
-        super().__init__(key_path, example, description, default, required)
+        super().__init__(key_path, example, description, default, required, secret)
 
     def _value_to_type(self, value: any) -> int or None:
         """
