@@ -47,7 +47,8 @@ class TestConfigBase2(ConfigBase):
 class TestConfigBase(ConfigBase):
     BOOL = BoolConfigEntry(
         key_path=["test", "bool"],
-        default=False
+        default=False,
+        secret=True
     )
     STRING = StringConfigEntry(
         key_path=["test", "string"],
@@ -92,12 +93,19 @@ class TestConfigBase(ConfigBase):
             "test",
             "values"
         ],
-        secret=True
+        secret=False
     )
 
     SECRET_REGEX = RegexConfigEntry(
         key_path=["secret", "regex"],
         default="[0-9]*",
+        secret=True
+    )
+
+    SECRET_LIST = ListConfigEntry(
+        item_type=RegexConfigEntry,
+        key_path=["secret", "list"],
+        default=["[a-zA-Z]*"],
         secret=True
     )
 

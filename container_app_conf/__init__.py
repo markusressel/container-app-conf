@@ -23,9 +23,9 @@ from typing import Dict, List
 
 from container_app_conf.const import DEFAULT_CONFIG_FILE_PATHS
 from container_app_conf.entry import ConfigEntry
-from container_app_conf.formatter import ConfigFormatter
+from container_app_conf.formatter import ConfigFormatter, SimpleFormatter
 from container_app_conf.source import DataSource
-from container_app_conf.util import find_duplicates, generate_reference_config
+from container_app_conf.util import find_duplicates, generate_reference_config, config_entries_to_dict
 
 LOGGER = logging.getLogger(__name__)
 
@@ -121,8 +121,10 @@ class ConfigBase:
         :return: printable description of the current configuration
         """
         if formatter is None:
-            formatter = ConfigFormatter()
-        output = formatter.format(self)
+            formatter = SimpleFormatter()
+
+        data = config_entries_to_dict(list(self._config_entries.values()), hide_secrets=True)
+        output = formatter.format(data)
         return output
 
     def _find_config_entries(self) -> Dict[str, ConfigEntry]:

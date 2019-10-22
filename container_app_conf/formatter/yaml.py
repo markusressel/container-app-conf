@@ -17,25 +17,23 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf.entry.string import StringConfigEntry
-from tests import EntryTestBase, TestConfigBase
+import io
+
+from ruamel.yaml import YAML
+
+from container_app_conf import ConfigFormatter
 
 
-class SecretTest(EntryTestBase):
+class YamlFormatter(ConfigFormatter):
+    """
+    Formats config entries like a YAML config file
+    """
+    yaml = YAML()
+    yaml.default_style = False
+    yaml.default_flow_style = False
 
-    def test_secret_entry(self):
-        config_entry = StringConfigEntry(key_path=["string"], required=False)
-        self.assertFalse(config_entry.secret)
-        config_entry = StringConfigEntry(key_path=["string"], required=False, secret=False)
-        self.assertFalse(config_entry.secret)
-        config_entry = StringConfigEntry(key_path=["string"], required=False, secret=True)
-        self.assertTrue(config_entry.secret)
-
-    def test_secret_current_config(self):
-        config = TestConfigBase()
-        from container_app_conf.formatter.yaml import YamlFormatter
-        output = config.print(YamlFormatter())
-        # output = config.print()
-
-        for secret_entry in list(filter(lambda x: x.secret, config._config_entries.values())):
-            self.assertNotIn(str(secret_entry.value), output)
+    def format(self, data: dict) -> str:
+        output = io.StringIO()
+        self.yaml.dump(data, output)
+        output.seek(0)
+        return output.read()

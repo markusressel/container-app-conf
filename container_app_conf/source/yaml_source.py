@@ -19,8 +19,9 @@
 #  SOFTWARE.
 import logging
 
-import yaml
+from ruamel.yaml import YAML
 
+from container_app_conf.formatter.yaml import YamlFormatter
 from container_app_conf.source import FilesystemSource
 
 LOGGER = logging.getLogger(__name__)
@@ -31,12 +32,19 @@ class YamlSource(FilesystemSource):
     Data source utilizing YAML files
     """
     DEFAULT_FILE_EXTENSIONS = ['yaml', 'yml']
+    formatter = YamlFormatter()
+
+    yaml = YAML()
+    yaml.default_style = False
+    yaml.default_flow_style = False
 
     def _load_file(self, file_path: str) -> dict:
         with open(file_path, 'r') as ymlfile:
-            return yaml.load(ymlfile, Loader=yaml.FullLoader)
+            return self.yaml.load(ymlfile)
 
     def _write_reference(self, reference: dict, file_path: str):
-        text = yaml.dump(reference)
+        text = self.formatter.format(reference)
         with open(file_path, "w") as file:
+            file.seek(0)
             file.write(text)
+            file.truncate()

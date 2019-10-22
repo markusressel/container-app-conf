@@ -17,10 +17,6 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from typing import List
-
-from container_app_conf import ConfigEntry
-from container_app_conf.source.env_source import EnvSource
 
 
 class ConfigFormatter:
@@ -28,35 +24,34 @@ class ConfigFormatter:
     Allows config entries to be formatted into a string
     """
 
-    def format(self, config) -> str:
+    def format(self, data: dict) -> str:
         """
-        Formats the given configuration
-        :param config: config to format
+        Formats the given entry data
+        :param data: entries to format
         :return: formatted string
         """
-        lines = list(map(self.format_entries, config._config_entries.values()))
-        output = "\n".join(lines)
-        return output
+        raise NotImplementedError()
 
-    def format_entries(self, entries: List[ConfigEntry] or ConfigEntry) -> str:
-        """
-        Formats the given entries
-        :param entries: entries to format
-        :return: formatted string
-        """
-        entries = entries if isinstance(entries, list) else [entries]
-        output = "\n".join(list(map(self.format_entry, entries)))
-        return output
 
-    def format_entry(self, entry: ConfigEntry) -> str:
-        """
-        Formats the given entry
-        :param entry: entry to format
-        :return: formatted string
-        """
-        if entry.secret:
-            value = "*****"
-        else:
-            value = entry._type_to_value(entry.value)
+class SimpleFormatter(ConfigFormatter):
+    """
+    Prints all config entries in a human readable manner
+    """
 
-        return "{}: {}".format(EnvSource.env_key(entry), value)
+    def format(self, data: dict) -> str:
+        return "\n".join(self._format(data)).strip()
+
+    def _format(self, data: dict, prefix: str = "") -> [str]:
+        """
+        Recursively formats the dictionary
+        :param data:
+        :return:
+        """
+        lines = []
+        for key, value in data.items():
+            output = prefix + key
+            if isinstance(value, dict):
+                lines.extend(self._format(value, "{}->".format(output)))
+            else:
+                lines.append(output + ": {}".format(value))
+        return lines

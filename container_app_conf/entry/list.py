@@ -60,6 +60,7 @@ class ListConfigEntry(ConfigEntry):
             example=example,
             default=default,
             required=required,
+            secret=secret
         )
 
     @property
