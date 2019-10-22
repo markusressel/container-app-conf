@@ -79,6 +79,12 @@ constructor parameter to `True`.
 If you want to allow setting a `None` value even if the default value 
 is **not** `None`, you have to explicitly set `required=False`.
 
+## Secret values
+
+If your config contains secret values like passwords you can mark them
+as such using the `secret=True` constructor parameter. That way their 
+value will be redacted when [printing the current configuration]().
+
 ## Data sources
 
 **container-app-conf** supports the simultaneous use of multiple data 
@@ -107,11 +113,18 @@ env_key = "_".join(key_path).upper()
 
 yields `MY_APP_EXAMPLE`.
 
-### YamlSource
+
+### Filesystem Source
+
+Multiple data sources using the filesystem are available:
+
+* YamlSource
+* TomlSource
+* JsonSource
 
 #### File paths
 
-By default the `YamlSource` looks for a YAML config file in multiple 
+By default config files are searched for in multiple 
 directories that are commonly used for configuration files which include:
 
 - `./`
@@ -138,6 +151,43 @@ constructor parameter:
 ```python
 config1 = AppConfig(singleton=False)
 config2 = AppConfig(singleton=False)
+```
+
+## Print current config
+
+Oftentimes it can be useful to print the current configuration of an
+application. To do this you can use
+
+```python
+config = AppConfig()
+config.print()
+```
+
+which will result in an output similar to this:
+
+```text
+test->bool: _REDACTED_
+test->this->date->is->nested->deep: 2019-10-22T04:21:02.316907
+test->this->is->a->range: [0..100]
+test->this->is->a->list: None
+test->this->timediff->is->in->this->branch: 0:00:10
+test->directory: None
+test->file: None
+test->float: 1.23
+test->int: 100
+test->regex: ^[a-zA-Z0-9]$
+test->string: default value
+secret->list: _REDACTED_
+secret->regex: _REDACTED_
+```
+
+If you don't like the style you can specify a custom `ConfigFormatter`
+like this:
+
+```python
+from container_app_conf.formatter.toml import TomlFormatter
+config = AppConfig()
+config.print(TomlFormatter())
 ```
 
 ## Generate reference config
