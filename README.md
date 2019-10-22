@@ -190,6 +190,32 @@ config = AppConfig()
 config.print(TomlFormatter())
 ```
 
+Which would output the same config like this:
+
+```text
+[test]
+bool = "_REDACTED_"
+directory = "None"
+file = "None"
+float = 1.23
+int = 100
+regex = "^[a-zA-Z0-9]$"
+string = "default value"
+
+[secret]
+list = "_REDACTED_"
+regex = "_REDACTED_"
+
+[test.this.is.a]
+range = "[0..100]"
+
+[test.this.date.is.nested]
+deep = "2019-10-22T04:26:10.654541"
+
+[test.this.timediff.is.in.this]
+branch = "0:00:10"
+```
+
 ## Generate reference config
 
 **container-app-conf** will (by default) generate a reference config
