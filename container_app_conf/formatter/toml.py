@@ -17,31 +17,20 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-import logging
+import io
 
 import toml
 
-from container_app_conf.formatter.toml import TomlFormatter
-from container_app_conf.source import FilesystemSource
-
-LOGGER = logging.getLogger(__name__)
+from container_app_conf import ConfigFormatter
 
 
-class TomlSource(FilesystemSource):
+class TomlFormatter(ConfigFormatter):
     """
-    Data source utilizing TOML files
+    Formats config entries like a TOML config file
     """
-    DEFAULT_FILE_EXTENSIONS = ['toml', 'tml']
 
-    formatter = TomlFormatter()
-
-    def _load_file(self, file_path: str) -> dict:
-        with open(file_path, 'r') as file:
-            return toml.load(file)
-
-    def _write_reference(self, reference: dict, file_path: str):
-        text = self.formatter.format(reference)
-        with open(file_path, "w") as file:
-            file.seek(0)
-            file.write(text)
-            file.truncate()
+    def format(self, data: dict) -> str:
+        output = io.StringIO()
+        toml.dump(data, output)
+        output.seek(0)
+        return output.read()
