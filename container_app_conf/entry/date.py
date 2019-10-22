@@ -43,6 +43,8 @@ class DateConfigEntry(ConfigEntry):
             raise ValueError("Unsupported type: {}".format(type(value)))
 
     def _type_to_value(self, type: any) -> any:
+        if type is None:
+            return None
         if isinstance(type, datetime):
             return type.isoformat()
         else:
