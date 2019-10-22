@@ -17,30 +17,19 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+import io
 import json
-import logging
 
-from container_app_conf.formatter.json import JsonFormatter
-from container_app_conf.source import FilesystemSource
-
-LOGGER = logging.getLogger(__name__)
+from container_app_conf import ConfigFormatter
 
 
-class JsonSource(FilesystemSource):
+class JsonFormatter(ConfigFormatter):
     """
-    Data source utilizing JSON files
+    Formats config entries like a JSON config file
     """
-    DEFAULT_FILE_EXTENSIONS = ['json']
 
-    formatter = JsonFormatter()
-
-    def _load_file(self, file_path: str) -> dict:
-        with open(file_path, 'r') as file:
-            return json.load(file)
-
-    def _write_reference(self, reference: dict, file_path: str):
-        text = self.formatter.format(reference)
-        with open(file_path, "w") as file:
-            file.seek(0)
-            file.write(text)
-            file.truncate()
+    def format(self, data: dict) -> str:
+        output = io.StringIO()
+        json.dump(data, output, indent=2)
+        output.seek(0)
+        return output.read()
