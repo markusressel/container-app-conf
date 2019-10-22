@@ -83,7 +83,7 @@ is **not** `None`, you have to explicitly set `required=False`.
 
 If your config contains secret values like passwords you can mark them
 as such using the `secret=True` constructor parameter. That way their 
-value will be redacted when [printing the current configuration]().
+value will be redacted when [printing the current configuration](#print-current-config).
 
 ## Data sources
 
