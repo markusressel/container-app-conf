@@ -54,5 +54,9 @@ class RegexConfigEntry(ConfigEntry):
             value = str(value)
         return re.compile(value, flags=self.flags if self.flags is not None else 0)
 
-    def _type_to_value(self, type: any) -> str:
+    def _type_to_value(self, type: any) -> any:
+        if type is None:
+            return None
+        if isinstance(type, str):
+            return type
         return type.pattern

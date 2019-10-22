@@ -43,4 +43,6 @@ class BoolConfigEntry(ConfigEntry):
                 raise ValueError("Unsupported value")
 
     def _type_to_value(self, type: any) -> any:
+        if type is None:
+            return None
         return bool(type)

@@ -42,4 +42,6 @@ class IntConfigEntry(ConfigEntry):
         return parsed_value
 
     def _type_to_value(self, type: any) -> any:
+        if type is None:
+            return None
         return int(type)
