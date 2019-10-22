@@ -125,6 +125,8 @@ class ConfigEntry:
         :param type: value of expected entry type
         :return: config file value
         """
+        if type is None:
+            return None
         return str(type)
 
     def _raise_invalid_value(self, value: any, reason: str or None = None):
