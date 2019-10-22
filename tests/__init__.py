@@ -47,8 +47,7 @@ class TestConfigBase2(ConfigBase):
 class TestConfigBase(ConfigBase):
     BOOL = BoolConfigEntry(
         key_path=["test", "bool"],
-        default=False,
-        secret=True
+        default=False
     )
     STRING = StringConfigEntry(
         key_path=["test", "string"],
@@ -96,9 +95,31 @@ class TestConfigBase(ConfigBase):
         secret=False
     )
 
+    NONE_INT = IntConfigEntry(
+        key_path=["none", "int"],
+        default=None,
+    )
+
+    NONE_DATE = DateConfigEntry(
+        key_path=["none", "date"],
+        default=None,
+    )
+
+    SECRET_BOOL = BoolConfigEntry(
+        key_path=["secret", "bool"],
+        default=False,
+        secret=True
+    )
+
+    SECRET_INT = IntConfigEntry(
+        key_path=["secret", "int"],
+        default=None,
+        secret=True
+    )
+
     SECRET_REGEX = RegexConfigEntry(
         key_path=["secret", "regex"],
-        default="[0-9]*",
+        default=None,
         secret=True
     )
 

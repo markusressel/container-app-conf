@@ -17,25 +17,26 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf.entry.string import StringConfigEntry
+
 from tests import EntryTestBase, TestConfigBase
 
 
-class SecretTest(EntryTestBase):
+class PrintTest(EntryTestBase):
 
-    def test_secret_entry(self):
-        config_entry = StringConfigEntry(key_path=["string"], required=False)
-        self.assertFalse(config_entry.secret)
-        config_entry = StringConfigEntry(key_path=["string"], required=False, secret=False)
-        self.assertFalse(config_entry.secret)
-        config_entry = StringConfigEntry(key_path=["string"], required=False, secret=True)
-        self.assertTrue(config_entry.secret)
-
-    def test_secret_current_config(self):
+    def test_print_yaml(self):
         config = TestConfigBase()
         from container_app_conf.formatter.yaml import YamlFormatter
         output = config.print(YamlFormatter())
-        # output = config.print()
+        self.assertIsNotNone(output)
 
-        for secret_entry in list(filter(lambda x: x.secret and x.value is not None, config._config_entries.values())):
-            self.assertNotIn(str(secret_entry.value), output)
+    def test_print_toml(self):
+        config = TestConfigBase()
+        from container_app_conf.formatter.toml import TomlFormatter
+        output = config.print(TomlFormatter())
+        self.assertIsNotNone(output)
+
+    def test_print_json(self):
+        config = TestConfigBase()
+        from container_app_conf.formatter.json import JsonFormatter
+        output = config.print(JsonFormatter())
+        self.assertIsNotNone(output)
