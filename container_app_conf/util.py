@@ -52,6 +52,15 @@ def generate_reference_config(config_entries: List[ConfigEntry]) -> {}:
     Generates a dictionary containing the expected config tree filled with default and example values
     :return: a dictionary containing the expected config tree
     """
+    return config_entries_to_dict(config_entries, use_examples=True)
+
+
+def config_entries_to_dict(config_entries: List[ConfigEntry], hide_secrets: bool = False,
+                           use_examples: bool = False) -> {}:
+    """
+    Converts a list of config entries to a dictionary
+    :return: a dictionary containing the expected config tree
+    """
     config_tree = {}
     for entry in config_entries:
         current_level = config_tree
@@ -60,6 +69,11 @@ def generate_reference_config(config_entries: List[ConfigEntry]) -> {}:
                 current_level[path] = {}
             current_level = current_level[path]
 
-        current_level[entry.key_path[-1]] = entry._type_to_value(entry.example)
+        if hide_secrets and entry.secret:
+            value = "_REDACTED_"
+        else:
+            value = entry._type_to_value(entry.example if use_examples else entry.value)
+
+        current_level[entry.key_path[-1]] = value
 
     return config_tree

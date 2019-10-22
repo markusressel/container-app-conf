@@ -46,6 +46,11 @@ class ListConfigEntry(ConfigEntry):
         """
         if item_args is None:
             item_args = {}
+
+        # pass "secret" value to item if necessary
+        if secret:
+            item_args["secret"] = secret
+
         self._item_entry = item_type(key_path=["dummy"], **item_args)
         self.delimiter = delimiter if delimiter is not None else ","
 
@@ -55,7 +60,7 @@ class ListConfigEntry(ConfigEntry):
             example=example,
             default=default,
             required=required,
-            secret=secret,
+            secret=secret
         )
 
     @property
@@ -81,6 +86,8 @@ class ListConfigEntry(ConfigEntry):
         return list(map(lambda x: self._item_entry._value_to_type(x), filter(lambda x: x, value)))
 
     def _type_to_value(self, type: list or str) -> any:
+        if type is None:
+            return None
         if isinstance(type, str):
             return type
         str_items = list(map(lambda x: self._item_entry._type_to_value(x), type))

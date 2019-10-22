@@ -17,25 +17,41 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from container_app_conf.entry.string import StringConfigEntry
-from tests import EntryTestBase, TestConfigBase
 
 
-class SecretTest(EntryTestBase):
+class ConfigFormatter:
+    """
+    Allows config entries to be formatted into a string
+    """
 
-    def test_secret_entry(self):
-        config_entry = StringConfigEntry(key_path=["string"], required=False)
-        self.assertFalse(config_entry.secret)
-        config_entry = StringConfigEntry(key_path=["string"], required=False, secret=False)
-        self.assertFalse(config_entry.secret)
-        config_entry = StringConfigEntry(key_path=["string"], required=False, secret=True)
-        self.assertTrue(config_entry.secret)
+    def format(self, data: dict) -> str:
+        """
+        Formats the given entry data
+        :param data: entries to format
+        :return: formatted string
+        """
+        raise NotImplementedError()
 
-    def test_secret_current_config(self):
-        config = TestConfigBase()
-        from container_app_conf.formatter.yaml import YamlFormatter
-        output = config.print(YamlFormatter())
-        # output = config.print()
 
-        for secret_entry in list(filter(lambda x: x.secret, config._config_entries.values())):
-            self.assertNotIn(str(secret_entry.value), output)
+class SimpleFormatter(ConfigFormatter):
+    """
+    Prints all config entries in a human readable manner
+    """
+
+    def format(self, data: dict) -> str:
+        return "\n".join(self._format(data)).strip()
+
+    def _format(self, data: dict, prefix: str = "") -> [str]:
+        """
+        Recursively formats the dictionary
+        :param data:
+        :return:
+        """
+        lines = []
+        for key, value in data.items():
+            output = prefix + key
+            if isinstance(value, dict):
+                lines.extend(self._format(value, "{}->".format(output)))
+            else:
+                lines.append(output + ": {}".format(value))
+        return lines

@@ -20,6 +20,7 @@
 import json
 import logging
 
+from container_app_conf.formatter.json import JsonFormatter
 from container_app_conf.source import FilesystemSource
 
 LOGGER = logging.getLogger(__name__)
@@ -31,10 +32,15 @@ class JsonSource(FilesystemSource):
     """
     DEFAULT_FILE_EXTENSIONS = ['json']
 
+    formatter = JsonFormatter()
+
     def _load_file(self, file_path: str) -> dict:
         with open(file_path, 'r') as file:
             return json.load(file)
 
     def _write_reference(self, reference: dict, file_path: str):
+        text = self.formatter.format(reference)
         with open(file_path, "w") as file:
-            json.dump(reference, file, indent=2)
+            file.seek(0)
+            file.write(text)
+            file.truncate()

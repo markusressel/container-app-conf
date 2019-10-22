@@ -21,6 +21,7 @@ import logging
 
 import toml
 
+from container_app_conf.formatter.toml import TomlFormatter
 from container_app_conf.source import FilesystemSource
 
 LOGGER = logging.getLogger(__name__)
@@ -32,10 +33,15 @@ class TomlSource(FilesystemSource):
     """
     DEFAULT_FILE_EXTENSIONS = ['toml', 'tml']
 
+    formatter = TomlFormatter()
+
     def _load_file(self, file_path: str) -> dict:
         with open(file_path, 'r') as file:
             return toml.load(file)
 
     def _write_reference(self, reference: dict, file_path: str):
+        text = self.formatter.format(reference)
         with open(file_path, "w") as file:
-            toml.dump(reference, file)
+            file.seek(0)
+            file.write(text)
+            file.truncate()
