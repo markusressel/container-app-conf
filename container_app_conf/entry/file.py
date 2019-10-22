@@ -60,7 +60,7 @@ class FileConfigEntry(ConfigEntry):
 
 
 class DirectoryConfigEntry(ConfigEntry):
-    _example = "/tmp"
+    _example = "/tmp/"
 
     def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
                  required: bool = None, check_existence: bool = False):
