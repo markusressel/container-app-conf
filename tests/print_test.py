@@ -23,6 +23,11 @@ from tests import EntryTestBase, TestConfigBase
 
 class PrintTest(EntryTestBase):
 
+    def test_print_simple(self):
+        config = TestConfigBase()
+        output = config.print()
+        self.assertIsNotNone(output)
+
     def test_print_yaml(self):
         config = TestConfigBase()
         from container_app_conf.formatter.yaml import YamlFormatter

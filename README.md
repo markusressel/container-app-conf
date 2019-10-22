@@ -195,8 +195,6 @@ Which would output the same config like this:
 ```text
 [test]
 bool = "_REDACTED_"
-directory = "None"
-file = "None"
 float = 1.23
 int = 100
 regex = "^[a-zA-Z0-9]$"
