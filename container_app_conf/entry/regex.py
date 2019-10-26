@@ -18,15 +18,13 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-import copy
 import re
 from typing import Pattern
 
 from container_app_conf import ConfigEntry
+from container_app_conf.util import regex_deepcopy_36_workaround
 
-# workaround for deepcopy bug in python<=3.6
-# see: https://stackoverflow.com/questions/6279305/typeerror-cannot-deepcopy-this-pattern-object/56935186#56935186
-copy._deepcopy_dispatch[type(re.compile(''))] = lambda r, _: r
+regex_deepcopy_36_workaround()
 
 
 class RegexConfigEntry(ConfigEntry):
