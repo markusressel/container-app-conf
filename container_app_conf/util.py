@@ -77,3 +77,13 @@ def config_entries_to_dict(config_entries: List[ConfigEntry], hide_secrets: bool
         current_level[entry.key_path[-1]] = value
 
     return config_tree
+
+
+def regex_deepcopy_36_workaround():
+    """
+    Workaround for deepcopy bug in python<=3.6
+    see: https://stackoverflow.com/questions/6279305/typeerror-cannot-deepcopy-this-pattern-object/56935186#56935186
+    """
+    import copy
+    import re
+    copy._deepcopy_dispatch[type(re.compile(''))] = lambda r, _: r

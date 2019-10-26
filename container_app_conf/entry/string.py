@@ -20,6 +20,9 @@
 import re
 
 from container_app_conf import ConfigEntry
+from container_app_conf.util import regex_deepcopy_36_workaround
+
+regex_deepcopy_36_workaround()
 
 
 class StringConfigEntry(ConfigEntry):
