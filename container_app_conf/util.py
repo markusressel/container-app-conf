@@ -85,4 +85,5 @@ def regex_deepcopy_36_workaround():
     see: https://stackoverflow.com/questions/6279305/typeerror-cannot-deepcopy-this-pattern-object/56935186#56935186
     """
     import copy
+    import re
     copy._deepcopy_dispatch[type(re.compile(''))] = lambda r, _: r
