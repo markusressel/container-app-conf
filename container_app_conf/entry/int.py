@@ -38,7 +38,7 @@ class IntConfigEntry(ConfigEntry):
         """
         parsed_value = int(value)
         if self.range is not None and parsed_value not in self.range:
-            raise ValueError("Value not in range")
+            raise ValueError("Value not in range: {} not in {}".format(parsed_value, self.range))
         return parsed_value
 
     def _type_to_value(self, type: any) -> any:
