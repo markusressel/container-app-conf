@@ -216,13 +216,27 @@ branch = "0:00:10"
 
 ## Generate reference config
 
-**container-app-conf** will (by default) generate a reference config
-for each data source that supports it. This reference contains **all** 
-available configuration options. If a **default** was specified for an 
-entry it will be used, otherwise the **example** value.
+You can generate a reference configuration from a config object.
+This reference contains **all** available configuration options. 
+If a **default** was specified for an entry it will be used, 
+otherwise the **example** value.
 
-Where and how the reference fill is stored depends on the data source
-implementation.
+```python
+from container_app_conf.util import generate_reference_config
+config = AppConfig()
+reference_config = generate_reference_config(config._config_entries.values())
+```
+
+This will return a dictionary representing the config entry tree.
+You can also specify a formatter and write a reference config to a 
+file using:
+
+```python
+from container_app_conf.util import write_reference
+from container_app_conf.formatter.yaml import YamlFormatter
+config = AppConfig()
+write_reference(config, "/home/markus/.config/example.yaml", YamlFormatter())
+```
 
 If the generated reference contains values that do not make sense 
 because of application constraints, specify your own **example** 
@@ -233,7 +247,6 @@ constructor parameter.
 
 GitHub is for social coding: if you want to write code, I encourage contributions through pull requests from forks
 of this repository. Create GitHub tickets for bugs and new features and comment on the ones that you are interested in.
-
 
 # License
 ```text
