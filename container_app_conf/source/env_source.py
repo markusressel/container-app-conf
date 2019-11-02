@@ -17,7 +17,7 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-
+import copy
 import os
 
 from container_app_conf import ConfigEntry
@@ -31,17 +31,15 @@ class EnvSource(DataSource):
     KEY_SPLIT_CHAR = "_"
 
     def has(self, entry: ConfigEntry) -> bool:
-        return self.env_key(entry) in os.environ.keys()
+        return self.env_key(entry) in self.root.keys()
 
     def get(self, entry: ConfigEntry) -> str or None:
         key = self.env_key(entry)
-        return os.environ.get(key, None)
+        return self.root.get(key, None)
 
     @staticmethod
     def env_key(entry: ConfigEntry) -> str:
         return EnvSource.KEY_SPLIT_CHAR.join(entry.key_path).upper()
 
     def _load(self) -> dict:
-        # loading env is pointless since it is already in memory
-        # instead we override has() and get() methods to directly access the environment
-        pass
+        return copy.deepcopy(os.environ)

@@ -18,7 +18,6 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 import logging
-import os
 from typing import List
 
 from container_app_conf import ConfigEntry
@@ -78,13 +77,6 @@ class DataSource:
 
         return value
 
-    def write_reference(self, reference: dict):
-        """
-        Writes a reference configuration (if implemented)
-        :param reference: the reference config as in tree form
-        """
-        pass
-
 
 class FilesystemSource(DataSource):
     DEFAULT_FILE_EXTENSIONS = []
@@ -124,26 +116,6 @@ class FilesystemSource(DataSource):
         :return: file content as a dictionary
         """
         raise NotImplementedError()
-
-    def write_reference(self, reference: dict):
-        """
-        Writes a reference config file
-        """
-        folder = self.paths[0]
-        file_name = "{}_reference.{}".format(self.file_names[0], self.file_extensions[0])
-        file_path = os.path.join(self.paths[0], file_name)
-
-        os.makedirs(folder, exist_ok=True)
-
-        self._write_reference(reference, file_path)
-
-    def _write_reference(self, reference: dict, file_path: str):
-        """
-        Writes a reference config file
-        :param reference: the data to write
-        :param file_path: the file path to write to
-        """
-        pass
 
     def _find_config_file(self) -> str or None:
         """

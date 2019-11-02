@@ -72,16 +72,7 @@ class TestDataSource(TestBase):
             key_path=["testing", "key2"],
             default=2
         )
-        data = {
-            "testing": {
-                "key1": "value",
-                "key2": 2,
-            }
-        }
-
         source = TomlSource("test")
-        source._write_reference(data, "./test.toml")
-
         source.load()
         self.assertTrue(source.has(str_entry))
         self.assertEqual(source.get(str_entry), "value")
@@ -97,16 +88,7 @@ class TestDataSource(TestBase):
             key_path=["testing", "key2"],
             default=2
         )
-        data = {
-            "testing": {
-                "key1": "value",
-                "key2": 2,
-            }
-        }
-
         source = YamlSource("test")
-        source._write_reference(data, "./test.yaml")
-
         source.load()
         self.assertTrue(source.has(str_entry))
         self.assertEqual(source.get(str_entry), "value")
@@ -122,16 +104,7 @@ class TestDataSource(TestBase):
             key_path=["testing", "key2"],
             default=2
         )
-        data = {
-            "testing": {
-                "key1": "value",
-                "key2": 2,
-            }
-        }
-
         source = JsonSource("test")
-        source._write_reference(data, "./test.json")
-
         source.load()
         self.assertTrue(source.has(str_entry))
         self.assertEqual(source.get(str_entry), "value")
