@@ -17,9 +17,12 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+import os
+from pathlib import Path
 from typing import List
 
-from container_app_conf import ConfigEntry
+from container_app_conf import ConfigEntry, ConfigFormatter
+from container_app_conf.formatter.yaml import YamlFormatter
 
 
 def find_duplicates(l: list) -> []:
@@ -87,3 +90,25 @@ def regex_deepcopy_36_workaround():
     import copy
     import re
     copy._deepcopy_dispatch[type(re.compile(''))] = lambda r, _: r
+
+
+def write_reference(config, path: str or Path, formatter: ConfigFormatter = YamlFormatter()):
+    """
+    Writes an example configuration to the given path.
+    :param config:
+    :param path:
+    :param formatter:
+    :return:
+    """
+    path = Path(path)
+    if not path.is_file():
+        raise AttributeError("Path is not a file path: {}".format(path))
+
+    reference_config = generate_reference_config(list(config._config_entries.values()))
+    text = formatter.format(reference_config)
+
+    os.makedirs(path.parent, exist_ok=True)
+    with open(path, "w") as file:
+        file.seek(0)
+        file.write(text)
+        file.truncate()

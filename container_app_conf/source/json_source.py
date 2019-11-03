@@ -37,10 +37,3 @@ class JsonSource(FilesystemSource):
     def _load_file(self, file_path: str) -> dict:
         with open(file_path, 'r') as file:
             return json.load(file)
-
-    def _write_reference(self, reference: dict, file_path: str):
-        text = self.formatter.format(reference)
-        with open(file_path, "w") as file:
-            file.seek(0)
-            file.write(text)
-            file.truncate()
