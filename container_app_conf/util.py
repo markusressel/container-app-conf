@@ -100,9 +100,9 @@ def write_reference(config, path: str or Path, formatter: ConfigFormatter = Yaml
     :param formatter:
     :return:
     """
-    path = Path(path)
-    if not path.is_file():
-        raise AttributeError("Path is not a file path: {}".format(path))
+    path = Path(path).expanduser().resolve()
+    if path.exists() and not path.is_file():
+        raise AssertionError("Path exists and is not a file: {}".format(path))
 
     reference_config = generate_reference_config(list(config._config_entries.values()))
     text = formatter.format(reference_config)
