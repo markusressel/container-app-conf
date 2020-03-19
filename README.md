@@ -1,4 +1,5 @@
 # container-app-conf [![Contributors](https://img.shields.io/github/contributors/markusressel/container-app-conf.svg)](https://github.com/markusressel/container-app-conf/graphs/contributors) [![MIT License](https://img.shields.io/github/license/markusressel/container-app-conf.svg)](/LICENSE) ![Code Size](https://img.shields.io/github/languages/code-size/markusressel/container-app-conf.svg) ![https://badge.fury.io/py/container-app-conf](https://badge.fury.io/py/container-app-conf.svg) [![Build Status](https://travis-ci.org/markusressel/container-app-conf.svg?branch=master)](https://travis-ci.org/markusressel/container-app-conf)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmarkusressel%2Fcontainer-app-conf.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmarkusressel%2Fcontainer-app-conf?ref=badge_shield)
 
 **container-app-conf** is a library to easily read application configuration values
 from multiple sources (YAML, env) while providing type validation.
@@ -271,3 +272,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmarkusressel%2Fcontainer-app-conf.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmarkusressel%2Fcontainer-app-conf?ref=badge_large)
