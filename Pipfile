@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pytimeparse = "*"
+ruamel.yaml = "*"
+toml = "*"
+python-dateutil = "*"
+py-range-parse = ">=1.0.5"
+
+[dev-packages]
+pytest = "*"
+
+[requires]
+python_version = "3"
