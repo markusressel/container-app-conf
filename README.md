@@ -9,6 +9,7 @@ an application running inside of a container using environment variables
 form of configuration like a YAML file.
 
 **container-app-conf is used by**
+* [n26](https://github.com/femueller/n26)
 * [InfiniteWisdom](https://github.com/ekeih/InfiniteWisdom)
 * [DeineMudda](https://github.com/markusressel/DeineMudda)
 * [py-image-dedup](https://github.com/markusressel/py-image-dedup)
@@ -47,7 +48,7 @@ class AppConfig(ConfigBase):
 | `BoolConfigEntry`        | Parses `bool`, `int` (`0` and `1`) and `str` values (`yes`, `no` etc.) to a boolean value | `bool` |
 | `IntConfigEntry`         | Parses input to an integer | `int` |
 | `FloatConfigEntry`       | Parses input to a floating number | `float` |
-| `FloatConfigEntry`       | Parses input to a range (see [py-range-parse](https://github.com/markusressel/py-range-parse)) | `Range` |
+| `RangeConfigEntry`       | Parses input to a range (see [py-range-parse](https://github.com/markusressel/py-range-parse)) | `Range` |
 | `StringConfigEntry`      | Takes the raw string input | `str` |
 | `RegexConfigEntry`       | Parses and compiles regular expressions | `re.pattern` |
 | `DateConfigEntry`        | Parses various datetime formats (see [python-dateutil](https://github.com/dateutil/dateutil/)) | `datetime` |
