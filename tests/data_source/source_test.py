@@ -72,7 +72,7 @@ class TestDataSource(TestBase):
             key_path=["testing", "key2"],
             default=2
         )
-        source = TomlSource("test")
+        source = TomlSource("test", ["./", "./tests"])
         source.load()
         self.assertTrue(source.has(str_entry))
         self.assertEqual(source.get(str_entry), "value")
@@ -88,7 +88,7 @@ class TestDataSource(TestBase):
             key_path=["testing", "key2"],
             default=2
         )
-        source = YamlSource("test")
+        source = YamlSource("test", ["./", "./tests"])
         source.load()
         self.assertTrue(source.has(str_entry))
         self.assertEqual(source.get(str_entry), "value")
@@ -104,7 +104,7 @@ class TestDataSource(TestBase):
             key_path=["testing", "key2"],
             default=2
         )
-        source = JsonSource("test")
+        source = JsonSource("test", ["./", "./tests"])
         source.load()
         self.assertTrue(source.has(str_entry))
         self.assertEqual(source.get(str_entry), "value")

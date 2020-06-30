@@ -18,6 +18,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 import logging
+from collections import OrderedDict
 from typing import List
 
 from container_app_conf import ConfigEntry
@@ -27,14 +28,43 @@ LOGGER = logging.getLogger(__name__)
 
 class DataSource:
 
-    def __init__(self):
+    def __init__(self, ignore_case_in_keys: bool = False):
+        """
+        Constructor
+        :param ignore_case_in_keys: whether to ignore case in keys
+        """
         self.root = {}
+        self.ignore_case_in_keys = ignore_case_in_keys
 
     def load(self):
         """
         Loads all values of this data source into memory
         """
         self.root = self._load()
+
+        if self.ignore_case_in_keys:
+            self.root = self._convert_keys_to_lower(self.root)
+
+    def _convert_keys_to_lower(self, dictionary: dict) -> dict:
+        """
+        Recursively converts all dictionary keys to lowercase.
+        This is used for case insensitive key search.
+        :param dictionary: the dictionary to convert
+        :return: converted dict
+        :raises ValueError when a duplicate key is detected
+        """
+        lower_case_dictionary = OrderedDict()
+
+        for key, value in dictionary.items():
+            if not key.islower():
+                if key.lower() in lower_case_dictionary.keys():
+                    raise ValueError(f"Duplicate (case insensitive) key found: {key.lower()}")
+            if isinstance(value, dict):
+                lower_case_dictionary[key.lower()] = self._convert_keys_to_lower(value)
+            else:
+                lower_case_dictionary[key.lower()] = value
+
+        return lower_case_dictionary
 
     def _load(self) -> dict:
         """
@@ -54,6 +84,8 @@ class DataSource:
             return False
 
         for key in entry.key_path:
+            if self.ignore_case_in_keys:
+                key = key.lower()
             value = value.get(key)
             if value is None:
                 return False
@@ -71,6 +103,8 @@ class DataSource:
             return None
 
         for key in entry.key_path:
+            if self.ignore_case_in_keys:
+                key = key.lower()
             value = value.get(key)
             if value is None:
                 return entry.value
@@ -83,13 +117,15 @@ class FilesystemSource(DataSource):
 
     def __init__(self, file_name: str or List[str],
                  path: str or List[str] = None,
-                 file_extension: str or List[str] = None):
+                 file_extension: str or List[str] = None,
+                 ignore_case_in_keys: bool = False):
         """
         :param path: allowed config file path(s)
         :param file_name: allowed config file name(s)
         :param file_extension: allowed config file extension(s)
+        :param ignore_case_in_keys: whether to ignore case in keys
         """
-        super().__init__()
+        super().__init__(ignore_case_in_keys)
         if path is None:
             from container_app_conf import DEFAULT_CONFIG_FILE_PATHS
             self.paths = DEFAULT_CONFIG_FILE_PATHS

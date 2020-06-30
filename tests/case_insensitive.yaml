@@ -1,0 +1,6 @@
+tHiS:
+  Is:
+    CaseInsensitive: value
+    #caseInsensitive: value2 # this would trigger an exception
+  Or:
+    iSit: "?"
