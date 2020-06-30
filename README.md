@@ -9,7 +9,7 @@ an application running inside of a container using environment variables
 form of configuration like a YAML file.
 
 **container-app-conf is used by**
-* [n26](https://github.com/femueller/n26)
+* [python-n26](https://github.com/femueller/python-n26)
 * [InfiniteWisdom](https://github.com/ekeih/InfiniteWisdom)
 * [DeineMudda](https://github.com/markusressel/DeineMudda)
 * [py-image-dedup](https://github.com/markusressel/py-image-dedup)
