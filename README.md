@@ -18,11 +18,16 @@ and hopefully many others :)
 
 # How to use
 
+
+## Install dependency
+
 ```shell
 pip install container-app-conf
 ```
 
 ## Extend `ConfigBase` base
+
+Create a custom configuration class and define your config entries:
 
 ```python
 from container_app_conf import ConfigBase
@@ -38,8 +43,105 @@ class AppConfig(ConfigBase):
             "example"
         ],
         required=True)
-
 ```
+
+## Use configuration values
+
+```python
+config = AppConfig()
+
+value = config.MY_CONFIG.value
+```
+
+## Print current config
+
+Oftentimes it can be useful to print the current configuration of an
+application. To do this you can use
+
+```python
+config = AppConfig()
+config.print()
+```
+
+which will result in an output similar to this:
+
+```text
+test->bool: _REDACTED_
+test->this->date->is->nested->deep: 2019-10-22T04:21:02.316907
+test->this->is->a->range: [0..100]
+test->this->is->a->list: None
+test->this->timediff->is->in->this->branch: 0:00:10
+test->directory: None
+test->file: None
+test->float: 1.23
+test->int: 100
+test->regex: ^[a-zA-Z0-9]$
+test->string: default value
+secret->list: _REDACTED_
+secret->regex: _REDACTED_
+```
+
+If you don't like the style you can specify a custom `ConfigFormatter`
+like this:
+
+```python
+from container_app_conf.formatter.toml import TomlFormatter
+config = AppConfig()
+config.print(TomlFormatter())
+```
+
+Which would output the same config like this:
+
+```text
+[test]
+bool = "_REDACTED_"
+float = 1.23
+int = 100
+regex = "^[a-zA-Z0-9]$"
+string = "default value"
+
+[secret]
+list = "_REDACTED_"
+regex = "_REDACTED_"
+
+[test.this.is.a]
+range = "[0..100]"
+
+[test.this.date.is.nested]
+deep = "2019-10-22T04:26:10.654541"
+
+[test.this.timediff.is.in.this]
+branch = "0:00:10"
+```
+
+## Generate reference config
+
+You can generate a reference configuration from a config object.
+This reference contains **all** available configuration options. 
+If a **default** was specified for an entry it will be used, 
+otherwise the **example** value.
+
+```python
+from container_app_conf.util import generate_reference_config
+config = AppConfig()
+reference_config = generate_reference_config(config._config_entries.values())
+```
+
+This will return a dictionary representing the config entry tree.
+You can also specify a formatter and write a reference config to a 
+file using:
+
+```python
+from container_app_conf.util import write_reference
+from container_app_conf.formatter.yaml import YamlFormatter
+config = AppConfig()
+write_reference(config, "/home/markus/.config/example.yaml", YamlFormatter())
+```
+
+If the generated reference contains values that do not make sense 
+because of application constraints, specify your own **example** 
+or better yet **default** value using the respective config entry 
+constructor parameter.
 
 ## Config Types
 
@@ -154,96 +256,6 @@ constructor parameter:
 config1 = AppConfig(singleton=False)
 config2 = AppConfig(singleton=False)
 ```
-
-## Print current config
-
-Oftentimes it can be useful to print the current configuration of an
-application. To do this you can use
-
-```python
-config = AppConfig()
-config.print()
-```
-
-which will result in an output similar to this:
-
-```text
-test->bool: _REDACTED_
-test->this->date->is->nested->deep: 2019-10-22T04:21:02.316907
-test->this->is->a->range: [0..100]
-test->this->is->a->list: None
-test->this->timediff->is->in->this->branch: 0:00:10
-test->directory: None
-test->file: None
-test->float: 1.23
-test->int: 100
-test->regex: ^[a-zA-Z0-9]$
-test->string: default value
-secret->list: _REDACTED_
-secret->regex: _REDACTED_
-```
-
-If you don't like the style you can specify a custom `ConfigFormatter`
-like this:
-
-```python
-from container_app_conf.formatter.toml import TomlFormatter
-config = AppConfig()
-config.print(TomlFormatter())
-```
-
-Which would output the same config like this:
-
-```text
-[test]
-bool = "_REDACTED_"
-float = 1.23
-int = 100
-regex = "^[a-zA-Z0-9]$"
-string = "default value"
-
-[secret]
-list = "_REDACTED_"
-regex = "_REDACTED_"
-
-[test.this.is.a]
-range = "[0..100]"
-
-[test.this.date.is.nested]
-deep = "2019-10-22T04:26:10.654541"
-
-[test.this.timediff.is.in.this]
-branch = "0:00:10"
-```
-
-## Generate reference config
-
-You can generate a reference configuration from a config object.
-This reference contains **all** available configuration options. 
-If a **default** was specified for an entry it will be used, 
-otherwise the **example** value.
-
-```python
-from container_app_conf.util import generate_reference_config
-config = AppConfig()
-reference_config = generate_reference_config(config._config_entries.values())
-```
-
-This will return a dictionary representing the config entry tree.
-You can also specify a formatter and write a reference config to a 
-file using:
-
-```python
-from container_app_conf.util import write_reference
-from container_app_conf.formatter.yaml import YamlFormatter
-config = AppConfig()
-write_reference(config, "/home/markus/.config/example.yaml", YamlFormatter())
-```
-
-If the generated reference contains values that do not make sense 
-because of application constraints, specify your own **example** 
-or better yet **default** value using the respective config entry 
-constructor parameter.
 
 # Contributing
 
