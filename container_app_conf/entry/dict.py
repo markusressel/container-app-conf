@@ -29,8 +29,8 @@ class DictConfigEntry(ConfigEntry):
 
     def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
                  required: bool = None, secret: bool = None, schema: Schema = None):
-        super().__init__(key_path, example, description, default, required, secret)
         self.schema = schema
+        super().__init__(key_path, example, description, default, required, secret)
 
     def _value_to_type(self, value: any) -> any:
         if isinstance(value, str):

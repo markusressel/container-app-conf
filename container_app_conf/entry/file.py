@@ -32,8 +32,8 @@ class FileConfigEntry(ConfigEntry):
         See ConfigEntry
         :param check_existence: whether to check for file existence
         """
-        super().__init__(key_path, example, description, default, required, secret)
         self.check_existence = check_existence
+        super().__init__(key_path, example, description, default, required, secret)
 
     def _value_to_type(self, value: any) -> str or None:
         """
@@ -68,8 +68,8 @@ class DirectoryConfigEntry(ConfigEntry):
         See ConfigEntry
         :param check_existence: whether to check for folder existence
         """
-        super().__init__(key_path, example, description, default, required, secret)
         self.check_existence = check_existence
+        super().__init__(key_path, example, description, default, required, secret)
 
     def _value_to_type(self, value: any) -> str or None:
         """
