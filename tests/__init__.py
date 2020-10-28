@@ -22,10 +22,12 @@ import unittest
 from datetime import datetime, timedelta
 
 from py_range_parse import Range
+from voluptuous import Schema
 
 from container_app_conf import ConfigBase, ConfigEntry
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
+from container_app_conf.entry.dict import DictConfigEntry
 from container_app_conf.entry.file import FileConfigEntry, DirectoryConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
@@ -83,6 +85,20 @@ class TestConfigBase(ConfigBase):
         key_path=["test", "this", "is", "a", "range"],
         default=Range(0, 100)
     )
+    DICT = DictConfigEntry(
+        key_path=["dict"],
+        schema=Schema({str: str})
+    )
+
+    DICT_LIST = ListConfigEntry(
+        item_type=DictConfigEntry,
+        item_args={
+            "schema": Schema({str: str})
+        },
+        key_path=[
+            "dict_list",
+        ],
+    )
     STRING_LIST = ListConfigEntry(
         item_type=StringConfigEntry,
         key_path=["test", "this", "is", "a", "list"],
@@ -99,7 +115,6 @@ class TestConfigBase(ConfigBase):
         key_path=["none", "int"],
         default=None,
     )
-
     NONE_DATE = DateConfigEntry(
         key_path=["none", "date"],
         default=None,
@@ -110,19 +125,16 @@ class TestConfigBase(ConfigBase):
         default=False,
         secret=True
     )
-
     SECRET_INT = IntConfigEntry(
         key_path=["secret", "int"],
         default=None,
         secret=True
     )
-
     SECRET_REGEX = RegexConfigEntry(
         key_path=["secret", "regex"],
         default=None,
         secret=True
     )
-
     SECRET_LIST = ListConfigEntry(
         item_type=RegexConfigEntry,
         key_path=["secret", "list"],
