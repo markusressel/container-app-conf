@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 pytimeparse = "*"
 "ruamel.yaml" = "*"
-toml = "*"
+toml = "==0.10.0"
 python-dateutil = "*"
 py-range-parse = ">=1.0.5"
 

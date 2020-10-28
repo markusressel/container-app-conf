@@ -51,7 +51,7 @@ class ListConfigEntry(ConfigEntry):
         if secret:
             item_args["secret"] = secret
 
-        self._item_entry = item_type(key_path=["dummy"], **item_args)
+        self._item_entry = item_type(key_path=key_path, **item_args)
         self.delimiter = delimiter if delimiter is not None else ","
 
         super().__init__(
