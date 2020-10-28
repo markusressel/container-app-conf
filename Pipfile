@@ -9,6 +9,7 @@ pytimeparse = "*"
 toml = "==0.10.0"
 python-dateutil = "*"
 py-range-parse = ">=1.0.5"
+voluptuous = "*"
 
 [dev-packages]
 pytest = "*"

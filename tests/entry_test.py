@@ -21,9 +21,11 @@
 from pathlib import Path
 
 from py_range_parse import Range
+from voluptuous import Schema
 
 from container_app_conf.entry.bool import BoolConfigEntry
 from container_app_conf.entry.date import DateConfigEntry
+from container_app_conf.entry.dict import DictConfigEntry
 from container_app_conf.entry.file import FileConfigEntry, DirectoryConfigEntry
 from container_app_conf.entry.float import FloatConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
@@ -188,6 +190,18 @@ class EntryTest(EntryTestBase):
         config_entry = RangeConfigEntry(key_path=["range"])
         input_output = [
             ("[-5..5]", Range(-5, 5)),
+        ]
+
+        self.assert_input_output(config_entry, input_output)
+
+    def test_dict_entry(self):
+        config_entry = DictConfigEntry(key_path=["dict"], schema=Schema({str: str}))
+        input_output = [
+            ("{\"key\": \"value\"}", {"key": "value"}),
+            ("{'key': 'value'}", {"key": "value"}),
+            ({"key": "value"}, {"key": "value"}),
+            ({"key": 5}, ValueError),
+            ("{key: 5}", ValueError),
         ]
 
         self.assert_input_output(config_entry, input_output)
