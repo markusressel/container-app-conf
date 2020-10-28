@@ -157,6 +157,7 @@ constructor parameter.
 | `TimeDeltaConfigEntry`   | Parses various timedelta formats (see [pytimeparse](https://github.com/wroberts/pytimeparse)) | `timedelta` |
 | `FileConfigEntry`        | Parses a file path | `Path` |
 | `DirectoryConfigEntry`   | Parses a directory path | `Path` |
+| `DictConfigEntry`        | Parses a dictionary | `dict` |
 | `ListConfigEntry`        | Parses a comma separated string to a list of items specified in another `ConfigEntry` (in yaml it can also be specified as a yaml list) | `[]` |
 
 If none of the existing types suit your needs you can easily create your 
