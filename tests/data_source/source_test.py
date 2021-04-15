@@ -17,11 +17,14 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+import os
 from typing import Dict
+from unittest import mock
 
 from container_app_conf import ConfigEntry
 from container_app_conf.entry.int import IntConfigEntry
 from container_app_conf.entry.string import StringConfigEntry
+from container_app_conf.source.env_source import EnvSource
 from container_app_conf.source.json_source import JsonSource
 from container_app_conf.source.toml_source import TomlSource
 from container_app_conf.source.yaml_source import YamlSource
@@ -110,3 +113,32 @@ class TestDataSource(TestBase):
         self.assertEqual(source.get(str_entry), "value")
         self.assertTrue(source.has(int_entry))
         self.assertEqual(source.get(int_entry), 2)
+
+    def test_env(self):
+        str_entry = StringConfigEntry(
+            key_path=["test-ing", "key1"],
+            default="value"
+        )
+        int_entry = IntConfigEntry(
+            key_path=["testing", "key2"],
+            default=2
+        )
+
+        source = EnvSource()
+        original_key = EnvSource.env_key(str_entry)
+        expected = "expected"
+        with mock.patch.dict(os.environ, {original_key: expected}, clear=True):
+            source.load()
+
+        self.assertTrue(source.has(str_entry))
+        self.assertEqual(source.get(str_entry), expected)
+        self.assertFalse(source.has(int_entry))
+
+        normalized_env_key = original_key.replace('-', '_')
+        self.assertNotEqual(original_key, normalized_env_key)
+        with mock.patch.dict(os.environ, {normalized_env_key: expected + '2'}, clear=True):
+            source.load()
+
+        self.assertTrue(source.has(str_entry))
+        self.assertEqual(source.get(str_entry), expected + '2')
+        self.assertFalse(source.has(int_entry))

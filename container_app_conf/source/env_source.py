@@ -31,11 +31,14 @@ class EnvSource(DataSource):
     KEY_SPLIT_CHAR = "_"
 
     def has(self, entry: ConfigEntry) -> bool:
-        return self.env_key(entry) in self.root.keys()
+        original_key = self.env_key(entry)
+        normalized_key = original_key.replace('-', '_')
+        return original_key in self.root.keys() or normalized_key in self.root.keys()
 
     def get(self, entry: ConfigEntry) -> str or None:
-        key = self.env_key(entry)
-        return self.root.get(key, None)
+        original_key = self.env_key(entry)
+        normalized_key = original_key.replace('-', '_')
+        return self.root.get(original_key, self.root.get(normalized_key, None))
 
     @staticmethod
     def env_key(entry: ConfigEntry) -> str:
