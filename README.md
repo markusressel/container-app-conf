@@ -216,7 +216,7 @@ hyphens also with an underscore:
 key_path = ["my_app", "my-example"]
 ```
 
-would yield both `MY_APP_MY_EXAMPLE` (recommended) and `MY_APP_MY-EXAMPLE`.
+would yield `MY_APP_MY_EXAMPLE`.
 
 ### Filesystem Source
 
