@@ -209,15 +209,14 @@ implementations are available:
 
 Since you only specify the key path of a config entry the ENV
 key is generated automatically by concatenating all key path items 
-using an underscore and converting to uppercase:
+using an underscore, converting to uppercase and replacing any remaining
+hyphens also with an underscore:
 
 ```python
-key_path = ["my_app", "example"]
-env_key = "_".join(key_path).upper()
+key_path = ["my_app", "my-example"]
 ```
 
-yields `MY_APP_EXAMPLE`.
-
+would yield both `MY_APP_MY_EXAMPLE` (recommended) and `MY_APP_MY-EXAMPLE`.
 
 ### Filesystem Source
 
