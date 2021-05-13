@@ -18,6 +18,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 import re
+from re import Pattern
 
 from container_app_conf import ConfigEntry
 from container_app_conf.util import regex_deepcopy_36_workaround
@@ -29,7 +30,7 @@ class StringConfigEntry(ConfigEntry):
     _example = "text"
 
     def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
-                 required: bool = None, secret: bool = None, regex: str = None):
+                 required: bool = None, secret: bool = None, regex: str or Pattern = None):
         self.regex = re.compile(regex) if regex is not None else None
         super().__init__(key_path, example, description, default, required, secret)
 
