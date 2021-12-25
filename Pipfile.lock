@@ -94,11 +94,10 @@
         },
         "voluptuous": {
             "hashes": [
-                "sha256:663572419281ddfaf4b4197fd4942d181630120fb39b333e3adad70aeb56444b",
-                "sha256:8ace33fcf9e6b1f59406bfaf6b8ec7bcc44266a9f29080b4deb4fe6ff2492386"
+                "sha256:4db1ac5079db9249820d49c891cb4660a6f8cae350491210abce741fabf56513"
             ],
             "index": "pypi",
-            "version": "==0.12.1"
+            "version": "==0.12.2"
         }
     },
     "develop": {
