@@ -22,7 +22,7 @@ updates:
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: toml
-      versions:
-        - "> 0.10.0, < 0.11"
+        versions:
+          - "> 0.10.0, < 0.11"
     registries:
       - python-index-pypi-python-org-simple
