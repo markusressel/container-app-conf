@@ -47,9 +47,6 @@ class FileConfigEntry(ConfigEntry):
         else:
             file = pathlib.Path(str_value)
 
-        if str_value.endswith(os.sep):
-            raise AssertionError("File path should not end with '{}' delimiter: {}".format(os.sep, str_value))
-
         if file.is_dir():
             raise IsADirectoryError("Path is not a file: {}".format(str_value))
 
@@ -79,13 +76,9 @@ class DirectoryConfigEntry(ConfigEntry):
         """
         str_value = str(value)
         if isinstance(value, pathlib.Path):
-            str_value += os.sep
             directory = value
         else:
             directory = pathlib.Path(str_value)
-
-        if not str_value.endswith(os.sep):
-            raise AssertionError("Directory path should end with '{}' delimiter: {}".format(os.sep, str_value))
 
         if directory.is_file():
             raise NotADirectoryError("Path is not a directory: {}".format(str_value))
