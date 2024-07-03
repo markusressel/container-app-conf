@@ -124,12 +124,12 @@
         },
         "voluptuous": {
             "hashes": [
-                "sha256:533e36175967a310f1b73170d091232bf881403e4ebe52a9b4ade8404d151f5d",
-                "sha256:efc1dadc9ae32a30cc622602c1400a17b7bf8ee2770d64f70418144860739c3b"
+                "sha256:016348bc7788a9af9520b1764ebd4de0df41fe2138ebe9e06fa036bf86a65566",
+                "sha256:6ffcab32c4d3230b4d2af3a577c87e1908a714a11f6f95570456b1849b0279aa"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.8'",
-            "version": "==0.14.2"
+            "markers": "python_version >= '3.9'",
+            "version": "==0.15.2"
         }
     },
     "develop": {
