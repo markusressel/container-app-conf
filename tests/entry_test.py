@@ -172,7 +172,8 @@ class EntryTest(EntryTestBase):
             ("/tmp/", Path("/tmp")),
             ("./test/", Path("./test")),
             ("/something/", Path("/something")),
-            (Path("./test/"), Path("./test"))
+            (Path("./test/"), Path("./test")),
+            ("C:/Users/my.user/Documents/", Path("C:/Users/my.user/Documents")),
         ]
 
         self.assert_input_output(config_entry, input_output)
