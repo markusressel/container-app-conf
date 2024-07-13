@@ -1,0 +1,3 @@
+
+test:
+	pipenv run pytest
