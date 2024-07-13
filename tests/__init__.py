@@ -160,6 +160,8 @@ class EntryTestBase(TestBase):
                 try:
                     entry._parse_value(input)
                     assert False
+                except AssertionError as ex:
+                    raise ex
                 except:
                     assert True
             else:
