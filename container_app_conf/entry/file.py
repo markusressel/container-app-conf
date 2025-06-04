@@ -79,13 +79,9 @@ class DirectoryConfigEntry(ConfigEntry):
         """
         str_value = str(value)
         if isinstance(value, pathlib.Path):
-            str_value += os.sep
             directory = value
         else:
             directory = pathlib.Path(str_value)
-
-        if not str_value.endswith(os.sep):
-            raise AssertionError("Directory path should end with '{}' delimiter: {}".format(os.sep, str_value))
 
         if directory.is_file():
             raise NotADirectoryError("Path is not a directory: {}".format(str_value))

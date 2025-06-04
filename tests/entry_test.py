@@ -168,11 +168,12 @@ class EntryTest(EntryTestBase):
     def test_directory_entry(self):
         config_entry = DirectoryConfigEntry(key_path=["directory"])
         input_output = [
-            ("/tmp", AssertionError),
+            ("/tmp", Path("/tmp")),
             ("/tmp/", Path("/tmp")),
             ("./test/", Path("./test")),
             ("/something/", Path("/something")),
-            (Path("./test/"), Path("./test"))
+            (Path("./test/"), Path("./test")),
+            ("C:/Users/my.user/Documents/", Path("C:/Users/my.user/Documents")),
         ]
 
         self.assert_input_output(config_entry, input_output)
