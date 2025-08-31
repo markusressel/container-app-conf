@@ -19,6 +19,7 @@
 #  SOFTWARE.
 import ast
 import json
+from typing import List, Optional, Any
 
 from voluptuous import Schema
 
@@ -27,12 +28,12 @@ from container_app_conf import ConfigEntry
 
 class DictConfigEntry(ConfigEntry):
 
-    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
+    def __init__(self, key_path: List[str], example: Any = None, description: Optional[str] = None, default: Any = None,
                  required: bool = None, secret: bool = None, schema: Schema = None):
         self.schema = schema
         super().__init__(key_path, example, description, default, required, secret)
 
-    def _value_to_type(self, value: any) -> any:
+    def _value_to_type(self, value: Any) -> Any:
         if isinstance(value, str):
             try:
                 value = ast.literal_eval(value)
@@ -47,7 +48,7 @@ class DictConfigEntry(ConfigEntry):
 
         return value
 
-    def _type_to_value(self, type: any) -> any:
+    def _type_to_value(self, type: Any) -> Any:
         if type is None:
             return None
         return json.dumps(type)

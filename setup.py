@@ -18,6 +18,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 #
+from typing import Optional
 
 from setuptools import setup, find_packages
 
@@ -27,7 +28,7 @@ DEVELOPMENT_STATUS = "Development Status :: 5 - Production/Stable"
 VERSION_NAME = VERSION_NUMBER
 
 
-def readme_type() -> str:
+def readme_type() -> Optional[str]:
     import os
     if os.path.exists("README.rst"):
         return "text/x-rst"
@@ -35,7 +36,7 @@ def readme_type() -> str:
         return "text/markdown"
 
 
-def readme() -> [str]:
+def readme() -> str:
     if readme_type() == "text/markdown":
         file_name = "README.md"
     else:

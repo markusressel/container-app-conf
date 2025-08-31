@@ -18,6 +18,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 import logging
+from typing import Dict
 
 import toml
 
@@ -35,6 +36,6 @@ class TomlSource(FilesystemSource):
 
     formatter = TomlFormatter()
 
-    def _load_file(self, file_path: str) -> dict:
+    def _load_file(self, file_path: str) -> Dict:
         with open(file_path, 'r') as file:
             return toml.load(file)

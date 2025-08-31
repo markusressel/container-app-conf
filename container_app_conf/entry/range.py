@@ -17,6 +17,8 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+from typing import Optional, Any
+
 from py_range_parse import Range, parse_range
 
 from container_app_conf import ConfigEntry
@@ -25,7 +27,7 @@ from container_app_conf import ConfigEntry
 class RangeConfigEntry(ConfigEntry):
     _example = "[-5..5]"
 
-    def _value_to_type(self, value: any) -> Range or None:
+    def _value_to_type(self, value: Any) -> Optional[Range]:
         """
         Tries to convert the given value to a range.
         :param value: the value to parse

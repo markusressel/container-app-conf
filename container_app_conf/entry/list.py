@@ -17,7 +17,7 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-from typing import Type
+from typing import Type, List, Any, Optional
 
 from container_app_conf import ConfigEntry
 
@@ -27,9 +27,9 @@ class ListConfigEntry(ConfigEntry):
     Config entry allowing to specify a list of items of specified type
     """
 
-    def __init__(self, item_type: Type[ConfigEntry], key_path: [str], example: any = None,
-                 description: str or None = None,
-                 default: any = None,
+    def __init__(self, item_type: Type[ConfigEntry], key_path: List[str], example: Any = None,
+                 description: Optional[str] = None,
+                 default: Any = None,
                  required: bool = None,
                  secret: bool = None,
                  item_args: dict = None,
@@ -64,7 +64,7 @@ class ListConfigEntry(ConfigEntry):
         )
 
     @property
-    def example(self) -> any:
+    def example(self) -> Any:
         if self.default is not None:
             return self.default
 
@@ -74,18 +74,18 @@ class ListConfigEntry(ConfigEntry):
         single_example = self._item_entry.example
         return [single_example, single_example, single_example]
 
-    def _value_to_type(self, value: any) -> [any] or None:
+    def _value_to_type(self, value: Any) -> Optional[List[Any]]:
         """
         Tries to permissively convert the given value to a list of values.
         :param value: the value to parse
         :return: the parsed list
         """
-        if not isinstance(value, list):
+        if not isinstance(value, List):
             value = str(value).split(self.delimiter)
 
         return list(map(lambda x: self._item_entry._value_to_type(x), filter(lambda x: x, value)))
 
-    def _type_to_value(self, type: list or str) -> any:
+    def _type_to_value(self, type: List | str) -> Any:
         if type is None:
             return None
         if isinstance(type, str):

@@ -19,7 +19,7 @@
 #  SOFTWARE.
 import logging
 from collections import OrderedDict
-from typing import List
+from typing import List, Optional, Any, Dict
 
 from container_app_conf import ConfigEntry
 
@@ -45,7 +45,7 @@ class DataSource:
         if self.ignore_case_in_keys:
             self.root = self._convert_keys_to_lower(self.root)
 
-    def _convert_keys_to_lower(self, dictionary: dict) -> dict:
+    def _convert_keys_to_lower(self, dictionary: dict) -> Dict:
         """
         Recursively converts all dictionary keys to lowercase.
         This is used for case insensitive key search.
@@ -66,7 +66,7 @@ class DataSource:
 
         return lower_case_dictionary
 
-    def _load(self) -> dict:
+    def _load(self) -> Dict:
         """
         Loads all values of this data source and returns them as a dictionary tree
         :return: value tree
@@ -92,7 +92,7 @@ class DataSource:
 
         return True
 
-    def get(self, entry: ConfigEntry) -> any:
+    def get(self, entry: ConfigEntry) -> Any:
         """
         Retrieve the value of the given key
         :param entry: config entry
@@ -115,9 +115,9 @@ class DataSource:
 class FilesystemSource(DataSource):
     DEFAULT_FILE_EXTENSIONS = []
 
-    def __init__(self, file_name: str or List[str],
-                 path: str or List[str] = None,
-                 file_extension: str or List[str] = None,
+    def __init__(self, file_name: str | List[str],
+                 path: str | List[str] = None,
+                 file_extension: str | List[str] = None,
                  ignore_case_in_keys: bool = False):
         """
         :param path: allowed config file path(s)
@@ -137,7 +137,7 @@ class FilesystemSource(DataSource):
         else:
             self.file_extensions = file_extension if isinstance(file_extension, list) else [file_extension]
 
-    def _load(self) -> dict:
+    def _load(self) -> Dict:
         file_path = self._find_config_file()
         if file_path is None:
             LOGGER.debug("No config file found in paths: {}".format(self.paths))
@@ -145,7 +145,7 @@ class FilesystemSource(DataSource):
 
         return self._load_file(file_path)
 
-    def _load_file(self, file_path: str) -> dict:
+    def _load_file(self, file_path: str) -> Dict:
         """
         Parses the file content into memory
         :param file_path: the path of the file to parse
@@ -153,7 +153,7 @@ class FilesystemSource(DataSource):
         """
         raise NotImplementedError()
 
-    def _find_config_file(self) -> str or None:
+    def _find_config_file(self) -> Optional[str]:
         """
         Tries to find a usable config file
         :return: file path or None

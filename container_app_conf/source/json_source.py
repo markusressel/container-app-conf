@@ -19,6 +19,7 @@
 #  SOFTWARE.
 import json
 import logging
+from typing import Dict
 
 from container_app_conf.formatter.json import JsonFormatter
 from container_app_conf.source import FilesystemSource
@@ -34,6 +35,6 @@ class JsonSource(FilesystemSource):
 
     formatter = JsonFormatter()
 
-    def _load_file(self, file_path: str) -> dict:
+    def _load_file(self, file_path: str) -> Dict:
         with open(file_path, 'r') as file:
             return json.load(file)

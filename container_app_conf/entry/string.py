@@ -19,6 +19,7 @@
 #  SOFTWARE.
 import re
 from re import Pattern
+from typing import List, Any, Optional
 
 from container_app_conf import ConfigEntry
 from container_app_conf.util import regex_deepcopy_36_workaround
@@ -29,12 +30,12 @@ regex_deepcopy_36_workaround()
 class StringConfigEntry(ConfigEntry):
     _example = "text"
 
-    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
-                 required: bool = None, secret: bool = None, regex: str or Pattern = None):
+    def __init__(self, key_path: List[str], example: Any = None, description: Optional[str] = None, default: Any = None,
+                 required: bool = None, secret: bool = None, regex: str | Pattern = None):
         self.regex = re.compile(regex) if regex is not None else None
         super().__init__(key_path, example, description, default, required, secret)
 
-    def _value_to_type(self, value: any) -> str or None:
+    def _value_to_type(self, value: Any) -> Optional[str]:
         """
         Converts the given type to the expected type
         :param value: the yaml value

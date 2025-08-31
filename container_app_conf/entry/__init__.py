@@ -19,6 +19,7 @@
 #  SOFTWARE.
 import logging
 import re
+from typing import List, Any, Optional
 
 from container_app_conf.const import KEY_PATH_REGEX
 
@@ -28,7 +29,7 @@ LOGGER = logging.Logger(__name__)
 class ConfigEntry:
     _example = None
 
-    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
+    def __init__(self, key_path: List[str], example: Any = None, description: Optional[str] = None, default: Any = None,
                  required: bool = None, secret: bool = None):
         """
         Creates a config entry
@@ -67,11 +68,11 @@ class ConfigEntry:
         self._value = default
 
     @property
-    def example(self) -> any:
+    def example(self) -> Any:
         return self.default if self.default is not None else self._example
 
     @property
-    def value(self) -> any:
+    def value(self) -> Any:
         """
         :return: the value of this config entry
         """
@@ -84,7 +85,7 @@ class ConfigEntry:
         """
         self._value = self._parse_value(new_value)
 
-    def _parse_value(self, value: any) -> any or None:
+    def _parse_value(self, value: Any) -> Optional[Any]:
         """
         Tries to permissively convert the given value to the expected value type.
         :param value: the value to parse
@@ -110,7 +111,7 @@ class ConfigEntry:
             LOGGER.exception(ex)
             self._raise_invalid_value(value, ex)
 
-    def _value_to_type(self, value: any) -> any:
+    def _value_to_type(self, value: Any) -> Any:
         """
         Converts the given value to the expected value type of this entry
         :param value: the yaml value
@@ -118,7 +119,7 @@ class ConfigEntry:
         """
         raise NotImplementedError()
 
-    def _type_to_value(self, type: any) -> any:
+    def _type_to_value(self, type: Any) -> Any:
         """
         Converts a value of the expected entry type to a valid representation in the config file.
         This is the inverse function of _value_to_type
@@ -129,7 +130,7 @@ class ConfigEntry:
             return None
         return str(type)
 
-    def _raise_invalid_value(self, value: any, reason: str or None = None):
+    def _raise_invalid_value(self, value: Any, reason: Optional[str] = None):
         entry_key_path = ">".join(self.key_path)
         message = "Invalid value '{}' for config option `{}`".format(value, entry_key_path)
         if reason is not None:

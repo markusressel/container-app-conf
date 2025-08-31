@@ -30,7 +30,7 @@ class MemoryDataSource(DataSource):
         """
         raise NotImplementedError()
 
-    def _load(self) -> dict:
+    def _load(self) -> Dict:
         data = {}
         for entry, value in self.items().items():
             key_path = entry.key_path

@@ -17,6 +17,8 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+from typing import List, Optional, Any
+
 from py_range_parse import Range
 
 from container_app_conf import ConfigEntry
@@ -25,12 +27,12 @@ from container_app_conf import ConfigEntry
 class IntConfigEntry(ConfigEntry):
     _example = "42"
 
-    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
+    def __init__(self, key_path: List[str], example: Any = None, description: Optional[str] = None, default: Any = None,
                  required: bool = None, secret: bool = None, range: Range = None):
         self.range = range
         super().__init__(key_path, example, description, default, required, secret)
 
-    def _value_to_type(self, value: any) -> int or None:
+    def _value_to_type(self, value: Any) -> Optional[int]:
         """
         Tries to permissively convert the given value to an int.
         :param value: the value to parse
@@ -41,7 +43,7 @@ class IntConfigEntry(ConfigEntry):
             raise ValueError("Value not in range: {} not in {}".format(parsed_value, self.range))
         return parsed_value
 
-    def _type_to_value(self, type: any) -> any:
+    def _type_to_value(self, type: Any) -> Any:
         if type is None:
             return None
         return int(type)
