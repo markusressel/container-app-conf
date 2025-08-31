@@ -19,7 +19,7 @@
 #  SOFTWARE.
 
 import re
-from typing import Pattern
+from typing import Pattern, List, Any, Optional
 
 from container_app_conf import ConfigEntry
 from container_app_conf.util import regex_deepcopy_36_workaround
@@ -30,15 +30,15 @@ regex_deepcopy_36_workaround()
 class RegexConfigEntry(ConfigEntry):
     _example = r"^[a-zA-z0-9]*$"
 
-    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
-                 required: bool = None, secret: bool = None, flags: int or None = None):
+    def __init__(self, key_path: List[str], example: Any = None, description: Optional[str] = None, default: Any = None,
+                 required: bool = None, secret: bool = None, flags: Optional[int] = None):
         """
         :param flags: Regex flags to mandate or None if no flag restrictions should be made
         """
         self.flags = flags | re.UNICODE if flags is not None else None
         super().__init__(key_path, example, description, default, required, secret)
 
-    def _value_to_type(self, value: any) -> Pattern or None:
+    def _value_to_type(self, value: Any) -> Optional[Pattern]:
         if value is None and self._required:
             return None
 
@@ -52,7 +52,7 @@ class RegexConfigEntry(ConfigEntry):
             value = str(value)
         return re.compile(value, flags=self.flags if self.flags is not None else 0)
 
-    def _type_to_value(self, type: any) -> any:
+    def _type_to_value(self, type: Any) -> Any:
         if type is None:
             return None
         if isinstance(type, str):

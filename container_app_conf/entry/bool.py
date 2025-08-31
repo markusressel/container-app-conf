@@ -17,6 +17,7 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+from typing import Optional, Any
 
 from container_app_conf import ConfigEntry
 
@@ -24,7 +25,7 @@ from container_app_conf import ConfigEntry
 class BoolConfigEntry(ConfigEntry):
     _example = "true"
 
-    def _value_to_type(self, value: any) -> bool or None:
+    def _value_to_type(self, value: Any) -> Optional[bool]:
         """
         Tries to permissively convert the given value to a boolean.
         :param value: the value to parse
@@ -42,7 +43,7 @@ class BoolConfigEntry(ConfigEntry):
             else:
                 raise ValueError("Unsupported value")
 
-    def _type_to_value(self, type: any) -> any:
+    def _type_to_value(self, type: Any) -> Any:
         if type is None:
             return None
         return bool(type)

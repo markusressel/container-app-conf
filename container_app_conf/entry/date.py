@@ -20,6 +20,7 @@
 
 
 from datetime import datetime
+from typing import Optional, Any
 
 import dateutil.parser
 
@@ -29,7 +30,7 @@ from container_app_conf import ConfigEntry
 class DateConfigEntry(ConfigEntry):
     _example = "2008-09-03T20:56:35.450686Z"
 
-    def _value_to_type(self, value: any) -> datetime or None:
+    def _value_to_type(self, value: Any) -> Optional[datetime]:
         """
         Tries to permissively convert the given value to a datetime.
         :param value: the value to parse
@@ -42,7 +43,7 @@ class DateConfigEntry(ConfigEntry):
         else:
             raise ValueError("Unsupported type: {}".format(type(value)))
 
-    def _type_to_value(self, type: any) -> any:
+    def _type_to_value(self, type: Any) -> Any:
         if type is None:
             return None
         if isinstance(type, datetime):

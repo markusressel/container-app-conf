@@ -19,6 +19,7 @@
 #  SOFTWARE.
 import os
 import pathlib
+from typing import List, Any, Optional
 
 from container_app_conf import ConfigEntry
 
@@ -26,7 +27,7 @@ from container_app_conf import ConfigEntry
 class FileConfigEntry(ConfigEntry):
     _example = "/tmp/temporary"
 
-    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
+    def __init__(self, key_path: List[str], example: Any = None, description: Optional[str] = None, default: Any = None,
                  required: bool = None, secret: bool = None, check_existence: bool = False):
         """
         See ConfigEntry
@@ -35,7 +36,7 @@ class FileConfigEntry(ConfigEntry):
         self.check_existence = check_existence
         super().__init__(key_path, example, description, default, required, secret)
 
-    def _value_to_type(self, value: any) -> str or None:
+    def _value_to_type(self, value: Any) -> Optional[pathlib.Path]:
         """
         Tries to permissively convert the given value to a file path.
         :param value: the value to parse
@@ -62,7 +63,7 @@ class FileConfigEntry(ConfigEntry):
 class DirectoryConfigEntry(ConfigEntry):
     _example = "/tmp/"
 
-    def __init__(self, key_path: [str], example: any = None, description: str or None = None, default: any = None,
+    def __init__(self, key_path: List[str], example: Any = None, description: Optional[str] = None, default: Any = None,
                  required: bool = None, secret: bool = None, check_existence: bool = False):
         """
         See ConfigEntry
@@ -71,7 +72,7 @@ class DirectoryConfigEntry(ConfigEntry):
         self.check_existence = check_existence
         super().__init__(key_path, example, description, default, required, secret)
 
-    def _value_to_type(self, value: any) -> str or None:
+    def _value_to_type(self, value: Any) -> Optional[pathlib.Path]:
         """
         Tries to permissively convert the given value to a folder path.
         :param value: the value to parse

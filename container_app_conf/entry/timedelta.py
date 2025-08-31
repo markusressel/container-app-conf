@@ -18,6 +18,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 from datetime import timedelta
+from typing import Optional, Any
 
 from pytimeparse import parse
 
@@ -27,7 +28,7 @@ from container_app_conf import ConfigEntry
 class TimeDeltaConfigEntry(ConfigEntry):
     _example = "4h32m1s"
 
-    def _value_to_type(self, value: any) -> timedelta or None:
+    def _value_to_type(self, value: Any) -> Optional[timedelta]:
         """
         Tries to permissively convert the given value to a timedelta.
         :param value: the value to parse

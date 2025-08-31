@@ -19,6 +19,7 @@
 #  SOFTWARE.
 import copy
 import os
+from typing import Optional, Dict
 
 from container_app_conf import ConfigEntry
 from container_app_conf.source import DataSource
@@ -35,7 +36,7 @@ class EnvSource(DataSource):
         normalized_key = original_key.replace('-', '_')
         return original_key in self.root.keys() or normalized_key in self.root.keys()
 
-    def get(self, entry: ConfigEntry) -> str or None:
+    def get(self, entry: ConfigEntry) -> Optional[str]:
         original_key = self.env_key(entry)
         normalized_key = original_key.replace('-', '_')
         return self.root.get(original_key, self.root.get(normalized_key, None))
@@ -44,5 +45,5 @@ class EnvSource(DataSource):
     def env_key(entry: ConfigEntry) -> str:
         return EnvSource.KEY_SPLIT_CHAR.join(entry.key_path).upper()
 
-    def _load(self) -> dict:
+    def _load(self) -> Dict:
         return copy.deepcopy(os.environ)

@@ -19,20 +19,20 @@
 #  SOFTWARE.
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Dict
 
 from container_app_conf import ConfigEntry, ConfigFormatter
 from container_app_conf.formatter.yaml import YamlFormatter
 
 
-def find_duplicates(l: list) -> []:
+def find_duplicates(l: list) -> Dict:
     """
     Finds duplicate entries in the given list
     :param l: the list to check
     :return: map of (value -> list of indexes)
     """
     if not len(l) != len(set(l)):
-        return []
+        return {}
 
     # remember indexes of items with equal hash
     tmp = {}
@@ -50,7 +50,7 @@ def find_duplicates(l: list) -> []:
     return result
 
 
-def generate_reference_config(config_entries: List[ConfigEntry]) -> {}:
+def generate_reference_config(config_entries: List[ConfigEntry]) -> Dict:
     """
     Generates a dictionary containing the expected config tree filled with default and example values
     :return: a dictionary containing the expected config tree
@@ -59,7 +59,7 @@ def generate_reference_config(config_entries: List[ConfigEntry]) -> {}:
 
 
 def config_entries_to_dict(config_entries: List[ConfigEntry], hide_secrets: bool = False,
-                           use_examples: bool = False) -> {}:
+                           use_examples: bool = False) -> Dict:
     """
     Converts a list of config entries to a dictionary
     :return: a dictionary containing the expected config tree
@@ -92,7 +92,7 @@ def regex_deepcopy_36_workaround():
     copy._deepcopy_dispatch[type(re.compile(''))] = lambda r, _: r
 
 
-def write_reference(config, path: str or Path, formatter: ConfigFormatter = YamlFormatter()):
+def write_reference(config, path: str | Path, formatter: ConfigFormatter = YamlFormatter()):
     """
     Writes an example configuration to the given path.
     :param config:
