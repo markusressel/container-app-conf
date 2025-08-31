@@ -20,6 +20,7 @@
 
 import unittest
 from datetime import datetime, timedelta
+from typing import List, Tuple
 
 from py_range_parse import Range
 from voluptuous import Schema
@@ -149,7 +150,7 @@ class TestBase(unittest.TestCase):
 
 class EntryTestBase(TestBase):
 
-    def assert_input_output(self, entry: ConfigEntry, list_of_tuples: [()]):
+    def assert_input_output(self, entry: ConfigEntry, list_of_tuples: List[Tuple]):
         for item in list_of_tuples:
             assert len(item) == 2
 
