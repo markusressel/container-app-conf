@@ -22,7 +22,7 @@ from typing import Optional
 
 from setuptools import setup, find_packages
 
-VERSION_NUMBER = "5.3.0"
+VERSION_NUMBER = "5.4.0"
 
 DEVELOPMENT_STATUS = "Development Status :: 5 - Production/Stable"
 VERSION_NAME = VERSION_NUMBER
@@ -82,6 +82,7 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
     ],
     install_requires=locked_requirements('default'),
     tests_require=locked_requirements('develop'),
